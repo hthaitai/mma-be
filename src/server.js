@@ -7,8 +7,24 @@ const port = process.env.PORT;
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const db = require('./db/index.js');
+const cors = require('cors');
 
 const authRouter = require('./routes/auth.route');
+
+const whiteList = ['http://localhost:5171'];
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whiteList.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(morgan("dev"));
