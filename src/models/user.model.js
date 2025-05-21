@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,       
+        unique: true,
     },
     password: {
         type: String,
@@ -24,8 +24,19 @@ const userSchema = new mongoose.Schema({
     avatar_url: {
         type: String,
         default: 'https://example.com/default-avatar.png',
-    }
-})
+    },
+    vertificationToken: {
+        type: String,
+        default: null,
+    },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+}, 
+{
+    timestamps: true,
+});
 // Hash password before saving to database
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
