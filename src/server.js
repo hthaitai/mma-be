@@ -10,6 +10,7 @@ const db = require('./db/index.js');
 const cors = require('cors');
 
 const authRouter = require('./routes/auth.route');
+const userRouter = require('./routes/user.route');
 
 const whiteList = ['http://localhost:5171'];
 const corsOptions = {
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
 // Run the server
 app.get('/', (req, res) => {
     res.send('API Smoking website')

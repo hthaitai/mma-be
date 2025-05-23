@@ -35,4 +35,26 @@ const validateToken = (req, res, next) => {
     }
 };
 
-module.exports = { validateToken };
+const checkRole = (roles) => {
+    return (req, res, next) => {
+        try {
+            const userRole = req.user.role;
+            if (!roles.includes(userRole)) {
+                return res.status(403).json({
+                    error: 'Access denied',
+                    message: 'You do not have permission to perform this action'
+                })
+            }
+
+            next();
+        } catch (error) {
+            console.error('Role Check Error:', error);
+            return res.status(500).json({
+                error: 'Role check failed',
+                details: error.message
+            });
+        }
+    }
+}
+
+module.exports = { validateToken, checkRole };
