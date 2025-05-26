@@ -12,7 +12,7 @@ const cors = require('cors');
 const authRouter = require('./routes/auth.route');
 const userRouter = require('./routes/user.route');
 
-const whiteList = ['http://localhost:5171'];
+const whiteList = ['http://localhost:5173'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whiteList.indexOf(origin) !== -1 || !origin) {
