@@ -13,6 +13,7 @@ const authRouter = require('./routes/auth.route');
 const userRouter = require('./routes/user.route');
 const smokingStatusRouter = require('./routes/smokingStatus.route');
 const coachRouter = require('./routes/coach.route');
+const meetSessionRouter = require('./routes/meetSession.route');
 
 const whiteList = ['http://localhost:5173'];
 const corsOptions = {
@@ -43,6 +44,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/smoking-status', smokingStatusRouter);
 app.use('/api/coach', coachRouter);
+app.use('/api/meet-session', meetSessionRouter);    
 // Run the server
 app.get('/', (req, res) => {
     res.send('API Smoking website')

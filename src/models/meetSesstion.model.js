@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const meetSessionSchema = new mongoose.Schema({
-    member_id: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
@@ -11,8 +11,10 @@ const meetSessionSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    purpose: { type: String },
     status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
     schedule_at: { type: Date, required: true },
+    meet_link: { type: String }
 }, { timestamps: true });
 
 const MeetSession = mongoose.model('MeetSession', meetSessionSchema);
