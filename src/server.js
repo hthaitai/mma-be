@@ -12,6 +12,7 @@ const cors = require('cors');
 const authRouter = require('./routes/auth.route');
 const userRouter = require('./routes/user.route');
 const smokingStatusRouter = require('./routes/smokingStatus.route');
+const coachRouter = require('./routes/coach.route');
 
 const whiteList = ['http://localhost:5173'];
 const corsOptions = {
@@ -41,6 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/smoking-status', smokingStatusRouter);
+app.use('/api/coach', coachRouter);
 // Run the server
 app.get('/', (req, res) => {
     res.send('API Smoking website')
