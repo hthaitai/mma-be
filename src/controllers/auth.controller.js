@@ -49,33 +49,33 @@ module.exports.register = async (req, res) => {
             to: email,
             subject: 'Xác thực tài khoản',
             html: `
-    <!DOCTYPE html>
-    <html>
-        <body style="margin: 0; padding: 20px; background-color: #f4f4f4; font-family: Arial, sans-serif;">
-            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                <h2 style="color: #2C3E50; text-align: center; margin-bottom: 20px; font-size: 24px;">Xin chào ${name}!</h2>
-                <div style="color: #666; line-height: 1.6; font-size: 16px;">
-                    <p style="margin-bottom: 15px;">Cảm ơn bạn đã đăng ký tài khoản. Vui lòng click vào nút bên dưới để xác thực tài khoản của bạn:</p>
-                    <div style="text-align: center; margin: 25px 0;">
-                        <a href="${verificationLink}" 
-                           style="background-color: #3498DB; 
-                                  color: white; 
-                                  padding: 12px 30px; 
-                                  text-decoration: none; 
-                                  border-radius: 5px; 
-                                  font-weight: bold;
-                                  display: inline-block;">
-                            Xác thực tài khoản
-                        </a>
-                    </div>
-                    <p style="color: #999; font-size: 14px; text-align: center; margin-top: 20px;">Link này sẽ hết hạn sau 24 giờ.</p>
-                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="color: #999; font-size: 12px; text-align: center;">Nếu bạn không yêu cầu xác thực này, vui lòng bỏ qua email này.</p>
-                </div>
-            </div>
-        </body>
-    </html>
-`
+                <!DOCTYPE html>
+                <html>
+                    <body style="margin: 0; padding: 20px; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                            <h2 style="color: #2C3E50; text-align: center; margin-bottom: 20px; font-size: 24px;">Xin chào ${name}!</h2>
+                            <div style="color: #666; line-height: 1.6; font-size: 16px;">
+                                <p style="margin-bottom: 15px;">Cảm ơn bạn đã đăng ký tài khoản. Vui lòng click vào nút bên dưới để xác thực tài khoản của bạn:</p>
+                                <div style="text-align: center; margin: 25px 0;">
+                                    <a href="${verificationLink}" 
+                                    style="background-color: #3498DB; 
+                                            color: white; 
+                                            padding: 12px 30px; 
+                                            text-decoration: none; 
+                                            border-radius: 5px; 
+                                            font-weight: bold;
+                                            display: inline-block;">
+                                        Xác thực tài khoản
+                                    </a>
+                                </div>
+                                <p style="color: #999; font-size: 14px; text-align: center; margin-top: 20px;">Link này sẽ hết hạn sau 24 giờ.</p>
+                                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                                <p style="color: #999; font-size: 12px; text-align: center;">Nếu bạn không yêu cầu xác thực này, vui lòng bỏ qua email này.</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+            `
         }
 
         transporter.sendMail(mailOptions, (error, info) => {
