@@ -49,10 +49,32 @@ module.exports.register = async (req, res) => {
             to: email,
             subject: 'Xác thực tài khoản',
             html: `
-                <h2>Xin chào ${name}!</h2>
-                <p>Cảm ơn bạn đã đăng ký tài khoản. Vui lòng click vào link bên dưới để xác thực tài khoản:</p>
-                <a href="${verificationLink}">Xác thực tài khoản</a>
-                <p>Link này sẽ hết hạn sau 24 giờ.</p>
+                <!DOCTYPE html>
+                <html>
+                    <body style="margin: 0; padding: 20px; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                            <h2 style="color: #2C3E50; text-align: center; margin-bottom: 20px; font-size: 24px;">Xin chào ${name}!</h2>
+                            <div style="color: #666; line-height: 1.6; font-size: 16px;">
+                                <p style="margin-bottom: 15px;">Cảm ơn bạn đã đăng ký tài khoản. Vui lòng click vào nút bên dưới để xác thực tài khoản của bạn:</p>
+                                <div style="text-align: center; margin: 25px 0;">
+                                    <a href="${verificationLink}" 
+                                    style="background-color: #3498DB; 
+                                            color: white; 
+                                            padding: 12px 30px; 
+                                            text-decoration: none; 
+                                            border-radius: 5px; 
+                                            font-weight: bold;
+                                            display: inline-block;">
+                                        Xác thực tài khoản
+                                    </a>
+                                </div>
+                                <p style="color: #999; font-size: 14px; text-align: center; margin-top: 20px;">Link này sẽ hết hạn sau 24 giờ.</p>
+                                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                                <p style="color: #999; font-size: 12px; text-align: center;">Nếu bạn không yêu cầu xác thực này, vui lòng bỏ qua email này.</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>
             `
         }
 
@@ -120,6 +142,7 @@ module.exports.login = async (req, res) => {
         res.status(200).json({
             message: 'Login successful',
             user: {
+                userId: user._id,
                 email: user.email,
                 name: user.name,
                 role: user.role,
@@ -154,11 +177,33 @@ module.exports.fogotPassword = async (req, res) => {
             to: email,
             subject: 'Đặt lại mật khẩu',
             html: `
-                <h2>Xin chào ${user.name}!</h2>
-                <p>Vui lòng click vào link bên dưới để đặt lại mật khẩu:</p>
-                <a href="${resetLink}">Đặt lại mật khẩu</a>
-                <p>Link này sẽ hết hạn sau 10 phút.</p>
-            `
+            <!DOCTYPE html>
+            <html>
+                <body style="margin: 0; padding: 20px; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                        <h2 style="color: #2C3E50; text-align: center; margin-bottom: 20px; font-size: 24px;">Xin chào ${user.name}!</h2>
+                        <div style="color: #666; line-height: 1.6; font-size: 16px;">
+                            <p style="margin-bottom: 15px;">Chúng tôi nhận được yêu cầu đặt lại mật khẩu của bạn. Vui lòng click vào nút bên dưới để đặt lại mật khẩu:</p>
+                            <div style="text-align: center; margin: 25px 0;">
+                                <a href="${resetLink}" 
+                                   style="background-color: #3498DB; 
+                                          color: white; 
+                                          padding: 12px 30px; 
+                                          text-decoration: none; 
+                                          border-radius: 5px; 
+                                          font-weight: bold;
+                                          display: inline-block;">
+                                    Đặt lại mật khẩu
+                                </a>
+                            </div>
+                            <p style="color: #999; font-size: 14px; text-align: center; margin-top: 20px;">Link này sẽ hết hạn sau 10 phút.</p>
+                            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                            <p style="color: #999; font-size: 12px; text-align: center;">Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `
         }
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -168,6 +213,10 @@ module.exports.fogotPassword = async (req, res) => {
             }
             console.log('Email sent:', info.response);
         })
+
+        return res.status(200).json({
+            message: 'Email sent successfully'
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

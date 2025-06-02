@@ -11,6 +11,14 @@ const cors = require('cors');
 
 const authRouter = require('./routes/auth.route');
 const userRouter = require('./routes/user.route');
+const smokingStatusRouter = require('./routes/smokingStatus.route');
+const coachRouter = require('./routes/coach.route');
+const meetSessionRouter = require('./routes/meetSession.route');
+const postRouter = require('./routes/post.route');
+const commentRouter = require('./routes/comment.route');
+const badgeRouter = require('./routes/badge.route');
+const tagRouter = require('./routes/tag.route');
+const userBadgeRouter = require('./routes/userBadge.route');
 
 const whiteList = ['http://localhost:5173'];
 const corsOptions = {
@@ -39,6 +47,14 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/smoking-status', smokingStatusRouter);
+app.use('/api/coach', coachRouter);
+app.use('/api/meet-session', meetSessionRouter);
+app.use('/api/posts', postRouter);
+app.use('/api/comments', commentRouter);
+app.use('/api/badges', badgeRouter);
+app.use('/api/tags', tagRouter);
+app.use('/api/user-badges', userBadgeRouter);
 // Run the server
 app.get('/', (req, res) => {
     res.send('API Smoking website')
