@@ -19,7 +19,12 @@ const postSchema = new mongoose.Schema({
     post_type: { type: String, enum: ['text', 'image', 'video'], default: 'text' },
     reaction_count: { type: Number, default: 0 },
     comment_count: { type: Number, default: 0 },  // tổng comment
-    like_user_ids: [{ type: String, ref: 'User' }] // lưu danh sách người đã like
+    like_user_ids: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // lưu danh sách người đã like
+    image: {
+        type: String,
+        default: null, // URL của hình ảnh
+    },
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
 }, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
