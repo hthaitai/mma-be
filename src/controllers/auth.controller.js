@@ -213,6 +213,10 @@ module.exports.fogotPassword = async (req, res) => {
             }
             console.log('Email sent:', info.response);
         })
+
+        return res.status(200).json({
+            message: 'Email sent successfully'
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
