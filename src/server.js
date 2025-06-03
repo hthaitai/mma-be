@@ -1,37 +1,38 @@
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = process.env.PORT;
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const db = require('./db/index.js');
-const cors = require('cors');
+const db = require("./db/index.js");
+const cors = require("cors");
 
-const authRouter = require('./routes/auth.route');
-const userRouter = require('./routes/user.route');
-const smokingStatusRouter = require('./routes/smokingStatus.route');
-const coachRouter = require('./routes/coach.route');
-const meetSessionRouter = require('./routes/meetSession.route');
-const postRouter = require('./routes/post.route');
-const commentRouter = require('./routes/comment.route');
-const badgeRouter = require('./routes/badge.route');
-const tagRouter = require('./routes/tag.route');
-const userBadgeRouter = require('./routes/userBadge.route');
+const authRouter = require("./routes/auth.route");
+const userRouter = require("./routes/user.route");
+const smokingStatusRouter = require("./routes/smokingStatus.route");
+const coachRouter = require("./routes/coach.route");
+const meetSessionRouter = require("./routes/meetSession.route");
+const postRouter = require("./routes/post.route");
+const commentRouter = require("./routes/comment.route");
+const badgeRouter = require("./routes/badge.route");
+const tagRouter = require("./routes/tag.route");
+const userBadgeRouter = require("./routes/userBadge.route");
+const quitPlanRouter = require("./routes/quitPlan.route");
 
-const whiteList = ['http://localhost:5173'];
+const whiteList = ["http://localhost:5173"];
 const corsOptions = {
-    origin: function (origin, callback) {
-        if (whiteList.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+  origin: function (origin, callback) {
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
@@ -45,30 +46,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/auth', authRouter);
-app.use('/api/user', userRouter);
-app.use('/api/smoking-status', smokingStatusRouter);
-app.use('/api/coach', coachRouter);
-app.use('/api/meet-session', meetSessionRouter);
-app.use('/api/posts', postRouter);
-app.use('/api/comments', commentRouter);
-app.use('/api/badges', badgeRouter);
-app.use('/api/tags', tagRouter);
-app.use('/api/user-badges', userBadgeRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/smoking-status", smokingStatusRouter);
+app.use("/api/coach", coachRouter);
+app.use("/api/meet-session", meetSessionRouter);
+app.use("/api/posts", postRouter);
+app.use("/api/comments", commentRouter);
+app.use("/api/badges", badgeRouter);
+app.use("/api/tags", tagRouter);
+app.use("/api/user-badges", userBadgeRouter);
+app.use("/api/quitPlan", quitPlanRouter);
 // Run the server
-app.get('/', (req, res) => {
-    res.send('API Smoking website')
-})
+app.get("/", (req, res) => {
+  res.send("API Smoking website");
+});
 
 app.use(async (err, req, res, next) => {
-    res.status = err.status || 500,
-        res.send({
-            "error": {
-                "status": err.status || 500,
-                "message": err.message
-            }
-        });
-})
+  (res.status = err.status || 500),
+    res.send({
+      error: {
+        status: err.status || 500,
+        message: err.message,
+      },
+    });
+});
 
-app.listen(port, () => console.log(`Server is running on http://localhost:${port}`));
-
+app.listen(port, () =>
+  console.log(`Server is running on http://localhost:${port}`)
+);
