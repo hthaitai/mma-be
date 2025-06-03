@@ -20,6 +20,7 @@ const badgeRouter = require("./routes/badge.route");
 const tagRouter = require("./routes/tag.route");
 const userBadgeRouter = require("./routes/userBadge.route");
 const quitPlanRouter = require("./routes/quitPlan.route");
+const stageRouter = require("./routes/stage.route");
 
 const whiteList = ["http://localhost:5173"];
 const corsOptions = {
@@ -57,6 +58,7 @@ app.use("/api/badges", badgeRouter);
 app.use("/api/tags", tagRouter);
 app.use("/api/user-badges", userBadgeRouter);
 app.use("/api/quitPlan", quitPlanRouter);
+app.use("/api/stages", stageRouter);
 // Run the server
 app.get("/", (req, res) => {
   res.send("API Smoking website");
