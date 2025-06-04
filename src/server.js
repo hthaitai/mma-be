@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const db = require('./db/index.js');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
 
 const authRouter = require('./routes/auth.route');
 const userRouter = require('./routes/user.route');
@@ -20,7 +21,7 @@ const badgeRouter = require('./routes/badge.route');
 const tagRouter = require('./routes/tag.route');
 const userBadgeRouter = require('./routes/userBadge.route');
 
-const whiteList = ['http://localhost:5173'];
+const whiteList = ['http://localhost:5173', 'http://localhost:8080'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whiteList.indexOf(origin) !== -1 || !origin) {
@@ -55,6 +56,11 @@ app.use('/api/comments', commentRouter);
 app.use('/api/badges', badgeRouter);
 app.use('/api/tags', tagRouter);
 app.use('/api/user-badges', userBadgeRouter);
+
+// Swagger documentation
+const swaggerDocument = require('../swagger.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Run the server
 app.get('/', (req, res) => {
     res.send('API Smoking website')

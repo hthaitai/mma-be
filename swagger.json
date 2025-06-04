@@ -1,0 +1,1729 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Smoking",
+        "description": "",
+        "version": "1.0.0",
+        "contact": {}
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080"
+        }
+    ],
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register",
+                "description": "",
+                "operationId": "postapiauthregister",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "phongntse170299@fpt.edu.vn",
+                                    "password": "123456",
+                                    "name": "phong"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "description": "",
+                "operationId": "postapiauthlogin",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "nguyenthanhphong3778@gmail.com",
+                                    "password": "123456"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/fogot-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Forgot Password",
+                "description": "",
+                "operationId": "postapiauthfogotpassword",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "nguyenthanhphong3778@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/resset-password/:token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Resset Password",
+                "description": "",
+                "operationId": "postapiauthressetpasswordressettoken",
+                "parameters": [
+                    {
+                        "name": "resset-token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "newPassword": "123456"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/smoking-status/:id": {
+            "post": {
+                "tags": [
+                    "Smoking Status"
+                ],
+                "summary": "New Smoking Status",
+                "description": "",
+                "operationId": "postapismokingstatusid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "frequency": "5",
+                                    "cigarettes_per_day": "20",
+                                    "cost_per_pack": "30",
+                                    "start_date": "2025-05-27"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Smoking Status"
+                ],
+                "summary": "Get Smoking Status",
+                "description": "",
+                "operationId": "getapismokingstatusid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/coach": {
+            "post": {
+                "tags": [
+                    "CoachProfile"
+                ],
+                "summary": "Create Coach Profile",
+                "description": "",
+                "operationId": "postapicoach",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "specialization": "Bac si ",
+                                    "experience_years": "20",
+                                    "bio": "Facebook, Instagram"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "CoachProfile"
+                ],
+                "summary": "Get Coach",
+                "description": "",
+                "operationId": "getapicoach",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/coach/:id": {
+            "get": {
+                "tags": [
+                    "CoachProfile"
+                ],
+                "summary": "Get Coach by Id",
+                "description": "",
+                "operationId": "getapicoachid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CoachProfile"
+                ],
+                "summary": "Update Coach",
+                "description": "",
+                "operationId": "putapicoachid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "specialization": "Bac si chuyen mon ve mang phoi",
+                                    "experience_years": "20",
+                                    "bio": "Facebook, Instagram"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/:id": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Edit User",
+                "description": "",
+                "operationId": "putapiuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com",
+                                    "password": "123456",
+                                    "name": "phong",
+                                    "role": "coach"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user by Id",
+                "description": "",
+                "operationId": "getapiuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User",
+                "description": "",
+                "operationId": "deleteapiuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/edit-profile/:id": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Edit profile",
+                "description": "",
+                "operationId": "putapiusereditprofileid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com",
+                                    "password": "123456",
+                                    "name": "phong",
+                                    "role": "coach"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get All user",
+                "description": "",
+                "operationId": "getapiuser",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/meet-session": {
+            "post": {
+                "tags": [
+                    "MeetSession"
+                ],
+                "summary": "Book Session",
+                "description": "",
+                "operationId": "postapimeetsession",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "coach_id": "6838801d80c105e05f5b5e96",
+                                    "schedule_at": "2025-06-06",
+                                    "purpose": "Tu van lap ke hoach"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/meet-session/:id/status": {
+            "put": {
+                "tags": [
+                    "MeetSession"
+                ],
+                "summary": "Update Session",
+                "description": "",
+                "operationId": "putapimeetsessionidstatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "status": "accepted",
+                                    "meet_link": "link vi du"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/meet-session/coach": {
+            "get": {
+                "tags": [
+                    "MeetSession"
+                ],
+                "summary": "Get Coach Session",
+                "description": "",
+                "operationId": "getapimeetsessioncoach",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/meet-session/user": {
+            "get": {
+                "tags": [
+                    "MeetSession"
+                ],
+                "summary": "Get User Session",
+                "description": "",
+                "operationId": "getapimeetsessionuser",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/posts/create": {
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Create Post",
+                "description": "",
+                "operationId": "postapipostscreate",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "content": "Các môn thể thao mạo hiểm, được tài trợ bởi Redbull",
+                                    "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+                                    "tags": "683bffdf373ea82a7210ab22"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/posts": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Get all posts",
+                "description": "",
+                "operationId": "getapiposts",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/posts/like/:id": {
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Like post",
+                "description": "",
+                "operationId": "postapipostslikeid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {}
+                    }
+                }
+            }
+        },
+        "/api/posts/:id": {
+            "put": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Edit Post",
+                "description": "",
+                "operationId": "putapipostsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "content": "Các môn thể thao mạo hiểm, được tài trợ bởi Redbull. Choi ngu lay tieng",
+                                    "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+                                    "tags": "683bffdf373ea82a7210ab22"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Delete Post",
+                "description": "",
+                "operationId": "deleteapipostsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/posts/user/:id": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Get postByUserID",
+                "description": "",
+                "operationId": "getapipostsuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tags/create": {
+            "post": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "create tag",
+                "description": "",
+                "operationId": "postapitagscreate",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "title": "#sport",
+                                    "description": "Các chủ đề về thể thao"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tags": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "get Tags",
+                "description": "",
+                "operationId": "getapitags",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/create": {
+            "post": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Add Comment",
+                "description": "",
+                "operationId": "postapicommentscreate",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "post_id": "683c0105373ea82a7210ab28",
+                                    "comment_text": "Bai viet tuyet voi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/post/:id": {
+            "get": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Get Comment by PostId",
+                "description": "",
+                "operationId": "getapicommentspostid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/:id": {
+            "put": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Edit Comment",
+                "description": "",
+                "operationId": "putapicommentsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "comment_text": "Hay binh thuong"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "Delete Comment",
+                "description": "",
+                "operationId": "deleteapicommentsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/badges/create": {
+            "post": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Create Badge",
+                "description": "",
+                "operationId": "postapibadgescreate",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "3 ngày phổi xanh",
+                                    "condition": "3 ngày không hút thuốc",
+                                    "tier": "Đồng",
+                                    "point_value": "10"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/badges": {
+            "get": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Get All Badge",
+                "description": "",
+                "operationId": "getapibadges",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user-badges/create": {
+            "post": {
+                "tags": [
+                    "Badge User"
+                ],
+                "summary": "Assign Badge",
+                "description": "",
+                "operationId": "postapiuserbadgescreate",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "user_id": "683b19aa2274084cd4231a34",
+                                    "badge_id": "683c07f81a52cf047b37ddfc"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user-badges/user/:id": {
+            "get": {
+                "tags": [
+                    "Badge User"
+                ],
+                "summary": "Get User badge",
+                "description": "",
+                "operationId": "getapiuserbadgesuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan": {
+            "get": {
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Get All QuitPlan",
+                "description": "",
+                "operationId": "getapiquitPlan",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapiquitPlan",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "Kế hoạch cai thuốc tháng 6",
+                                    "start_date": "2025-06-03T00:00:00.000Z",
+                                    "target_quit_date": "2025-07-01T00:00:00.000Z",
+                                    "reason": "Sức khỏe",
+                                    "user_id": "68302f68b239be97eea641de"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan/683eb70c4d533a558f47884d": {
+            "put": {
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Update",
+                "description": "",
+                "operationId": "putapiquitPlan683eb70c4d533a558f47884d",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "string",
+                                "example": "{\n  \"name\": \"Kế hoạch cai thuốc tháng \",\n  \"reason\": \"Sức khỏe\",\n}\n"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Delete",
+                "description": "",
+                "operationId": "deleteapiquitPlan683eb70c4d533a558f47884d",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Get By Progress ID",
+                "description": "",
+                "operationId": "get",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stages": {
+            "post": {
+                "tags": [
+                    "Stage"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapistages",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "plan_id": "683eb70c4d533a558f47884d",
+                                    "title": "Giai đoạn 2: Bắt đầu cai",
+                                    "description": "Ăn kẹo để giảm độ thèm thuốc",
+                                    "stage_number": 2,
+                                    "start_date": "2025-06-04T00:00:00.000Z",
+                                    "end_date": "2025-06-10T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stages/683ec03282c6d72e5af7719e": {
+            "get": {
+                "tags": [
+                    "Stage"
+                ],
+                "summary": "GetByID Stage",
+                "description": "",
+                "operationId": "getapistages683ec03282c6d72e5af7719e",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Stage"
+                ],
+                "summary": "Update",
+                "description": "",
+                "operationId": "putapistages683ec03282c6d72e5af7719e",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "plan_id": "683eb70c4d533a558f47884d",
+                                    "title": "Giai đoạn 2: Bắt đầu cai thuốc  2",
+                                    "description": "Ăn kẹo để giảm độ thèm thuốc",
+                                    "stage_number": 2,
+                                    "start_date": "2025-06-04T00:00:00.000Z",
+                                    "end_date": "2025-06-10T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Stage"
+                ],
+                "summary": "Delete",
+                "description": "",
+                "operationId": "deleteapistages683ec03282c6d72e5af7719e",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stages/plan/683eb70c4d533a558f47884d": {
+            "get": {
+                "tags": [
+                    "Stage"
+                ],
+                "summary": "GetBY PlanID",
+                "description": "",
+                "operationId": "getapistagesplan683eb70c4d533a558f47884d",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/progress": {
+            "post": {
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapiprogress",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "stage_id": "683ec03282c6d72e5af7719e",
+                                    "date": "2025-06-03",
+                                    "cigarettes_smoked": 3,
+                                    "health_stat": "Stable breathing, slight cravings",
+                                    "money_saved": 15000
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/progress/683f22e0158f63100643c39b": {
+            "put": {
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Update",
+                "description": "",
+                "operationId": "putapiprogress683f22e0158f63100643c39b",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Delete",
+                "description": "",
+                "operationId": "deleteapiprogress683f22e0158f63100643c39b",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {},
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "scheme": "basic"
+            },
+            "digestAuth": {
+                "type": "http",
+                "scheme": "digest"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": ""
+        },
+        {
+            "name": "Smoking Status",
+            "description": ""
+        },
+        {
+            "name": "CoachProfile",
+            "description": ""
+        },
+        {
+            "name": "User",
+            "description": ""
+        },
+        {
+            "name": "MeetSession",
+            "description": ""
+        },
+        {
+            "name": "Post",
+            "description": ""
+        },
+        {
+            "name": "Tags",
+            "description": ""
+        },
+        {
+            "name": "Comment",
+            "description": ""
+        },
+        {
+            "name": "Badge",
+            "description": ""
+        },
+        {
+            "name": "Badge User",
+            "description": ""
+        },
+        {
+            "name": "QuitPlan",
+            "description": ""
+        },
+        {
+            "name": "Stage",
+            "description": ""
+        },
+        {
+            "name": "Progress",
+            "description": ""
+        }
+    ]
+}

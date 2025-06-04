@@ -45,8 +45,8 @@ module.exports.getCommentsByPostId = async (req, res) => {
 
 module.exports.updateComment = async (req, res) => {
     try {
-        const { comment_id } = req.params;
-        const { content } = req.body;
+        const comment_id = req.params.id;
+        const { comment_text } = req.body;
         const user_id = req.user.id;
 
         const comment = await Comment.findById(comment_id);
@@ -58,7 +58,7 @@ module.exports.updateComment = async (req, res) => {
             return res.status(403).json({ message: 'You are not authorized to update this comment' });
         }
 
-        comment.content = content;
+        comment.comment_text = comment_text;
         await comment.save();
         res.status(200).json({ message: 'Comment updated successfully', comment });
     } catch (error) {
@@ -69,7 +69,7 @@ module.exports.updateComment = async (req, res) => {
 
 module.exports.deleteComment = async (req, res) => {
     try {
-        const { comment_id } = req.params;
+        const comment_id = req.params.id;
         const user_id = req.user.id;
 
         const comment = await Comment.findById(comment_id);
