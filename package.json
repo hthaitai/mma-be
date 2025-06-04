@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^7.0.3",
     "nodemon": "^3.1.10",
-    "smoking_quit": "file:"
+    "smoking_quit": "file:",
+    "swagger-ui-express": "^5.0.1"
   }
 }
