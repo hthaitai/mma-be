@@ -53,12 +53,11 @@ module.exports.getUserById = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
     try {
         const userID = req.params.id;
-        const { email, name, role, avatar_url } = req.body;
+        const { name, role, avatar_url } = req.body;
         const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ message: error.message });
         }
-        user.email = email;
         user.name = name;
         user.role = role;
         user.avatar_url = avatar_url;
@@ -104,13 +103,13 @@ module.exports.deleteUser = async (req, res) => {
 //edit profile
 module.exports.editProfile = async (req, res) => {
     try {
-        const userID = req.user._id;
-        const { email, name, avatar_url } = req.body;
+        const userID = req.user.id;
+        const { name, avatar_url } = req.body;
         const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ message: error.message });
         }
-        user.email = email;
+       
         user.name = name;
         user.avatar_url = avatar_url;
         await user.save();
