@@ -133,10 +133,10 @@
                 ],
                 "summary": "Resset Password",
                 "description": "",
-                "operationId": "postapiauthressetpasswordressettoken",
+                "operationId": "postapiauthressetpasswordtoken",
                 "parameters": [
                     {
-                        "name": "resset-token",
+                        "name": "token",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -430,10 +430,9 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "email": "brofstorm2003@gmail.com",
-                                    "password": "123456",
                                     "name": "phong",
-                                    "role": "coach"
+                                    "role": "user",
+                                    "avatar_url": "link"
                                 }
                             }
                         }
@@ -541,10 +540,8 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "email": "brofstorm2003@gmail.com",
-                                    "password": "123456",
-                                    "name": "phong",
-                                    "role": "coach"
+                                    "name": "phongphong",
+                                    "avatar_url": "link"
                                 }
                             }
                         }
@@ -1657,14 +1654,429 @@
                     }
                 }
             }
+        },
+        "/api/notifications": {
+            "post": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapinotifications",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "message": "Chúc mừng! Bạn đã bỏ thuốc được 7 ngày rồi!",
+                                    "type": "motivation",
+                                    "schedule": "2025-06-06T08:00:00.000Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all",
+                "description": "",
+                "operationId": "getapinotifications",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/notifications/684118ecf2630f6f1e1b52c6": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "GetbyId",
+                "description": "",
+                "operationId": "getapinotifications684118ecf2630f6f1e1b52c6",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Update",
+                "description": "",
+                "operationId": "putapinotifications684118ecf2630f6f1e1b52c6",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "message": "Chúc mừng! Bạn đã bỏ thuốc được 7 ngày rồi nè!",
+                                    "type": "motivation",
+                                    "schedule": "2025-06-06T08:00:00.000Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "New Request",
+                "description": "",
+                "operationId": "deleteapinotifications684118ecf2630f6f1e1b52c6",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/subscriptions": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapisubscriptions",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "Gói hỗ trợ cơ bản",
+                                    "price": 199000,
+                                    "start_date": "2025-06-05T00:00:00.000Z",
+                                    "end_date": "2025-07-05T00:00:00.000Z",
+                                    "is_active": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Create Feedback",
+                "description": "",
+                "operationId": "postapifeedback",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "plan_id": "683eb70c4d533a558f47884d",
+                                    "coach_id": "6838801d80c105e05f5b5e96",
+                                    "rating": "4",
+                                    "feedback_type": "user_to_coach",
+                                    "content": "Mot trang web tuyet voi"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback/user/:id": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get Feedback By UserId",
+                "description": "",
+                "operationId": "getapifeedbackuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback/coach/:id": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get Coach Feedback",
+                "description": "",
+                "operationId": "getapifeedbackcoachid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback/:id": {
+            "put": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Update Feedback",
+                "description": "",
+                "operationId": "putapifeedbackid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "rating": "4.5",
+                                    "content": "oi doi oi, Trinh la gi ma la trinh ai cham"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Delete Feedback",
+                "description": "",
+                "operationId": "deleteapifeedbackid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback/coach/:id/average-rating": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get AVG Rating",
+                "description": "",
+                "operationId": "getapifeedbackcoachidaveragerating",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {},
         "securitySchemes": {
-            "basicAuth": {
+            "bearerAuth": {
                 "type": "http",
-                "scheme": "basic"
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Bearer token authentication"
             },
             "digestAuth": {
                 "type": "http",
@@ -1723,6 +2135,18 @@
         },
         {
             "name": "Progress",
+            "description": ""
+        },
+        {
+            "name": "Notification",
+            "description": ""
+        },
+        {
+            "name": "Subscription",
+            "description": ""
+        },
+        {
+            "name": "Feedback",
             "description": ""
         }
     ]

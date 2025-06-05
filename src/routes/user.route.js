@@ -7,6 +7,6 @@ userRouter.get('/', validateToken, checkRole(['admin']), userController.getAllUs
 userRouter.get('/:id', validateToken, userController.getUserById);
 userRouter.put('/:id', validateToken, checkRole(['admin']), userController.updateUser);
 userRouter.delete('/:id', validateToken, checkRole(['admin']), userController.deleteUser);
-userRouter.post('/edit-profile', validateToken, userController.editProfile);
+userRouter.put('/edit-profile/:id', validateToken, userController.editProfile);
 
 module.exports = userRouter;

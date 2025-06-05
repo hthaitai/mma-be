@@ -20,6 +20,7 @@ const commentRouter = require('./routes/comment.route');
 const badgeRouter = require('./routes/badge.route');
 const tagRouter = require('./routes/tag.route');
 const userBadgeRouter = require('./routes/userBadge.route');
+const feedbackRouter = require('./routes/feedback.route');
 
 const whiteList = ['http://localhost:5173', 'http://localhost:8080', 'https://smokingswp.onrender.com'];
 const corsOptions = {
@@ -56,6 +57,7 @@ app.use('/api/comments', commentRouter);
 app.use('/api/badges', badgeRouter);
 app.use('/api/tags', tagRouter);
 app.use('/api/user-badges', userBadgeRouter);
+app.use('/api/feedback', feedbackRouter);
 
 // Swagger documentation
 const swaggerDocument = require('../swagger.json');
