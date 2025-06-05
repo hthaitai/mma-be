@@ -22,7 +22,7 @@ const tagRouter = require('./routes/tag.route');
 const userBadgeRouter = require('./routes/userBadge.route');
 const feedbackRouter = require('./routes/feedback.route');
 
-const whiteList = ['http://localhost:5173', 'http://localhost:8080'];
+const whiteList = ['http://localhost:5173', 'http://localhost:8080', 'https://smokingswp.onrender.com'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whiteList.indexOf(origin) !== -1 || !origin) {
