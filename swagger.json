@@ -174,6 +174,11 @@
         },
         "/api/smoking-status/:id": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Smoking Status"
                 ],
@@ -254,6 +259,11 @@
         },
         "/api/coach": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "CoachProfile"
                 ],
@@ -394,6 +404,11 @@
         },
         "/api/user/:id": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "User"
                 ],
@@ -504,6 +519,11 @@
         },
         "/api/user/edit-profile/:id": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "User"
                 ],
@@ -551,6 +571,11 @@
         },
         "/api/user": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "User"
                 ],
@@ -575,6 +600,11 @@
         },
         "/api/meet-session": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "MeetSession"
                 ],
@@ -709,6 +739,11 @@
         },
         "/api/posts/create": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Post"
                 ],
@@ -748,6 +783,11 @@
         },
         "/api/posts": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Post"
                 ],
@@ -772,6 +812,11 @@
         },
         "/api/posts/like/:id": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Post"
                 ],
@@ -811,6 +856,11 @@
         },
         "/api/posts/:id": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Post"
                 ],
@@ -923,6 +973,11 @@
         },
         "/api/tags/create": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Tags"
                 ],
@@ -961,6 +1016,11 @@
         },
         "/api/tags": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Tags"
                 ],
@@ -985,6 +1045,11 @@
         },
         "/api/comments/create": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Comment"
                 ],
@@ -1133,6 +1198,11 @@
         },
         "/api/badges/create": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Badge"
                 ],
@@ -1197,6 +1267,11 @@
         },
         "/api/user-badges/create": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Badge User"
                 ],
@@ -1235,6 +1310,11 @@
         },
         "/api/user-badges/user/:id": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Badge User"
                 ],
@@ -1268,6 +1348,11 @@
         },
         "/api/quitPlan": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "QuitPlan"
                 ],
@@ -1290,6 +1375,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "QuitPlan"
                 ],
@@ -1412,6 +1502,11 @@
         },
         "/api/stages": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Stage"
                 ],
@@ -1454,6 +1549,11 @@
         },
         "/api/stages/683ec03282c6d72e5af7719e": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Stage"
                 ],
@@ -1476,6 +1576,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Stage"
                 ],
@@ -1516,6 +1621,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Stage"
                 ],
@@ -1564,6 +1674,11 @@
         },
         "/api/progress": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Progress"
                 ],
@@ -1605,6 +1720,11 @@
         },
         "/api/progress/683f22e0158f63100643c39b": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Progress"
                 ],
@@ -1657,6 +1777,11 @@
         },
         "/api/notifications": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Notification"
                 ],
@@ -1718,6 +1843,11 @@
         },
         "/api/notifications/684118ecf2630f6f1e1b52c6": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Notification"
                 ],
@@ -1740,6 +1870,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Notification"
                 ],
@@ -1801,6 +1936,11 @@
         },
         "/api/subscriptions": {
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Subscription"
                 ],
@@ -1888,6 +2028,11 @@
         },
         "/api/feedback/user/:id": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Feedback"
                 ],
@@ -1959,6 +2104,11 @@
         },
         "/api/feedback/:id": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Feedback"
                 ],
@@ -2004,6 +2154,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Feedback"
                 ],
@@ -2037,6 +2192,11 @@
         },
         "/api/feedback/coach/:id/average-rating": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Feedback"
                 ],
