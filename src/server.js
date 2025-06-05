@@ -22,6 +22,7 @@ const userBadgeRouter = require("./routes/userBadge.route");
 const quitPlanRouter = require("./routes/quitPlan.route");
 const stageRouter = require("./routes/stage.route");
 const progressRouter = require("./routes/progress.route");
+const notificationRouter = require("./routes/notification.route");
 
 const whiteList = ["http://localhost:5173"];
 const corsOptions = {
@@ -61,6 +62,7 @@ app.use("/api/user-badges", userBadgeRouter);
 app.use("/api/quitPlan", quitPlanRouter);
 app.use("/api/stages", stageRouter);
 app.use("/api/progress", progressRouter);
+app.use("/api/notifications", notificationRouter);
 
 // Run the server
 app.get("/", (req, res) => {
