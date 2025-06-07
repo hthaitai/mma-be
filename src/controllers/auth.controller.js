@@ -240,6 +240,7 @@ module.exports.ressetPassword = async (req, res) => {
         }
 
         user.password = newPassword;
+        user.markModified('password');
 
         user.ressetPasswordToken = undefined;
         user.ressetPasswordExpires = undefined;

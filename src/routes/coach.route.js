@@ -8,12 +8,12 @@ const  checkCoach  = require('../middlewares/CoachMiddleware');
 coachRouter.post('/', validateToken, checkCoach, coachController.createCoachProfile);
 
 // Lấy tất cả coach
-coachRouter.get('/', coachController.getAllCoachProfiles);
+coachRouter.get('/', validateToken, coachController.getAllCoachProfiles);
 
 // Lấy 1 coach
-coachRouter.get('/:id', coachController.getCoachProfileById);
+coachRouter.get('/:id', validateToken, coachController.getCoachProfileById);
 
 // Cập nhật coach
-coachRouter.put('/:id', coachController.updateCoachProfile);
+coachRouter.put('/:id', validateToken, coachController.updateCoachProfile);
 
 module.exports = coachRouter;

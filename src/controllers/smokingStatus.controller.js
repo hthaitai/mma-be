@@ -67,3 +67,22 @@ module.exports.updateSmokingStatus = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+//delete smoking status
+module.exports.deleteSmokingStatus = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const deletedSmokingStatus = await SmokingStatus.findOneAndDelete({ user_id: userId });
+        if (!deletedSmokingStatus) {
+            return res.status(404).json({ message: 'Smoking status not found' });
+        }
+        res.status(200).json({ message: 'Smoking status deleted successfully', deletedSmokingStatus });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ message: error.message });
+    }
+};
