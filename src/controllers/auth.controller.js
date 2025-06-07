@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 const crypto = require('crypto');
 const transporter = require('../configs/emailConfig');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 //Create token
 const maxAge = 3 * 24 * 60 * 60;
@@ -254,4 +256,68 @@ module.exports.ressetPassword = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
+module.exports.googleAuth = async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+
+        let user = await User.findOne({ email: payload.email });
+
+        if (!user) {
+            // Create new user if doesn't exist
+            user = await User.create({
+                email: payload.email,
+                user_name: payload.name,
+                avatar: payload.picture,
+                googleId: payload.sub,
+                isVerified: payload.email_verified,
+                role: 'user'
+            });
+        } else {
+            // Update existing user's Google-related info
+            user.googleId = payload.sub;
+            user.avatar = payload.picture;
+            user.isVerified = payload.email_verified;
+            await user.save();
+        }
+
+        // Create JWT token
+        const token = createToken(user);
+
+        // Set cookie
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: maxAge * 1000,
+            sameSite: 'lax'
+        });
+
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: user._id,
+                email: user.email,
+                user_name: user.user_name,
+                avatar: user.avatar,
+                role: user.role,
+                isVerified: user.isVerified,
+                token: token
+            },
+            token: token
+        });
+
+    } catch (error) {
+        console.error('Google auth error:', error);
+        return res.status(401).json({
+            success: false,
+            message: 'Google authentication failed'
+        });
+    }
+};

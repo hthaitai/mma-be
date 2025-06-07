@@ -40,7 +40,12 @@ const userSchema = new mongoose.Schema({
     ressetPasswordExpires: {
         type: Date,
         default: undefined,
-    }
+    },
+    googleId: {
+        type: String,
+        sparse: true,
+        unique: true
+    },
 }, 
 {
     timestamps: true,
