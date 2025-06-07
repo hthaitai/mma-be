@@ -8,5 +8,6 @@ authRouter.post('/login', authController.login);
 authRouter.get('/verify/:token', authController.verifyEmail);
 authRouter.post('/fogot-password', authController.fogotPassword);
 authRouter.post('/resset-password/:token', authController.ressetPassword);
+authRouter.post('/google', authController.googleAuth);
 
 module.exports = authRouter;
