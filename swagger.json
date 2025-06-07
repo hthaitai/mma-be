@@ -183,7 +183,7 @@
                     "Smoking Status"
                 ],
                 "summary": "New Smoking Status",
-                "description": "",
+                "description": "Create a new smoking status for a user by ID",
                 "operationId": "postapismokingstatusid",
                 "parameters": [
                     {
@@ -226,11 +226,16 @@
                 }
             },
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Smoking Status"
                 ],
                 "summary": "Get Smoking Status",
-                "description": "",
+                "description": "Get smoking status by user id",
                 "operationId": "getapismokingstatusid",
                 "parameters": [
                     {
@@ -255,6 +260,94 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Smoking Status"
+                ],
+                "summary": "Update Smoking Status",
+                "description": "Update a smoking status by user ID",
+                "operationId": "putapismokingstatusid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "frequency": "5",
+                                    "cigarettes_per_day": "20",
+                                    "cost_per_pack": "30",
+                                    "start_date": "2025-05-27"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Smoking Status"
+                ],
+                "summary": "Delete Smoking Status",
+                "description": "Delete a smoking status by user ID",
+                "operationId": "deleteapismokingstatusid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }            
             }
         },
         "/api/coach": {
@@ -301,6 +394,11 @@
                 }
             },
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "CoachProfile"
                 ],
@@ -325,6 +423,11 @@
         },
         "/api/coach/:id": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "CoachProfile"
                 ],
@@ -356,6 +459,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "CoachProfile"
                 ],
@@ -455,6 +563,11 @@
                 }
             },
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "User"
                 ],
@@ -486,6 +599,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "User"
                 ],
@@ -644,6 +762,11 @@
         },
         "/api/meet-session/:id/status": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "MeetSession"
                 ],
@@ -691,6 +814,11 @@
         },
         "/api/meet-session/coach": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "MeetSession"
                 ],
@@ -715,6 +843,11 @@
         },
         "/api/meet-session/user": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "MeetSession"
                 ],
@@ -907,6 +1040,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Post"
                 ],
@@ -940,6 +1078,11 @@
         },
         "/api/posts/user/:id": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Post"
                 ],
@@ -1043,7 +1186,7 @@
                 }
             }
         },
-        "/api/comments/create": {
+        "/api/bs/create": {
             "post": {
                 "security": [
                     {
@@ -1088,6 +1231,11 @@
         },
         "/api/comments/post/:id": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Comment"
                 ],
@@ -1121,6 +1269,11 @@
         },
         "/api/comments/:id": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Comment"
                 ],
@@ -1165,6 +1318,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Comment"
                 ],
@@ -1243,6 +1401,11 @@
         },
         "/api/badges": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Badge"
                 ],
@@ -1250,6 +1413,96 @@
                 "description": "",
                 "operationId": "getapibadges",
                 "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/badges/:id": {
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Update Badge",
+                "description": "",
+                "operationId": "putapibadgesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "7 ngày phổi xanh",
+                                    "condition": "7 ngày không hút thuốc",
+                                    "tier": "Đồng",
+                                    "point_value": "10"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Delete Badge",
+                "description": "",
+                "operationId": "deleteapibadgesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
