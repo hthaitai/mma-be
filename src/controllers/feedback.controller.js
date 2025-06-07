@@ -104,7 +104,7 @@ module.exports.updateFeedback = async (req, res) => {
 
 exports.getCoachAverageRating = async (req, res) => {
     try {
-        const coachId = req.params.id;
+        const { coachId } = req.params.id;
 
         const result = await Feedback.aggregate([
             { $match: { coachId, feedback_type: 'user_to_coach' } },
@@ -119,7 +119,8 @@ exports.getCoachAverageRating = async (req, res) => {
 
         if (result.length === 0) return res.status(404).json({ message: 'No feedback found' });
 
-        res.status(200).json(result[0]);
+        const { averageRating, totalFeedbacks } = result[0];
+        res.status(200).json({ averageRating, totalFeedbacks });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

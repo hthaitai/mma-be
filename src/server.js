@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const db = require('./db/index.js');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
+const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth.route');
 const userRouter = require('./routes/user.route');
@@ -37,7 +38,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 // Connect to MongoDB
