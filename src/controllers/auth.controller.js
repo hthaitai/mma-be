@@ -42,7 +42,7 @@ module.exports.register = async (req, res) => {
 
         await newuser.save();
         // Tạo link xác thực
-        const verificationLink = `http://localhost:${process.env.PORT}/api/auth/verify/${vertificationToken}`;// sẽ sửa lại verificationLink khi có front-end fogetpassword
+        const verificationLink = `http://localhost:${process.env.VITE_PORT}/login/${vertificationToken}`;// sẽ sửa lại verificationLink khi có front-end fogetpassword
         // Gửi email xác thực
         const mailOptions = {
             from: process.env.EMAIL_USER,
@@ -125,7 +125,7 @@ module.exports.login = async (req, res) => {
         if (!user.isVerified) {
             return res.status(400).json({
                 message: 'Email not verified',
-                verificationLink: `http://localhost:${process.env.PORT}/api/auth/verify/${user.vertificationToken}`// sẽ sửa lại verificationLink khi có front-end fogetpassword
+                verificationLink: `http://localhost:${process.env.VITE_PORT}/login/${user.vertificationToken}`// sẽ sửa lại verificationLink khi có front-end fogetpassword
             })
         }
         const isMatch = await bcrypt.compare(password, user.password);
@@ -171,7 +171,7 @@ module.exports.fogotPassword = async (req, res) => {
 
         await user.save();
 
-        const resetLink = `http://localhost:${process.env.PORT}/api/auth/resset-password/${ressetToken}`; // sẽ sửa lại resetLink khi có front-end fogetpassword
+        const resetLink = `http://localhost:${process.env.VITE_PORT}/resset-password/${ressetToken}`; // sẽ sửa lại resetLink khi có front-end fogetpassword
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
