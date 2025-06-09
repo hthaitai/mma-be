@@ -347,7 +347,7 @@
                             }
                         }
                     }
-                }            
+                }
             }
         },
         "/api/coach": {
@@ -2277,6 +2277,33 @@
                         }
                     }
                 }
+            },
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get All Feedback",
+                "description": "",
+                "operationId": "getapifeedback",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/feedback/user/:id": {
@@ -2443,6 +2470,57 @@
                 }
             }
         },
+        "/api/feedback/status/:id": {
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Update Feedback Status",
+                "description": "",
+                "operationId": "putapifeedbackstatusid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "status": "approved"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/feedback/coach/:id/average-rating": {
             "get": {
                 "security": [
@@ -2466,6 +2544,35 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback/system-rating": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get AVG Rating System",
+                "description": "",
+                "operationId": "getapifeedbacksystemrating",
+                "parameters": [],
                 "responses": {
                     "200": {
                         "description": "Successful response",

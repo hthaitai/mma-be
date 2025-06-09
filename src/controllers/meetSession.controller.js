@@ -47,7 +47,7 @@ module.exports.getUserSessions = async (req, res) => {
 // 4. Coach cập nhật trạng thái buổi hẹn (xác nhận, từ chối, hoàn tất)
 module.exports.updateSessionStatus = async (req, res) => {
     try {
-        const { sessionId } = req.params;
+        const sessionId  = req.params.id;
         const { status, meet_link } = req.body;
         const coach_id = req.user.id;
 
