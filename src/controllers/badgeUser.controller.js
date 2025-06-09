@@ -1,5 +1,6 @@
 const UserBadge = require('../models/userBadge.model');
 const Badge = require('../models/badge.model');
+const Post = require('../models/post.model');
 
 // Gán huy hiệu thủ công (admin hoặc coach)
 module.exports.assignBadge = async (req, res) => {
@@ -29,3 +30,55 @@ module.exports.getUserBadges = async (req, res) => {
         res.status(500).json({ message: 'Error fetching user badges', error: err.message });
     }
 };
+module.exports.countBadgeRecipients = async (req, res) => {
+    try {
+        const result = await UserBadge.aggregate([
+            { $group: { _id: "$badge_id", count: { $sum: 1 } } }
+        ]);
+
+        const populated = await Badge.populate(result, { path: '_id' });
+        res.status(200).json(populated);
+    } catch (err) {
+        res.status(500).json({ message: 'Error counting badge users', error: err.message });
+    }
+};
+
+module.exports.shareUserBadge = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { badge_id, content } = req.body;
+
+        const userBadge = await UserBadge.findOne({
+            user_id: userId,
+            badge_id: badge_id
+        });
+
+        if (!userBadge) {
+            return res.status(404).json({ message: 'You do not own this badge' });
+        }
+
+        const post = new Post({
+            user_id: userId,
+            shared_badge_id: badge_id,
+            content: content,
+            post_type: 'badge',
+            tags: [],
+            reaction_count: 0,
+            comment_count: 0
+        });
+
+        await post.save();
+
+        const populatedPost = await Post.findById(post._id)
+            .populate('user_id', 'name email avatar_url')
+            .populate('shared_badge_id');
+
+        res.status(201).json({
+            message: 'Badge shared successfully',
+            post: populatedPost
+        });
+    } catch (error) {
+        console.error('Error sharing user badge:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
