@@ -23,6 +23,7 @@ const quitPlanRouter = require("./routes/quitPlan.route");
 const stageRouter = require("./routes/stage.route");
 const progressRouter = require("./routes/progress.route");
 const notificationRouter = require("./routes/notification.route");
+const subscriptionRouter = require("./routes/subscription.route.js");
 
 const whiteList = ["http://localhost:5173"];
 const corsOptions = {
@@ -63,6 +64,7 @@ app.use("/api/quitPlan", quitPlanRouter);
 app.use("/api/stages", stageRouter);
 app.use("/api/progress", progressRouter);
 app.use("/api/notifications", notificationRouter);
+app.use("/api/subscriptions", subscriptionRouter);
 
 // Run the server
 app.get("/", (req, res) => {
