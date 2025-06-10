@@ -1,7 +1,7 @@
 const express = require('express');
 const feedbackRouter = express.Router();
 const feedbackController = require('../controllers/feedback.controller');
-const { validateToken, checkRole } = require('../middlewares/authMiddleware');
+const { validateToken, checkRole } = require('../middlewares/AuthMiddleware');
 // Tạo mới feedback
 feedbackRouter.post('/', validateToken, feedbackController.createFeedback);
 
