@@ -3,9 +3,9 @@ const Badge = require('../models/badge.model');
 // Tạo badge
 module.exports.createBadge = async (req, res) => {
     try {
-        const { name, condition, tier, point_value } = req.body;
+        const { name, condition, tier, point_value, url_image } = req.body;
 
-        const badge = new Badge({ name, condition, tier, point_value });
+        const badge = new Badge({ name, condition, tier, point_value, url_image });
         await badge.save();
 
         res.status(201).json(badge);
@@ -28,8 +28,8 @@ module.exports.getAllBadges = async (req, res) => {
 module.exports.updateBadge = async (req, res) => {
     try {
         const badgeId = req.params.id;
-        const { name, condition, tier, point_value } = req.body;
-        const badge = await Badge.findByIdAndUpdate(badgeId, { name, condition, tier, point_value }, { new: true });
+        const { name, condition, tier, point_value, url_image } = req.body;
+        const badge = await Badge.findByIdAndUpdate(badgeId, { name, condition, tier, point_value, url_image }, { new: true });
         if (!badge) {
             return res.status(404).json({ message: 'Badge not found' });
         }

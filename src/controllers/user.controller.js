@@ -1,5 +1,5 @@
 const User = require('../models/user.model');
-
+const CoachProfile = require('../models/coachProfile.model');
 // Get all users 
 module.exports.getAllUsers = async (req, res) => {
     try {
@@ -53,14 +53,21 @@ module.exports.getUserById = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
     try {
         const userID = req.params.id;
-        const { name, role, avatar_url } = req.body;
+        const { name, role } = req.body;
         const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ message: error.message });
         }
+
+        // Check if user's role is being changed from 'coach' to something else
+        if (user.role === 'coach' && role !== 'coach') {
+            // Delete coach profile when role is changed from coach
+            await CoachProfile.findOneAndDelete({ coach_id: userID });
+        }
+
         user.name = name;
         user.role = role;
-        user.avatar_url = avatar_url;
+
         await user.save();
         return res.status(200).json({
             message: 'Update user successfully',

@@ -274,8 +274,8 @@ module.exports.googleAuth = async (req, res) => {
             // Create new user if doesn't exist
             user = await User.create({
                 email: payload.email,
-                user_name: payload.name,
-                avatar: payload.picture,
+                name: payload.name,
+                avatar_url: payload.picture,
                 googleId: payload.sub,
                 isVerified: payload.email_verified,
                 role: 'user'
@@ -283,7 +283,7 @@ module.exports.googleAuth = async (req, res) => {
         } else {
             // Update existing user's Google-related info
             user.googleId = payload.sub;
-            user.avatar = payload.picture;
+            user.avatar_url = payload.picture;
             user.isVerified = payload.email_verified;
             await user.save();
         }
@@ -304,8 +304,8 @@ module.exports.googleAuth = async (req, res) => {
             user: {
                 id: user._id,
                 email: user.email,
-                user_name: user.user_name,
-                avatar: user.avatar,
+                name: user.user_name,
+                avatar_url: user.avatar,
                 role: user.role,
                 isVerified: user.isVerified,
                 token: token
