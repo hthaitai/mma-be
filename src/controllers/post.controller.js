@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 
 module.exports.createPost = async (req, res) => {
     try {
-        const { content, image, tags } = req.body;
+        const { title, content, image, tags } = req.body;
         const userId = req.user.id;
         const user = await User.findById(userId);
         if (!user) {
@@ -11,6 +11,7 @@ module.exports.createPost = async (req, res) => {
         }
         const post = new Post({
             user_id: userId,
+            title,
             content,
             image,
             tags,
@@ -23,6 +24,7 @@ module.exports.createPost = async (req, res) => {
             post: {
                 id: post._id,
                 user_id: post.user_id,
+                title: post.title,
                 content: post.content,
                 image: post.image,
                 tags: post.tags,
@@ -78,6 +80,7 @@ module.exports.likePost = async (req, res) => {
             post: {
                 id: post._id,
                 user_id: post.user_id,
+                title: post.title,
                 content: post.content,
                 image: post.image,
                 tags: post.tags,
@@ -120,7 +123,7 @@ module.exports.deletePost = async (req, res) => {
 module.exports.editPost = async (req, res) => {
     try {
         const postId = req.params.id;
-        const { content, image, tags } = req.body;
+        const { title, content, image, tags } = req.body;
         const userId = req.user.id;
 
         const post = await Post.findById(postId);
@@ -132,7 +135,7 @@ module.exports.editPost = async (req, res) => {
         if (post.user_id.toString() !== userId) {
             return res.status(403).json({ message: 'You are not authorized to update this post' });
         }
-
+        post.title = title;
         post.content = content;
         post.image = image;
         post.tags = tags;
@@ -171,5 +174,23 @@ module.exports.getPostByTagId = async (req, res) => {
     } catch (error) {
         console.error('Error fetching posts by tag ID:', error);
         res.status(500).json({ message: 'Internal server error' })
+    }
+};
+
+//get post by id
+module.exports.getPostById = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const post = await Post.findById(postId).populate('user_id', 'name avatar_url')
+            .populate('tags', 'title description');
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        res.status(200).json({ post });
+    } catch (error) {
+        console.error('Error fetching post by ID:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };

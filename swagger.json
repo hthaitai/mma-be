@@ -904,6 +904,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
+                                    "title": "Giai đoạn 1: Bắt đầu cai thuốc 1",
                                     "content": "Các môn thể thao mạo hiểm, được tài trợ bởi Redbull",
                                     "image": "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
                                     "tags": "683bffdf373ea82a7210ab22"
@@ -1051,6 +1052,42 @@
                 "summary": "Delete Post",
                 "description": "",
                 "operationId": "deleteapipostsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Get postById",
+                "description": "",
+                "operationId": "getapipostsid",
                 "parameters": [
                     {
                         "name": "id",
