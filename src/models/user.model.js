@@ -62,6 +62,13 @@ userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
+userSchema.methods.isValidPassword = async function (password) {
+    if (!this.password) {
+        return false; // Google users won't have a password
+    }
+    return await bcrypt.compare(password, this.password);
+};
+
 
 const User = mongoose.model('User', userSchema);
 
