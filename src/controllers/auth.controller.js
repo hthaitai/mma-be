@@ -267,12 +267,11 @@ module.exports.googleAuth = async (req, res) => {
         });
 
         const payload = ticket.getPayload();
-
         let user = await User.findOne({ email: payload.email });
 
         if (!user) {
-            // Create new user if doesn't exist
-            user = await User.create({
+            // Create new user without password for Google authentication
+            user = new User({
                 email: payload.email,
                 name: payload.name,
                 avatar_url: payload.picture,
@@ -280,7 +279,8 @@ module.exports.googleAuth = async (req, res) => {
                 isVerified: payload.email_verified,
                 role: 'user'
             });
-        } else {
+            await user.save();
+        } else if (!user.googleId) {
             // Update existing user's Google-related info
             user.googleId = payload.sub;
             user.avatar_url = payload.picture;
@@ -305,12 +305,11 @@ module.exports.googleAuth = async (req, res) => {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                avatar_url: user.avatar,
+                avatar_url: user.avatar_url,
                 role: user.role,
                 isVerified: user.isVerified,
                 token: token
-            },
-            token: token
+            }
         });
 
     } catch (error) {
