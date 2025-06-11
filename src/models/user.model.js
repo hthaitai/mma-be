@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: function () {
+            return !this.googleId; // Password is required only if googleId is not present
+        },
         minlength: 6,
     },
     name: {
@@ -59,6 +61,13 @@ userSchema.pre('save', async function (next) {
 });
 // Compare the password with the hashed password
 userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.isValidPassword = async function (password) {
+    if (!this.password) {
+        return false; // Google users won't have a password
+    }
     return await bcrypt.compare(password, this.password);
 };
 
