@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 const crypto = require('crypto');
 const transporter = require('../configs/emailConfig');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 //Create token
 const maxAge = 3 * 24 * 60 * 60;
@@ -42,7 +44,7 @@ module.exports.register = async (req, res) => {
 
         await newuser.save();
         // Tạo link xác thực
-        const verificationLink = `http://localhost:${process.env.PORT}/api/auth/verify/${vertificationToken}`;// sẽ sửa lại verificationLink khi có front-end fogetpassword
+        const verificationLink = `http://localhost:${process.env.VITE_PORT}/login/${vertificationToken}`;// sẽ sửa lại verificationLink khi có front-end fogetpassword
         // Gửi email xác thực
         const mailOptions = {
             from: process.env.EMAIL_USER,
@@ -125,7 +127,7 @@ module.exports.login = async (req, res) => {
         if (!user.isVerified) {
             return res.status(400).json({
                 message: 'Email not verified',
-                verificationLink: `http://localhost:${process.env.PORT}/api/auth/verify/${user.vertificationToken}`// sẽ sửa lại verificationLink khi có front-end fogetpassword
+                verificationLink: `http://localhost:${process.env.VITE_PORT}/login/${user.vertificationToken}`// sẽ sửa lại verificationLink khi có front-end fogetpassword
             })
         }
         const isMatch = await bcrypt.compare(password, user.password);
@@ -142,7 +144,7 @@ module.exports.login = async (req, res) => {
         res.status(200).json({
             message: 'Login successful',
             user: {
-                userId: user._id,
+                id: user._id,
                 email: user.email,
                 name: user.name,
                 role: user.role,
@@ -171,7 +173,7 @@ module.exports.fogotPassword = async (req, res) => {
 
         await user.save();
 
-        const resetLink = `http://localhost:${process.env.PORT}/api/auth/resset-password/${ressetToken}`; // sẽ sửa lại resetLink khi có front-end fogetpassword
+        const resetLink = `http://localhost:${process.env.VITE_PORT}/resset-password/${ressetToken}`; // sẽ sửa lại resetLink khi có front-end fogetpassword
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
@@ -240,6 +242,7 @@ module.exports.ressetPassword = async (req, res) => {
         }
 
         user.password = newPassword;
+        user.markModified('password');
 
         user.ressetPasswordToken = undefined;
         user.ressetPasswordExpires = undefined;
@@ -253,4 +256,67 @@ module.exports.ressetPassword = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
+module.exports.googleAuth = async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        let user = await User.findOne({ email: payload.email });
+
+        if (!user) {
+            // Create new user without password for Google authentication
+            user = new User({
+                email: payload.email,
+                name: payload.name,
+                avatar_url: payload.picture,
+                googleId: payload.sub,
+                isVerified: payload.email_verified,
+                role: 'user'
+            });
+            await user.save();
+        } else if (!user.googleId) {
+            // Update existing user's Google-related info
+            user.googleId = payload.sub;
+            user.avatar_url = payload.picture;
+            user.isVerified = payload.email_verified;
+            await user.save();
+        }
+
+        // Create JWT token
+        const token = createToken(user);
+
+        // Set cookie
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: maxAge * 1000,
+            sameSite: 'lax'
+        });
+
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                avatar_url: user.avatar_url,
+                role: user.role,
+                isVerified: user.isVerified,
+                token: token
+            }
+        });
+
+    } catch (error) {
+        console.error('Google auth error:', error);
+        return res.status(401).json({
+            success: false,
+            message: 'Google authentication failed'
+        });
+    }
+};

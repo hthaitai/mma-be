@@ -85,3 +85,18 @@ module.exports.updateCoachProfile = async (req, res) => {
         res.status(500).json({ message: 'Error updating coach profile', error: err.message });
     }
 };
+
+// Xóa hồ sơ huấn luyện viên
+module.exports.deleteCoachProfile = async (req, res) => {
+    try {
+        const coachId = req.params.id;
+        const profile = await CoachProfile.findOneAndDelete({ coach_id: coachId });
+        if (!profile) {
+            return res.status(404).json({ message: 'Coach profile not found' });
+        }
+        res.status(200).json({ message: 'Coach profile deleted successfully', profile });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};

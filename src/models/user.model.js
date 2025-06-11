@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: function () {
+            return !this.googleId; // Password is required only if googleId is not present
+        },
         minlength: 6,
     },
     name: {
@@ -40,21 +42,35 @@ const userSchema = new mongoose.Schema({
     ressetPasswordExpires: {
         type: Date,
         default: undefined,
-    }
+    },
+    googleId: {
+        type: String,
+        sparse: true,
+        unique: true
+    },
 }, 
 {
     timestamps: true,
 });
-// Hash password before saving to database
+// Hash the password before saving the user
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    this.password = await bcrypt.hash(this.password, 10);
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
     next();
 });
-// Compare password with hashed password
+// Compare the password with the hashed password
 userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
+
+userSchema.methods.isValidPassword = async function (password) {
+    if (!this.password) {
+        return false; // Google users won't have a password
+    }
+    return await bcrypt.compare(password, this.password);
+};
+
 
 const User = mongoose.model('User', userSchema);
 

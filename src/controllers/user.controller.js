@@ -1,5 +1,5 @@
 const User = require('../models/user.model');
-
+const CoachProfile = require('../models/coachProfile.model');
 // Get all users 
 module.exports.getAllUsers = async (req, res) => {
     try {
@@ -53,15 +53,21 @@ module.exports.getUserById = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
     try {
         const userID = req.params.id;
-        const { email, name, role, avatar_url } = req.body;
+        const { name, role } = req.body;
         const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ message: error.message });
         }
-        user.email = email;
+
+        // Check if user's role is being changed from 'coach' to something else
+        if (user.role === 'coach' && role !== 'coach') {
+            // Delete coach profile when role is changed from coach
+            await CoachProfile.findOneAndDelete({ coach_id: userID });
+        }
+
         user.name = name;
         user.role = role;
-        user.avatar_url = avatar_url;
+
         await user.save();
         return res.status(200).json({
             message: 'Update user successfully',
@@ -104,13 +110,13 @@ module.exports.deleteUser = async (req, res) => {
 //edit profile
 module.exports.editProfile = async (req, res) => {
     try {
-        const userID = req.user._id;
-        const { email, name, avatar_url } = req.body;
+        const userID = req.user.id;
+        const { name, avatar_url } = req.body;
         const user = await User.findById(userID);
         if (!user) {
             return res.status(404).json({ message: error.message });
         }
-        user.email = email;
+       
         user.name = name;
         user.avatar_url = avatar_url;
         await user.save();

@@ -157,4 +157,19 @@ module.exports.getPostsByUserId = async (req, res) => {
         console.error('Error getting posts by user ID:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
+
+
+module.exports.getPostByTagId = async (req, res) => {
+    try {
+        const tagId = req.params.id;
+        const posts = await Post.find({ tags: tagId }).populate('user_id', 'name email avatar_url')
+            .populate('tags', 'title description')
+            .sort({ post_date: -1 });
+
+        res.status(200).json({ posts });
+    } catch (error) {
+        console.error('Error fetching posts by tag ID:', error);
+        res.status(500).json({ message: 'Internal server error' })
+    }
+};

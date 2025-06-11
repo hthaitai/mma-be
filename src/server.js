@@ -6,8 +6,12 @@ const app = express();
 const port = process.env.PORT;
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const swaggerUi = require('swagger-ui-express');
+const cookieParser = require('cookie-parser');
+
 const db = require("./db/index.js");
 const cors = require("cors");
+
 
 const authRouter = require("./routes/auth.route");
 const userRouter = require("./routes/user.route");
@@ -24,8 +28,15 @@ const stageRouter = require("./routes/stage.route");
 const progressRouter = require("./routes/progress.route");
 const notificationRouter = require("./routes/notification.route");
 const subscriptionRouter = require("./routes/subscription.route.js");
+const feedbackRouter = require('./routes/feedback.route');
 
-const whiteList = ["http://localhost:5173"];
+
+
+
+
+
+
+const whiteList = ['http://localhost:5173', 'http://localhost:8080', 'https://smokingswp.onrender.com'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (whiteList.indexOf(origin) !== -1 || !origin) {
@@ -40,7 +51,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 // Connect to MongoDB
@@ -50,6 +61,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/smoking-status", smokingStatusRouter);
@@ -65,6 +77,13 @@ app.use("/api/stages", stageRouter);
 app.use("/api/progress", progressRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/subscriptions", subscriptionRouter);
+
+app.use('/api/feedback', feedbackRouter);
+
+// Swagger documentation
+const swaggerDocument = require('../swagger.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 // Run the server
 app.get("/", (req, res) => {
