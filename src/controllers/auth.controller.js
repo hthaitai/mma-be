@@ -304,7 +304,7 @@ module.exports.googleAuth = async (req, res) => {
             user: {
                 id: user._id,
                 email: user.email,
-                name: user.user_name,
+                name: user.name,
                 avatar_url: user.avatar,
                 role: user.role,
                 isVerified: user.isVerified,
