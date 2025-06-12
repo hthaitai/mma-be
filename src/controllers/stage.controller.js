@@ -132,3 +132,13 @@ exports.deleteStage = async (req, res) => {
     res.status(400).json({ message: "Error deleting stage", error });
   }
 };
+
+exports.getAllStages = async (req, res) => {
+  try {
+    const stages = await Stage.find();
+    res.status(200).json(stages);
+  } catch (error) {
+    console.error("Error getting all stages:", error);
+    res.status(500).json({ message: "Failed to get stages", error });
+  }
+};

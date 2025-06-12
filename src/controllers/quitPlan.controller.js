@@ -5,7 +5,7 @@ const QuitPlan = require("../models/quitPlan.model");
  */
 exports.getAllQuitPlans = async (req, res) => {
   try {
-    const plans = await QuitPlan.find().populate("user_id", "name email");
+    const plans = await QuitPlan.find();
     res.status(200).json(plans);
   } catch (error) {
     res.status(500).json({ message: "Error fetching quit plans", error });

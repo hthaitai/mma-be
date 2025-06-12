@@ -37,5 +37,12 @@ progressRouter.delete(
   checkRole(["coach", "admin"]),
   progressController.deleteProgress
 );
+// 🔐 Get all progress — Admin, Coach, User (lọc theo quyền trong controller)
+progressRouter.get(
+  "/",
+  validateToken,
+  checkRole(["user", "coach", "admin"]),
+  progressController.getAllProgress
+);
 
 module.exports = progressRouter;
