@@ -81,7 +81,7 @@
                                 "type": "object",
                                 "example": {
                                     "email": "nguyenthanhphong3778@gmail.com",
-                                    "password": "123456"
+                                    "password": "Phong123"
                                 }
                             }
                         }
@@ -126,7 +126,7 @@
                 }
             }
         },
-        "/api/auth/resset-password/:token": {
+        "/api/auth/resset-password/{token}": {
             "post": {
                 "tags": [
                     "Auth"
@@ -172,7 +172,7 @@
                 }
             }
         },
-        "/api/smoking-status/:id": {
+        "/api/smoking-status/{id}": {
             "post": {
                 "security": [
                     {
@@ -421,7 +421,7 @@
                 }
             }
         },
-        "/api/coach/:id": {
+        "/api/coach/{id}": {
             "get": {
                 "security": [
                     {
@@ -510,7 +510,7 @@
                 }
             }
         },
-        "/api/user/:id": {
+        "/api/user/{id}": {
             "put": {
                 "security": [
                     {
@@ -635,7 +635,7 @@
                 }
             }
         },
-        "/api/user/edit-profile/:id": {
+        "/api/user/edit-profile/{id}": {
             "put": {
                 "security": [
                     {
@@ -760,7 +760,7 @@
                 }
             }
         },
-        "/api/meet-session/:id/status": {
+        "/api/meet-session/{id}/status": {
             "put": {
                 "security": [
                     {
@@ -944,7 +944,7 @@
                 }
             }
         },
-        "/api/posts/like/:id": {
+        "/api/posts/like/{id}": {
             "post": {
                 "security": [
                     {
@@ -988,7 +988,7 @@
                 }
             }
         },
-        "/api/posts/:id": {
+        "/api/posts/{id}": {
             "put": {
                 "security": [
                     {
@@ -1113,7 +1113,7 @@
                 }
             }
         },
-        "/api/posts/user/:id": {
+        "/api/posts/user/{id}": {
             "get": {
                 "security": [
                     {
@@ -1266,7 +1266,7 @@
                 }
             }
         },
-        "/api/comments/post/:id": {
+        "/api/comments/post/{id}": {
             "get": {
                 "security": [
                     {
@@ -1304,7 +1304,7 @@
                 }
             }
         },
-        "/api/comments/:id": {
+        "/api/comments/{id}": {
             "put": {
                 "security": [
                     {
@@ -1465,7 +1465,7 @@
                 }
             }
         },
-        "/api/badges/:id": {
+        "/api/badges/{id}": {
             "put": {
                 "security": [
                     {
@@ -1598,7 +1598,7 @@
                 }
             }
         },
-        "/api/user-badges/user/:id": {
+        "/api/user-badges/user/{id}": {
             "get": {
                 "security": [
                     {
@@ -2343,7 +2343,7 @@
                 }
             }
         },
-        "/api/feedback/user/:id": {
+        "/api/feedback/user/{id}": {
             "get": {
                 "security": [
                     {
@@ -2381,7 +2381,7 @@
                 }
             }
         },
-        "/api/feedback/coach/:id": {
+        "/api/feedback/coach/{id}": {
             "get": {
                 "security": [
                     {
@@ -2419,7 +2419,7 @@
                 }
             }
         },
-        "/api/feedback/:id": {
+        "/api/feedback/{id}": {
             "put": {
                 "security": [
                     {
@@ -2507,7 +2507,7 @@
                 }
             }
         },
-        "/api/feedback/status/:id": {
+        "/api/feedback/status/{id}": {
             "put": {
                 "security": [
                     {
@@ -2558,7 +2558,7 @@
                 }
             }
         },
-        "/api/feedback/coach/:id/average-rating": {
+        "/api/feedback/coach/{id}/average-rating": {
             "get": {
                 "security": [
                     {
