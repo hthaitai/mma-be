@@ -1,4 +1,5 @@
 const Badge = require('../models/badge.model');
+const UserBadge = require('../models/userBadge.model');
 
 // Tạo badge
 module.exports.createBadge = async (req, res) => {
@@ -55,4 +56,32 @@ module.exports.deleteBadge = async (req, res) => {
         console.log(error.message);
         res.status(500).json({ message: 'Error delete badge', error: error.message })
     }
-}
+};
+
+
+// GET /api/badges/user/:userId
+module.exports.getAllBadgesWithUserStatus = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const allBadges = await Badge.find();
+        const userBadges = await UserBadge.find({ user_id: userId });
+
+        // Tạo map các badge đã đạt
+        const earnedBadgeMap = userBadges.reduce((ern, ub) => {
+            ern[ub.badge_id.toString()] = true;
+            return ern;
+        }, {});
+
+        // Trộn badge + trạng thái
+        const result = allBadges.map(badge => ({
+            ...badge.toObject(),
+            earned: !!earnedBadgeMap[badge._id.toString()],
+        }));
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+

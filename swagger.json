@@ -1555,6 +1555,44 @@
                 }
             }
         },
+        "/api/badges/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Get badge user with status",
+                "description": "",
+                "operationId": "getapibadgesuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user-badges/create": {
             "post": {
                 "security": [
@@ -1697,11 +1735,11 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "name": "Kế hoạch cai thuốc tháng 6",
+                                    "name": "Kế hoạch cai thuốc11 2",
                                     "start_date": "2025-06-03T00:00:00.000Z",
                                     "target_quit_date": "2025-07-01T00:00:00.000Z",
                                     "reason": "Sức khỏe",
-                                    "user_id": "68302f68b239be97eea641de"
+                                    "user_id": "683eb95bb6f67aa21068f9f8"
                                 }
                             }
                         }
@@ -1709,15 +1747,29 @@
                 }
             }
         },
-        "/api/quitPlan/683eb70c4d533a558f47884d": {
+        "/api/quitPlan/{id}": {
             "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "QuitPlan"
                 ],
                 "summary": "Update",
                 "description": "",
-                "operationId": "putapiquitPlan683eb70c4d533a558f47884d",
-                "parameters": [],
+                "operationId": "putapiquitPlanid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1743,14 +1795,28 @@
                     }
                 }
             },
-            "delete": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "QuitPlan"
                 ],
-                "summary": "Delete",
+                "summary": "GetByID",
                 "description": "",
-                "operationId": "deleteapiquitPlan683eb70c4d533a558f47884d",
-                "parameters": [],
+                "operationId": "getapiquitPlanid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1764,17 +1830,29 @@
                         }
                     }
                 }
-            }
-        },
-        "/": {
-            "get": {
-                "tags": [
-                    "Progress"
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
                 ],
-                "summary": "Get By Progress ID",
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Delete",
                 "description": "",
-                "operationId": "get",
-                "parameters": [],
+                "operationId": "deleteapiquitPlanid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1835,9 +1913,36 @@
                         }
                     }
                 }
+            },
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Stage"
+                ],
+                "summary": "Get All Stage",
+                "description": "",
+                "operationId": "getapistages",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/api/stages/683ec03282c6d72e5af7719e": {
+        "/api/stages/{id}": {
             "get": {
                 "security": [
                     {
@@ -1849,8 +1954,17 @@
                 ],
                 "summary": "GetByID Stage",
                 "description": "",
-                "operationId": "getapistages683ec03282c6d72e5af7719e",
-                "parameters": [],
+                "operationId": "getapistagesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1876,8 +1990,17 @@
                 ],
                 "summary": "Update",
                 "description": "",
-                "operationId": "putapistages683ec03282c6d72e5af7719e",
-                "parameters": [],
+                "operationId": "putapistagesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1921,8 +2044,17 @@
                 ],
                 "summary": "Delete",
                 "description": "",
-                "operationId": "deleteapistages683ec03282c6d72e5af7719e",
-                "parameters": [],
+                "operationId": "deleteapistagesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1938,15 +2070,29 @@
                 }
             }
         },
-        "/api/stages/plan/683eb70c4d533a558f47884d": {
+        "/api/stages/plan/{id}": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Stage"
                 ],
                 "summary": "GetBY PlanID",
                 "description": "",
-                "operationId": "getapistagesplan683eb70c4d533a558f47884d",
-                "parameters": [],
+                "operationId": "getapistagesplanid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -1996,11 +2142,39 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "stage_id": "683ec03282c6d72e5af7719e",
+                                    "stage_id": "684a6c0598a6097ad6c6cc5f",
                                     "date": "2025-06-03",
-                                    "cigarettes_smoked": 3,
-                                    "health_stat": "Stable breathing, slight cravings",
-                                    "money_saved": 15000
+                                    "cigarettes_smoked": 4,
+                                    "health_stat": "Tiết kiệm , khỏe khoắn1",
+                                    "money_saved": 5000,
+                                    "user_id": "683eb95bb6f67aa21068f9f8"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "GetAllProgress",
+                "description": "",
+                "operationId": "getapiprogress",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
                                 }
                             }
                         }
@@ -2008,7 +2182,81 @@
                 }
             }
         },
-        "/api/progress/683f22e0158f63100643c39b": {
+        "/api/progress/stage/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Get by Stage ID",
+                "description": "",
+                "operationId": "getapiprogressstageid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/progress/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Get By Progress ID",
+                "description": "",
+                "operationId": "getapiprogressid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -2020,8 +2268,17 @@
                 ],
                 "summary": "Update",
                 "description": "",
-                "operationId": "putapiprogress683f22e0158f63100643c39b",
-                "parameters": [],
+                "operationId": "putapiprogressid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -2043,13 +2300,27 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Progress"
                 ],
                 "summary": "Delete",
                 "description": "",
-                "operationId": "deleteapiprogress683f22e0158f63100643c39b",
-                "parameters": [],
+                "operationId": "deleteapiprogressid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -2109,6 +2380,11 @@
                 }
             },
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Notification"
                 ],
@@ -2131,7 +2407,7 @@
                 }
             }
         },
-        "/api/notifications/684118ecf2630f6f1e1b52c6": {
+        "/api/notifications/{id}": {
             "get": {
                 "security": [
                     {
@@ -2143,8 +2419,17 @@
                 ],
                 "summary": "GetbyId",
                 "description": "",
-                "operationId": "getapinotifications684118ecf2630f6f1e1b52c6",
-                "parameters": [],
+                "operationId": "getapinotificationsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -2170,8 +2455,17 @@
                 ],
                 "summary": "Update",
                 "description": "",
-                "operationId": "putapinotifications684118ecf2630f6f1e1b52c6",
-                "parameters": [],
+                "operationId": "putapinotificationsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -2192,7 +2486,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "message": "Chúc mừng! Bạn đã bỏ thuốc được 7 ngày rồi nè!",
+                                    "message": "Chúc mừng! Bạn đã bỏ thuốc được 8 ngày rồi nè!",
                                     "type": "motivation",
                                     "schedule": "2025-06-06T08:00:00.000Z"
                                 }
@@ -2202,13 +2496,207 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "tags": [
                     "Notification"
                 ],
-                "summary": "New Request",
+                "summary": "Delete Notification",
                 "description": "",
-                "operationId": "deleteapinotifications684118ecf2630f6f1e1b52c6",
-                "parameters": [],
+                "operationId": "deleteapinotificationsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/subscriptions/{id}": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapisubscriptionsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "Gói hỗ trợ nâng cao cấp ",
+                                    "price": 199000,
+                                    "start_date": "2025-06-05T00:00:00.000Z",
+                                    "end_date": "2025-07-05T00:00:00.000Z",
+                                    "is_active": true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "GetByID",
+                "description": "",
+                "operationId": "getapisubscriptionsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Update",
+                "description": "",
+                "operationId": "putapisubscriptionsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "Gói hỗ trợ cơ bản1312",
+                                    "price": 199,
+                                    "start_date": "2025-06-05T00:00:00.000Z",
+                                    "end_date": "2025-07-05T00:00:00.000Z",
+                                    "is_active": true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Delete",
+                "description": "",
+                "operationId": "deleteapisubscriptionsid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful response",
@@ -2225,7 +2713,7 @@
             }
         },
         "/api/subscriptions": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "bearerAuth": []
@@ -2234,9 +2722,9 @@
                 "tags": [
                     "Subscription"
                 ],
-                "summary": "Create",
+                "summary": "GetAll",
                 "description": "",
-                "operationId": "postapisubscriptions",
+                "operationId": "getapisubscriptions",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -2246,23 +2734,6 @@
                                 "schema": {
                                     "type": "object",
                                     "example": {}
-                                }
-                            }
-                        }
-                    }
-                },
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "example": {
-                                    "name": "Gói hỗ trợ cơ bản",
-                                    "price": 199000,
-                                    "start_date": "2025-06-05T00:00:00.000Z",
-                                    "end_date": "2025-07-05T00:00:00.000Z",
-                                    "is_active": true
                                 }
                             }
                         }
