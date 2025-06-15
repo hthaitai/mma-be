@@ -7,9 +7,9 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    plan_id: {
+    progress_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "QuitPlan",
+      ref: "Progress",
       required: true,
     },
     message: {

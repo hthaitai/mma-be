@@ -1,30 +1,32 @@
 const Notification = require("../models/notificaltion.model");
-const QuitPlan = require("../models/quitPlan.model"); // Import model kế hoạch bỏ thuốc
+const Progress = require("../models/progress.model"); // Import model tiến trình
 
-// [1] Tạo Notification
 exports.createNotification = async (req, res) => {
   try {
-    const { message, type, schedule } = req.body;
+    const { progress_id, message, type, schedule } = req.body;
 
-    if (!message || !type || !schedule) {
+    // ✅ Kiểm tra role
+    if (req.user.role !== "admin" && req.user.role !== "coach") {
+      return res
+        .status(403)
+        .json({ error: "Only admin or coach can send notifications" });
+    }
+
+    // ✅ Kiểm tra dữ liệu đầu vào
+    if (!progress_id || !message || !type || !schedule) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // ✅ Lấy user_id từ token đã xác thực
-    const userId = req.user.id;
-
-    // ✅ Tìm kế hoạch bỏ thuốc của user
-    const plan = await QuitPlan.findOne({ user_id: userId });
-    if (!plan) {
-      return res
-        .status(404)
-        .json({ error: "Quit plan not found for this user" });
+    // ✅ Lấy tiến trình
+    const progress = await Progress.findById(progress_id);
+    if (!progress) {
+      return res.status(404).json({ error: "Progress not found" });
     }
 
-    // ✅ Tạo thông báo
+    // ✅ Tạo Notification, tự động lấy user_id từ progress
     const newNotification = new Notification({
-      user_id: userId,
-      plan_id: plan._id,
+      user_id: progress.user_id,
+      progress_id: progress._id,
       message,
       type,
       schedule,
@@ -33,7 +35,7 @@ exports.createNotification = async (req, res) => {
     const saved = await newNotification.save();
     res.status(201).json(saved);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
