@@ -43,4 +43,11 @@ notificationRouter.delete(
   notificationController.deleteNotification
 );
 
+// [GET] Lấy tất cả thông báo của user theo tiến trình
+notificationRouter.get(
+  "/user/:userId",
+  validateToken,
+  checkRole(["user", "coach", "admin"]),
+  notificationController.getNotificationsByUser
+);
 module.exports = notificationRouter;

@@ -91,3 +91,23 @@ exports.deleteNotification = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// GET /notifications/user/:userId
+exports.getNotificationsByUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Tìm tất cả progress của user
+    const progresses = await Progress.find({ user_id: userId }).select("_id");
+    const progressIds = progresses.map((p) => p._id);
+
+    // Tìm notification theo progress
+    const notifications = await Notification.find({
+      progress_id: { $in: progressIds },
+    });
+
+    res.status(200).json(notifications);
+  } catch (err) {
+    res.status(500).json({ error: "Server error", details: err.message });
+  }
+};
