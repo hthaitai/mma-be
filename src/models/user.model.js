@@ -48,6 +48,14 @@ const userSchema = new mongoose.Schema({
         sparse: true,
         unique: true
     },
+    otp: {
+        type: String,
+        default: null,
+    },
+    otpExpires: {
+        type: Date,
+        default: null,
+    }
 }, 
 {
     timestamps: true,

@@ -7,7 +7,6 @@ const crypto = require('crypto');
 const transporter = require('../configs/emailConfig');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 //Create token
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (user) => {
@@ -25,6 +24,11 @@ const createToken = (user) => {
         }
     );
 }
+
+function generateOtp() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 // Register a new user
 module.exports.register = async (req, res) => {
     try {
@@ -113,6 +117,94 @@ module.exports.verifyEmail = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 }
+
+// Register send OTP
+module.exports.registerSendOtp = async (req, res) => {
+    const { email, password, name } = req.body;
+    try {
+        const existing = await User.findOne({ email });
+        if (existing) return res.status(400).json({ message: 'Email already registered' });
+
+        const otp = generateOtp();
+        const newUser = new User({ email, password, name, otp, otpExpires: Date.now() + 10 * 60 * 1000 });
+        await newUser.save();
+
+        // Send OTP email
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Your verification code',
+            html: `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    </head>
+                    <body style="margin: 0; padding: 0; background-color: #f7f7f7; font-family: Arial, sans-serif;">
+                        <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 40px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h1 style="color: #1a73e8; font-size: 28px; margin: 0; padding: 0;">Verification Required</h1>
+                                <p style="color: #5f6368; font-size: 16px; margin-top: 10px;">Please use the code below to verify your account</p>
+                            </div>
+                            
+                            <div style="background-color: #f8f9fa; border-radius: 10px; padding: 30px; text-align: center; margin: 20px 0;">
+                                <div style="font-size: 32px; letter-spacing: 8px; font-weight: bold; color: #1a73e8; font-family: monospace;">
+                                    ${otp}
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 30px;">
+                                <p style="color: #5f6368; font-size: 14px; margin: 0;">This code will expire in 10 minutes</p>
+                                <p style="color: #5f6368; font-size: 14px; margin-top: 20px;">If you didn't request this code, you can safely ignore this email.</p>
+                            </div>
+
+                            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+                                <p style="color: #5f6368; font-size: 12px; margin: 0;">
+                                    This is an automated email, please do not reply.
+                                </p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email:', error);
+                return res.status(500).json({ message: 'Error sending email' });
+            }
+            console.log('Email sent:', info.response);
+        });
+
+        res.status(200).json({ message: 'Registered. Please verify email with the code sent.' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error registering', error: err });
+    }
+};
+
+module.exports.verifyEmailWithOtp = async (req, res) => {
+    const { email, code } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        if (user.isVerified) return res.status(400).json({ message: 'User already verified' });
+
+        if (user.otp !== code || Date.now() > user.otpExpires) {
+            return res.status(400).json({ message: 'Invalid or expired code' });
+        }
+
+        user.isVerified = true;
+        user.otp = null;
+        user.otpExpires = null;
+        await user.save();
+
+        res.status(200).json({ message: 'Email verified successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Verification failed', error: err });
+    }
+};
+
 
 // Login a user
 module.exports.login = async (req, res) => {
