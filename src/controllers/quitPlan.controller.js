@@ -22,7 +22,6 @@ exports.getQuitPlanById = async (req, res) => {
       return res.status(404).json({ message: "Quit plan not found" });
     }
 
-    // Check if user is owner or admin
     if (req.user.role !== "admin" && plan.user_id.toString() !== req.user.id) {
       return res.status(403).json({ message: "Access denied" });
     }
@@ -38,22 +37,22 @@ exports.getQuitPlanById = async (req, res) => {
  */
 exports.createQuitPlan = async (req, res) => {
   try {
-    const { user_id, reason, name, start_date, target_quit_date } = req.body;
+    const { user_id, reason, name, start_date, target_quit_date, image } =
+      req.body;
 
-    // Nếu là user thường → chỉ được tạo plan cho chính mình
     if (req.user.role === "user" && user_id !== req.user.id) {
       return res.status(403).json({
         message: "Bạn chỉ có thể tạo kế hoạch cai thuốc cho chính mình",
       });
     }
 
-    // Nếu là admin hoặc coach → cho phép tạo hộ user khác (dùng user_id trong body)
     const newPlan = new QuitPlan({
       user_id: req.user.id,
       reason,
       name,
       start_date,
       target_quit_date,
+      image,
     });
 
     const savedPlan = await newPlan.save();
@@ -73,14 +72,19 @@ exports.updateQuitPlan = async (req, res) => {
       return res.status(404).json({ message: "Quit plan not found" });
     }
 
-    // Only owner or admin can update
     if (req.user.role !== "admin" && plan.user_id.toString() !== req.user.id) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const updated = await QuitPlan.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const { reason, name, start_date, target_quit_date, image } = req.body;
+
+    plan.reason = reason ?? plan.reason;
+    plan.name = name ?? plan.name;
+    plan.start_date = start_date ?? plan.start_date;
+    plan.target_quit_date = target_quit_date ?? plan.target_quit_date;
+    plan.image = image ?? plan.image;
+
+    const updated = await plan.save();
     res.status(200).json(updated);
   } catch (error) {
     res.status(400).json({ message: "Error updating quit plan", error });
