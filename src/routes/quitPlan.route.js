@@ -7,7 +7,7 @@ const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
 quitPlanRouter.get(
   "/",
   validateToken,
-  checkRole(["admin"]),
+  checkRole(["admin", "user", "coach"]),
   quitPlanController.getAllQuitPlans
 );
 
