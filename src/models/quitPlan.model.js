@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 const quitPlanSchema = new mongoose.Schema(
   {
-    plan_id: {
-      type: String,
-      default: () => new mongoose.Types.ObjectId().toString(),
-      unique: true,
-    },
 
     user_id: {
       type: mongoose.Schema.Types.ObjectId,

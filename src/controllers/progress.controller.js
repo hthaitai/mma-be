@@ -27,18 +27,28 @@ const canAccessStage = async (user, stageId) => {
 // ✅ Create progress (User only for their stage)
 exports.createProgress = async (req, res) => {
   try {
-    const { stage_id, date, cigarettes_smoked, health_stat, money_saved } =
-      req.body;
+    const {
+      stage_id,
+      date,
+      cigarettes_smoked,
+      health_stat,
+      money_saved,
+      user_id, // user_id có thể được truyền vào nếu là admin hoặc coach
+    } = req.body;
 
     const access = await canAccessStage(req.user, stage_id);
 
-    // ❗️Chỉ cần check access.allowed là đủ
     if (!access.allowed) {
       return res.status(403).json({ message: "Access denied" });
     }
 
+    // ✅ Nếu là admin hoặc coach, dùng user_id từ body (nếu có). Nếu không, dùng chính req.user.id
+    const isAdminOrCoach =
+      req.user.role === "admin" || req.user.role === "coach";
+    const finalUserId = isAdminOrCoach && user_id ? user_id : req.user.id;
+
     const progress = await Progress.create({
-      user_id: req.user.id,
+      user_id: finalUserId,
       stage_id,
       date,
       cigarettes_smoked,
@@ -120,5 +130,27 @@ exports.deleteProgress = async (req, res) => {
     res.status(200).json({ message: "Deleted successfully" });
   } catch (err) {
     res.status(400).json({ message: "Delete failed", err });
+  }
+};
+
+exports.getAllProgress = async (req, res) => {
+  try {
+    let progress;
+
+    if (req.user.role === "admin") {
+      // Admin: xem toàn bộ
+      progress = await Progress.find();
+    } else if (req.user.role === "coach") {
+      // Coach: xem toàn bộ progress nhưng có thể lọc theo stage nếu cần
+      // Giản lược: trả về toàn bộ (hoặc lọc kỹ hơn nếu bạn muốn, ví dụ theo coach's plans)
+      progress = await Progress.find();
+    } else {
+      // User: chỉ xem progress của chính họ
+      progress = await Progress.find({ user_id: req.user.id });
+    }
+
+    res.status(200).json(progress);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching progress records", err });
   }
 };

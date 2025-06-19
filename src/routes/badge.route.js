@@ -7,5 +7,6 @@ badgeRouter.put('/:id', validateToken, checkRole(['admin', 'coach']), badgeContr
 badgeRouter.delete('/:id', validateToken, checkRole(['admin', 'coach']), badgeController.deleteBadge);
 badgeRouter.post('/create', validateToken, checkRole(['admin', 'coach']), badgeController.createBadge);
 badgeRouter.get('/', validateToken, checkRole(['admin', 'coach']), badgeController.getAllBadges);
+badgeRouter.get('/user/:id', validateToken, badgeController.getAllBadgesWithUserStatus);
 
 module.exports = badgeRouter;

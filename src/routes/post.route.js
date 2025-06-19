@@ -10,5 +10,6 @@ postRouter.get('/user/:id', validateToken, postController.getPostsByUserId);
 postRouter.get('/tag/:id', validateToken, postController.getPostByTagId);
 postRouter.put('/:id', validateToken, postController.editPost);
 postRouter.delete('/:id', validateToken, postController.deletePost);
+postRouter.get('/:id', validateToken, postController.getPostById);
 
 module.exports = postRouter;
