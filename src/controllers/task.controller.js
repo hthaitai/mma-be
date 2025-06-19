@@ -1,0 +1,85 @@
+const Task = require("../models/task.model");
+
+// Lấy tất cả task (có thể filter theo stage_id nếu cần)
+exports.getAllTasks = async (req, res) => {
+  try {
+    const { stage_id } = req.query;
+    const filter = stage_id ? { stage_id } : {};
+
+    const tasks = await Task.find(filter).sort({ sort_order: 1 });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy danh sách task", error });
+  }
+};
+
+// Lấy task theo ID
+exports.getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: "Không tìm thấy task" });
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy task", error });
+  }
+};
+
+// Tạo task mới
+exports.createTask = async (req, res) => {
+  try {
+    const { stage_id, title, description, sort_order } = req.body;
+
+    const newTask = new Task({
+      stage_id,
+      title,
+      description,
+      sort_order,
+    });
+
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi tạo task", error });
+  }
+};
+
+// Cập nhật task
+exports.updateTask = async (req, res) => {
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+
+    if (!updatedTask)
+      return res.status(404).json({ message: "Task không tồn tại" });
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi cập nhật task", error });
+  }
+};
+
+// Xóa task
+exports.deleteTask = async (req, res) => {
+  try {
+    const deletedTask = await Task.findByIdAndDelete(req.params.id);
+
+    if (!deletedTask)
+      return res.status(404).json({ message: "Task không tồn tại" });
+
+    res.status(200).json({ message: "Đã xóa task thành công" });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi xóa task", error });
+  }
+};
+exports.getTasksByStage = async (req, res) => {
+  try {
+    const { stageId } = req.params;
+    const tasks = await Task.find({ stage_id: stageId }).sort({
+      sort_order: 1,
+    });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi lấy danh sách task", error });
+  }
+};

@@ -42,5 +42,12 @@ stageRouter.delete(
   checkRole(["admin"]),
   stageController.deleteStage
 );
+// 🔐 Get all stages (Admin only)
+stageRouter.get(
+  "/",
+  validateToken,
+  checkRole(["admin"]),
+  stageController.getAllStages
+);
 
 module.exports = stageRouter;

@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 const stageSchema = new mongoose.Schema(
   {
-    stage_id: {
-      type: String,
-      default: () => new mongoose.Types.ObjectId().toString(),
-      unique: true,
-    },
     plan_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "QuitPlan",

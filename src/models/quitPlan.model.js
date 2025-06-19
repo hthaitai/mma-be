@@ -7,6 +7,7 @@ const quitPlanSchema = new mongoose.Schema(
       default: () => new mongoose.Types.ObjectId().toString(),
       unique: true,
     },
+
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -27,6 +28,10 @@ const quitPlanSchema = new mongoose.Schema(
     target_quit_date: {
       type: Date,
       required: true,
+    },
+    image: {
+      type: String,
+      required: false, // không bắt buộc
     },
   },
   { timestamps: true }
