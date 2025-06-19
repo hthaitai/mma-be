@@ -133,12 +133,17 @@ exports.deleteStage = async (req, res) => {
   }
 };
 
+// ✅ Get all stages (Admin only)
 exports.getAllStages = async (req, res) => {
   try {
-    const stages = await Stage.find();
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Only admin can access all stages" });
+    }
+
+    const stages = await Stage.find().sort({ createdAt: -1 });
     res.status(200).json(stages);
   } catch (error) {
-    console.error("Error getting all stages:", error);
-    res.status(500).json({ message: "Failed to get stages", error });
-  }
-};
+    res.status(400).json({ message: "Error fetching all stages", error });
+

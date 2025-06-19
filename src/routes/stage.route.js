@@ -42,6 +42,13 @@ stageRouter.delete(
   checkRole(["admin"]),
   stageController.deleteStage
 );
+// 🔐 Get all stages (Admin only)
+stageRouter.get(
+  "/",
+  validateToken,
+  checkRole(["admin"]),
+  stageController.getAllStages
+);
 
 // 🔐 Get all stages — Admin only (hoặc thêm role tùy bạn)
 stageRouter.get(
