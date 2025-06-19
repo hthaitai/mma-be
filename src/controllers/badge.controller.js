@@ -61,7 +61,7 @@ module.exports.deleteBadge = async (req, res) => {
 
 // GET /api/badges/user/:userId
 module.exports.getAllBadgesWithUserStatus = async (req, res) => {
-    const { userId } = req.params;
+    const userId = req.params.id;
 
     try {
         const allBadges = await Badge.find();
