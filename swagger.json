@@ -172,6 +172,83 @@
                 }
             }
         },
+        "/api/auth/register/send-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register Send OTP",
+                "description": "",
+                "operationId": "postapiauthregistersendotp",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com",
+                                    "password": "Phong123",
+                                    "name": "phong phong"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/verify-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify OTP",
+                "description": "",
+                "operationId": "postapiauthverifyotp",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com",
+                                    "code": "705442"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/smoking-status/{id}": {
             "post": {
                 "security": [
