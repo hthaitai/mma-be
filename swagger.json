@@ -1664,6 +1664,30 @@
                 }
             }
         },
+        "/api/badges/leaderboard": {
+            "get": {
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Get bagdes LeaderBoard",
+                "description": "",
+                "operationId": "getapibadgesleaderboard",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user-badges/create": {
             "post": {
                 "security": [
