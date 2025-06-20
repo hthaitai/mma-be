@@ -22,6 +22,7 @@ module.exports.getUserBadges = async (req, res) => {
         const userId = req.params.id;
 
         const badges = await UserBadge.find({ user_id: userId })
+            .populate('user_id', 'name email avatar_url')
             .populate('badge_id')
             .sort({ awarded_at: -1 });
 

@@ -85,3 +85,40 @@ module.exports.getAllBadgesWithUserStatus = async (req, res) => {
     }
 };
 
+module.exports.getBadgeLeaderBoard = async (req, res) => {
+    try {
+        const userBadges = await UserBadge.find().populate('badge_id').populate('user_id');
+        const leaderBoardMap = {};
+
+        userBadges.forEach(ub => {
+            const userId = ub.user_id;
+            const badge = ub.badge_id;
+
+            if (!leaderBoardMap[userId]) {
+                leaderBoardMap[userId] = {
+                    userId: ub.user_id,
+                    name: ub.user_id.name,
+                    avatar: ub.user_id.avatar_url,
+                    badgeCount: 0,
+                    totalPoints: 0,
+                    badges: []
+                };
+            }
+
+            leaderBoardMap[userId].badgeCount += 1;
+            leaderBoardMap[userId].totalPoints += badge.point_value || 0;
+            leaderBoardMap[userId].badges.push({
+                badge_id: badge.id,
+                name: badge.name,
+                point_value: badge.point_value,
+            });
+        });
+
+        const leaderboard = Object.values(leaderBoardMap).sort((a, b) => b.totalPoints - a.totalPoints);
+
+        res.status(200).json(leaderboard);
+    } catch (error) {
+        console.error('Error generating leaderboard:', error.message);
+        res.status(500).json({ message: 'Failed to generate leaderboard', error: error.message });
+    }
+};

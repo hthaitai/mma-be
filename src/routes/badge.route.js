@@ -8,5 +8,6 @@ badgeRouter.delete('/:id', validateToken, checkRole(['admin', 'coach']), badgeCo
 badgeRouter.post('/create', validateToken, checkRole(['admin', 'coach']), badgeController.createBadge);
 badgeRouter.get('/', validateToken, checkRole(['admin', 'coach']), badgeController.getAllBadges);
 badgeRouter.get('/user/:id', validateToken, badgeController.getAllBadgesWithUserStatus);
+badgeRouter.get('/leaderboard', badgeController.getBadgeLeaderBoard);
 
 module.exports = badgeRouter;
