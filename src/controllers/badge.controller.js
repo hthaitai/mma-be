@@ -122,3 +122,49 @@ module.exports.getBadgeLeaderBoard = async (req, res) => {
         res.status(500).json({ message: 'Failed to generate leaderboard', error: error.message });
     }
 };
+
+module.exports.getBadgeStats = async (req, res) => {
+    try {
+        // Lấy tất cả badge
+        const badges = await Badge.find();
+
+        // Lấy user đã đạt từng badge (populate user)
+        const badgeUsers = await UserBadge.find().populate('user_id', 'name email avatar_url').populate('badge_id', 'name tier');
+
+        // Gom nhóm theo badge
+        const badgeMap = {};
+        badgeUsers.forEach(ub => {
+            // Bỏ qua nếu thiếu user hoặc badge (dữ liệu lỗi)
+            if (!ub.user_id || !ub.badge_id) return;
+
+            const badgeId = ub.badge_id._id.toString();
+            if (!badgeMap[badgeId]) {
+                badgeMap[badgeId] = {
+                    badge_id: badgeId,
+                    name: ub.badge_id.name,
+                    tier: ub.badge_id.tier,
+                    users: []
+                };
+            }
+            badgeMap[badgeId].users.push({
+                user_id: ub.user_id._id,
+                name: ub.user_id.name,
+                email: ub.user_id.email,
+                avatar_url: ub.user_id.avatar_url,
+                date_awarded: ub.date_awarded
+            });
+        });
+
+        // Đảm bảo trả về cả badge chưa ai đạt
+        const result = badges.map(badge => ({
+            badge_id: badge._id,
+            name: badge.name,
+            tier: badge.tier,
+            users: badgeMap[badge._id.toString()] ? badgeMap[badge._id.toString()].users : []
+        }));
+
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting badge stats', error: error.message });
+    }
+};

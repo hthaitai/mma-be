@@ -39,10 +39,13 @@ module.exports.register = async (req, res) => {
         }
         //Token xác thực
         const vertificationToken = crypto.randomBytes(32).toString('hex');
+        const avatar_url = `https://ui-avatars.com/api/?name=${name}&background=random`
+
         const newuser = new User({
             name,
             email,
             password,
+            avatar_url,
             vertificationToken
         });
 

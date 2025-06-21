@@ -1,0 +1,36 @@
+const Badge = require('../models/badge.model');
+const UserBadge = require('../models/userBadge.model');
+const getUserProgressStats = require('./userStats');
+
+const checkAndAwardBadges = async (user_id) => {
+    const stats = await getUserProgressStats(user_id) // lay thong ke tong
+
+    const allBadges = await Badge.find();
+    const awarded = await UserBadge.find({ user_id }).distinct('badge_id');
+
+    for (const badge of allBadges) {
+        if (awarded.includes(badge._id.toString())) continue;
+
+        const condition = badge.condition;
+        let achieved = false;
+
+        try {
+            const func = new Function(...Object.keys(stats), `return ${condition}`);
+            achieved = func(...Object.values(stats));
+        } catch (err) {
+            console.error(`Invalid condition in badge ${badge.name}:`, err.message);
+        }
+
+        if (achieved) {
+            await UserBadge.create({
+                user_id,
+                badge_id: badge._id,
+                url_image: badge.url_image,
+            });
+
+            console.log(`User ${user_id} đã đạt huy hiệu: ${badge.name}`);
+        }
+    }
+}
+
+module.exports = checkAndAwardBadges

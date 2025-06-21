@@ -1688,6 +1688,35 @@
                 }
             }
         },
+        "/api/badges/user-stats": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Badge"
+                ],
+                "summary": "Get User Badge Stats",
+                "description": "",
+                "operationId": "getapibadgesuserstats",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user-badges/create": {
             "post": {
                 "security": [

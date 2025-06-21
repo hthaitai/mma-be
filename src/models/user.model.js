@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
     },
     avatar_url: {
         type: String,
-        default: 'https://example.com/default-avatar.png',
     },
     vertificationToken: {
         type: String,
