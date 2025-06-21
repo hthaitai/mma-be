@@ -40,23 +40,51 @@ exports.createQuitPlan = async (req, res) => {
     const { user_id, reason, name, start_date, target_quit_date, image } =
       req.body;
 
-    if (req.user.role === "user" && user_id !== req.user.id) {
-      return res.status(403).json({
-        message: "Bạn chỉ có thể tạo kế hoạch cai thuốc cho chính mình",
+    // 🧑‍💻 Nếu là user thường → chỉ được tạo cho chính họ và trạng thái là pending
+    if (req.user.role === "user") {
+      if (user_id !== req.user.id) {
+        return res.status(403).json({
+          message: "Bạn chỉ có thể tạo kế hoạch cai thuốc cho chính mình",
+        });
+      }
+
+      const newPlan = new QuitPlan({
+        user_id: req.user.id,
+        reason,
+        name,
+        start_date,
+        target_quit_date,
+        image,
+        status: "pending", // user tạo -> chờ duyệt
       });
+
+      const savedPlan = await newPlan.save();
+      return res.status(201).json(savedPlan);
     }
 
-    const newPlan = new QuitPlan({
-      user_id: req.user.id,
-      reason,
-      name,
-      start_date,
-      target_quit_date,
-      image,
-    });
+    // 👑 Nếu là admin hoặc coach → được tạo cho bất kỳ user nào và duyệt ngay
+    if (req.user.role === "admin" || req.user.role === "coach") {
+      if (!user_id) {
+        return res.status(400).json({ message: "Thiếu user_id" });
+      }
 
-    const savedPlan = await newPlan.save();
-    res.status(201).json(savedPlan);
+      const newPlan = new QuitPlan({
+        user_id,
+        reason,
+        name,
+        start_date,
+        target_quit_date,
+        image,
+        status: "approved", // admin tạo -> được duyệt ngay
+      });
+
+      const savedPlan = await newPlan.save();
+      return res.status(201).json(savedPlan);
+    }
+
+    return res
+      .status(403)
+      .json({ message: "Vai trò không hợp lệ để tạo kế hoạch" });
   } catch (error) {
     res.status(400).json({ message: "Error creating quit plan", error });
   }
@@ -76,13 +104,15 @@ exports.updateQuitPlan = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const { reason, name, start_date, target_quit_date, image } = req.body;
+    const { reason, name, start_date, target_quit_date, image, status } =
+      req.body;
 
     plan.reason = reason ?? plan.reason;
     plan.name = name ?? plan.name;
     plan.start_date = start_date ?? plan.start_date;
     plan.target_quit_date = target_quit_date ?? plan.target_quit_date;
     plan.image = image ?? plan.image;
+    plan.status = status ?? plan.status;
 
     const updated = await plan.save();
     res.status(200).json(updated);

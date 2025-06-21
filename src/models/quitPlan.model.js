@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const quitPlanSchema = new mongoose.Schema(
   {
-
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -27,6 +26,11 @@ const quitPlanSchema = new mongoose.Schema(
     image: {
       type: String,
       required: false, // không bắt buộc
+    },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending", // user tạo mặc định là pending
     },
   },
   { timestamps: true }
