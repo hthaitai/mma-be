@@ -137,3 +137,45 @@ exports.deleteQuitPlan = async (req, res) => {
     res.status(500).json({ message: "Error deleting quit plan", error });
   }
 };
+// controllers/quitPlan.controller.js
+exports.approveQuitPlan = async (req, res) => {
+  try {
+    const plan = await QuitPlan.findById(req.params.id);
+    if (!plan)
+      return res.status(404).json({ message: "Không tìm thấy kế hoạch" });
+
+    if (req.user.role !== "admin" && req.user.role !== "coach") {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền duyệt kế hoạch" });
+    }
+
+    plan.status = "approved";
+    await plan.save();
+
+    res.status(200).json({ message: "Kế hoạch đã được duyệt", plan });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi duyệt kế hoạch", error });
+  }
+};
+
+exports.rejectQuitPlan = async (req, res) => {
+  try {
+    const plan = await QuitPlan.findById(req.params.id);
+    if (!plan)
+      return res.status(404).json({ message: "Không tìm thấy kế hoạch" });
+
+    if (req.user.role !== "admin" && req.user.role !== "coach") {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền từ chối kế hoạch" });
+    }
+
+    plan.status = "rejected";
+    await plan.save();
+
+    res.status(200).json({ message: "Kế hoạch đã bị từ chối", plan });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi khi từ chối kế hoạch", error });
+  }
+};

@@ -53,15 +53,10 @@ exports.createStage = async (req, res) => {
 exports.getStagesByPlan = async (req, res) => {
   try {
     const { planId } = req.params;
-    const access = await canAccessPlan(req.user, planId);
 
-    if (!access.allowed) {
-      return res
-        .status(403)
-        .json({ message: access.reason || "Access denied" });
-    }
-
+    // ❌ Bỏ kiểm tra quyền truy cập
     const stages = await Stage.find({ plan_id: planId }).sort("stage_number");
+
     res.status(200).json(stages);
   } catch (error) {
     res.status(400).json({ message: "Error fetching stages", error });

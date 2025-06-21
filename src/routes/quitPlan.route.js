@@ -39,4 +39,18 @@ quitPlanRouter.delete(
   quitPlanController.deleteQuitPlan
 );
 
+// 🆕 Admin/Coach duyệt kế hoạch
+quitPlanRouter.put(
+  "/:id/approve",
+  validateToken,
+  checkRole(["admin", "coach"]),
+  quitPlanController.approveQuitPlan
+);
+quitPlanRouter.put(
+  "/:id/reject",
+  validateToken,
+  checkRole(["admin", "coach"]),
+  quitPlanController.rejectQuitPlan
+);
+
 module.exports = quitPlanRouter;
