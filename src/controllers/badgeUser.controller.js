@@ -47,12 +47,14 @@ module.exports.countBadgeRecipients = async (req, res) => {
 module.exports.shareUserBadge = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { badge_id, content } = req.body;
+        const { badge_id, content, title, tags } = req.body;
 
         const userBadge = await UserBadge.findOne({
             user_id: userId,
             badge_id: badge_id
         });
+
+        const badge = await Badge.findById(badge_id);
 
         if (!userBadge) {
             return res.status(404).json({ message: 'You do not own this badge' });
@@ -61,9 +63,11 @@ module.exports.shareUserBadge = async (req, res) => {
         const post = new Post({
             user_id: userId,
             shared_badge_id: badge_id,
+            title: title,
             content: content,
             post_type: 'badge',
-            tags: [],
+            tags: tags,
+            image: badge.url_image,
             reaction_count: 0,
             comment_count: 0
         });

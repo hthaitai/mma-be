@@ -101,13 +101,19 @@ exports.updateProgress = async (req, res) => {
     const progress = await Progress.findById(req.params.id);
     if (!progress) return res.status(404).json({ message: "Not found" });
 
-    if (progress.user_id.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not your progress" });
-    }
-
-    const updated = await Progress.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const updated = await Progress.findOneAndUpdate(
+      { user_id, stage_id, date },
+      {
+        $set: {
+          cigarettes_smoked,
+          money_saved,
+          health_status
+        }
+      },
+      { new: true, upsert: true }
+    );
+    //Gọi gán huy hiệu sau khi cập nhật
+    await checkAndAwardBadges(user_id);
 
     res.status(200).json(updated);
   } catch (err) {
