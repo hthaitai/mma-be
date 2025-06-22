@@ -107,7 +107,7 @@ module.exports.deletePost = async (req, res) => {
         }
 
         // Check if the user is the owner of the post
-        if (post.user_id.toString() !== userId) {
+        if (req.user.role !== 'admin' && post.user_id.toString() !== userId) {
             return res.status(403).json({ message: 'You are not authorized to delete this post' });
         }
 
