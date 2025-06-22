@@ -32,59 +32,57 @@ exports.getQuitPlanById = async (req, res) => {
   }
 };
 
+exports.sendQuitPlanRequest = async (req, res) => {
+  try {
+    const { name, reason, start_date, target_quit_date } = req.body;
+
+    const request = new QuitPlan({
+      user_id: req.user.id,
+      name,
+      reason,
+      start_date,
+      target_quit_date,
+      status: "pending", // Mặc định là pending
+    });
+
+    const saved = await request.save();
+    res.status(201).json({ message: "Yêu cầu đã được gửi", request: saved });
+  } catch (error) {
+    res.status(400).json({ message: "Lỗi khi gửi yêu cầu", error });
+  }
+};
+
 /**
  * POST: Create new quit plan (User or Coach)
  */
+// controllers/quitPlan.controller.js
 exports.createQuitPlan = async (req, res) => {
   try {
     const { user_id, reason, name, start_date, target_quit_date, image } =
       req.body;
 
-    // 🧑‍💻 Nếu là user thường → chỉ được tạo cho chính họ và trạng thái là pending
-    if (req.user.role === "user") {
-      if (user_id !== req.user.id) {
-        return res.status(403).json({
-          message: "Bạn chỉ có thể tạo kế hoạch cai thuốc cho chính mình",
-        });
-      }
-
-      const newPlan = new QuitPlan({
-        user_id: req.user.id,
-        reason,
-        name,
-        start_date,
-        target_quit_date,
-        image,
-        status: "pending", // user tạo -> chờ duyệt
+    if (!["admin", "coach"].includes(req.user.role)) {
+      return res.status(403).json({
+        message: "Chỉ admin hoặc coach được tạo kế hoạch trực tiếp",
       });
-
-      const savedPlan = await newPlan.save();
-      return res.status(201).json(savedPlan);
     }
 
-    // 👑 Nếu là admin hoặc coach → được tạo cho bất kỳ user nào và duyệt ngay
-    if (req.user.role === "admin" || req.user.role === "coach") {
-      if (!user_id) {
-        return res.status(400).json({ message: "Thiếu user_id" });
-      }
-
-      const newPlan = new QuitPlan({
-        user_id,
-        reason,
-        name,
-        start_date,
-        target_quit_date,
-        image,
-        status: "approved", // admin tạo -> được duyệt ngay
-      });
-
-      const savedPlan = await newPlan.save();
-      return res.status(201).json(savedPlan);
+    if (!user_id) {
+      return res.status(400).json({ message: "Thiếu user_id" });
     }
 
-    return res
-      .status(403)
-      .json({ message: "Vai trò không hợp lệ để tạo kế hoạch" });
+    const newPlan = new QuitPlan({
+      user_id,
+      reason,
+      name,
+      start_date,
+      target_quit_date,
+      image,
+      status: "approved",
+    });
+
+    const savedPlan = await newPlan.save();
+    return res.status(201).json(savedPlan);
   } catch (error) {
     res.status(400).json({ message: "Error creating quit plan", error });
   }

@@ -53,4 +53,11 @@ quitPlanRouter.put(
   quitPlanController.rejectQuitPlan
 );
 
+quitPlanRouter.post(
+  "/request",
+  validateToken,
+  checkRole(["user", "coach", "admin"]),
+  quitPlanController.sendQuitPlanRequest
+);
+
 module.exports = quitPlanRouter;
