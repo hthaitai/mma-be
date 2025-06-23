@@ -51,4 +51,11 @@ taskRouter.delete(
   taskController.deleteTask
 );
 
+taskRouter.post(
+  "/:id/complete",
+  validateToken,
+  taskController.completeTask
+);
+
+
 module.exports = taskRouter;
