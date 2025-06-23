@@ -79,7 +79,6 @@ exports.createQuitPlan = async (req, res) => {
       start_date,
       target_quit_date,
       image,
-      status: "approved",
     });
 
     const savedPlan = await newPlan.save();
@@ -139,7 +138,7 @@ exports.deleteQuitPlan = async (req, res) => {
 // controllers/quitPlan.controller.js
 exports.approveQuitPlan = async (req, res) => {
   try {
-    const plan = await QuitPlan.findById(req.params.id);
+    const plan = await RequestQuitPlan.findById(req.params.id);
     if (!plan)
       return res.status(404).json({ message: "Không tìm thấy kế hoạch" });
 
@@ -160,7 +159,7 @@ exports.approveQuitPlan = async (req, res) => {
 
 exports.rejectQuitPlan = async (req, res) => {
   try {
-    const plan = await QuitPlan.findById(req.params.id);
+    const plan = await RequestQuitPlan.findById(req.params.id);
     if (!plan)
       return res.status(404).json({ message: "Không tìm thấy kế hoạch" });
 

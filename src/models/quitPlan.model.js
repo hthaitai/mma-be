@@ -29,8 +29,8 @@ const quitPlanSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending", // user tạo mặc định là pending
+      enum: ["approved"],
+      default: "approved", // Mặc định luôn được duyệt khi tạo
     },
   },
   { timestamps: true }
