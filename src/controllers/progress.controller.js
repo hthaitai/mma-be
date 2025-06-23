@@ -1,6 +1,9 @@
 const Progress = require("../models/progress.model");
 const Stage = require("../models/stage.model");
 const QuitPlan = require("../models/quitPlan.model");
+const checkAndAwardBadges = require("../utils/badgeCheck");
+const SmokingStatus = require("../models/smokingStatus.model");
+const { getPlanProgress, getTaskProgressInStage } = require("../utils/progressStats");
 
 // Helper: Kiểm tra quyền truy cập vào stage (dựa trên plan → user_id)
 const canAccessStage = async (user, stageId) => {
@@ -31,34 +34,57 @@ exports.createProgress = async (req, res) => {
       stage_id,
       date,
       cigarettes_smoked,
-      health_stat,
-      money_saved,
-      user_id, // user_id có thể được truyền vào nếu là admin hoặc coach
+      health_status,
+      user_id,
     } = req.body;
 
     const access = await canAccessStage(req.user, stage_id);
-
     if (!access.allowed) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    // ✅ Nếu là admin hoặc coach, dùng user_id từ body (nếu có). Nếu không, dùng chính req.user.id
-    const isAdminOrCoach =
-      req.user.role === "admin" || req.user.role === "coach";
+    const isAdminOrCoach = ["admin", "coach"].includes(req.user.role);
     const finalUserId = isAdminOrCoach && user_id ? user_id : req.user.id;
+
+    const inputDate = new Date(date);
+
+    // Check đã có progress trong cùng ngày chưa
+    const existing = await Progress.findOne({
+      user_id: finalUserId,
+      stage_id,
+      date: {
+        $gte: new Date(inputDate.setHours(0, 0, 0, 0)),
+        $lte: new Date(inputDate.setHours(23, 59, 59, 999)),
+      },
+    });
+
+    if (existing) {
+      return res.status(400).json({ message: "Đã có tiến trình được ghi nhận trong ngày này" });
+    }
+
+    const smokingStatus = await SmokingStatus.findOne({ user_id: finalUserId }).sort({ createdAt: -1 });
+    if (!smokingStatus) {
+      return res.status(400).json({ error: "Chưa có trạng thái hút thuốc ban đầu" });
+    }
+
+    const costPerCigarette = smokingStatus.cost_per_pack / 20;
+    const expectedCost = smokingStatus.cigarettes_per_day * costPerCigarette;
+    const actualCost = cigarettes_smoked * costPerCigarette;
+    const money_saved = Math.max(expectedCost - actualCost, 0);
 
     const progress = await Progress.create({
       user_id: finalUserId,
       stage_id,
-      date,
+      date: inputDate,
       cigarettes_smoked,
-      health_stat,
+      health_status,
       money_saved,
     });
-
+    await checkAndAwardBadges(finalUserId);
     res.status(201).json(progress);
   } catch (err) {
-    res.status(400).json({ message: "Error creating progress", err });
+    console.error("Error in createProgress:", err);
+    res.status(400).json({ message: "Error creating progress", error: err.message });
   }
 };
 
@@ -98,11 +124,19 @@ exports.getProgressById = async (req, res) => {
 };
 exports.updateProgress = async (req, res) => {
   try {
+    const user_id = req.user.id;
+    const { stage_id, date, cigarettes_smoked, money_saved, health_status } = req.body;
     const progress = await Progress.findById(req.params.id);
     if (!progress) return res.status(404).json({ message: "Not found" });
 
+    if (progress.user_id.toString() !== req.user.id) {
+        return res.status(403).json({ message: "Not your progress" });
+    }
+
+    const cleanDate = new Date(date);
+    cleanDate.setHours(0, 0, 0, 0);
     const updated = await Progress.findOneAndUpdate(
-      { user_id, stage_id, date },
+      { user_id, stage_id, date: cleanDate },
       {
         $set: {
           cigarettes_smoked,
@@ -120,6 +154,7 @@ exports.updateProgress = async (req, res) => {
     res.status(400).json({ message: "Update failed", err });
   }
 };
+
 exports.deleteProgress = async (req, res) => {
   try {
     const progress = await Progress.findById(req.params.id);
@@ -158,5 +193,85 @@ exports.getAllProgress = async (req, res) => {
     res.status(200).json(progress);
   } catch (err) {
     res.status(500).json({ message: "Error fetching progress records", err });
+  }
+};
+
+
+// API: Tiến độ tổng thể của user (qua nhiều plan)
+exports.getUserOverallProgress = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+
+    const plans = await QuitPlan.find({ user_id });
+    const planProgressList = [];
+
+    let totalPercent = 0;
+
+    for (const plan of plans) {
+      const percent = await getPlanProgress(plan._id);
+      totalPercent += percent;
+
+      planProgressList.push({
+        plan_id: plan._id,
+        plan_name: plan.name,
+        progress_percent: percent
+      });
+    }
+
+    const overall = plans.length > 0 ? Math.round(totalPercent / plans.length) : 0;
+
+    res.json({
+      overall_progress_percent: overall,
+      plans: planProgressList
+    });
+  } catch (err) {
+    console.error("Lỗi khi lấy tiến độ:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// API: Tiến độ của 1 kế hoạch cụ thể
+exports.getSinglePlanProgress = async (req, res) => {
+  try {
+    const plan_id = req.params.id;
+    const plan = await QuitPlan.findById(plan_id);
+
+    if (!plan) return res.status(404).json({ error: "Plan not found" });
+
+    if (req.user.role !== 'admin' && plan.user_id.toString() !== req.user.id) {
+      return res.status(403).json({ error: "Không có quyền truy cập kế hoạch này" });
+    }
+
+    const { totalStages, completedStages, progress_percent } = await getPlanProgress(plan_id);
+
+    res.json({
+      plan_id,
+      plan_name: plan.name,
+      total_stages: totalStages,
+      completed_stages: completedStages,
+      progress_percent: progress_percent
+    });
+
+  } catch (err) {
+    console.error("Lỗi khi lấy tiến độ kế hoạch:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+//API: Tiến độ 1 stage cụ thể
+exports.getSingleStageProgress = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const stage_id = req.params.id;
+
+    const percent = await getTaskProgressInStage(stage_id, user_id);
+
+    res.json({
+      stage_id,
+      progress_percent: percent
+    });
+  } catch (err) {
+    console.error("Lỗi khi lấy tiến độ stage:", err.message);
+    res.status(500).json({ error: "Server error" });
   }
 };

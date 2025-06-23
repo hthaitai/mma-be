@@ -83,3 +83,49 @@ exports.getTasksByStage = async (req, res) => {
     res.status(500).json({ message: "Lỗi khi lấy danh sách task", error });
   }
 };
+
+
+module.exports.completeTask = async (req, res) => {
+  try {
+    const task_id = req.params.id;
+    const user_id = req.user.id;
+
+    // 1. Lấy task để biết stage_id
+    const task = await Task.findById(task_id);
+    if (!task) return res.status(404).json({ message: 'Task không tồn tại' });
+
+    // 2. Cập nhật hoặc tạo mới taskResult
+    const taskResult = await TaskResult.findOneAndUpdate(
+      { task_id, user_id },
+      { stage_id: task.stage_id, is_completed: true },
+      { upsert: true, new: true }
+    );
+
+    // 3. Kiểm tra xem tất cả task của stage này đã hoàn thành chưa
+    const allTasks = await Task.find({ stage_id: task.stage_id });
+    const totalTasks = allTasks.length;
+
+    const completedResults = await TaskResult.find({
+      user_id,
+      stage_id: task.stage_id,
+      is_completed: true
+    });
+
+    const completedCount = completedResults.length;
+
+    if (totalTasks > 0 && completedCount === totalTasks) {
+      // Cập nhật Stage là đã hoàn thành
+      await Stage.findByIdAndUpdate(task.stage_id, { is_completed: true });
+    }
+
+    res.json({
+      message: 'Hoàn thành task thành công',
+      taskResult,
+      stage_completed: totalTasks > 0 && completedCount === totalTasks
+    });
+
+  } catch (err) {
+    console.error('Lỗi cập nhật task:', err);
+    res.status(500).json({ message: 'Lỗi server', error: err.message });
+  }
+};

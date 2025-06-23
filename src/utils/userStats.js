@@ -8,13 +8,15 @@ const getUserProgressStats = async (user_id) => {
     let days_since_start = 0;
 
     let lastDate = null;
-    let today = new Date();
+    let firstDate = null;
 
     let currentStreak = 0;
     let maxStreak = 0;
 
     progresses.forEach((p, idx) => {
         const currDate = new Date(p.date).setHours(0, 0, 0, 0);
+
+        if (idx === 0) firstDate = currDate;
 
         if (p.cigarettes_smoked === 0) {
             total_days_no_smoke++;
@@ -23,11 +25,7 @@ const getUserProgressStats = async (user_id) => {
                 const prevDate = new Date(lastDate).setHours(0, 0, 0, 0);
                 const diff = (currDate - prevDate) / (1000 * 60 * 60 * 24);
 
-                if (diff === 1) {
-                    currentStreak += 1;
-                } else {
-                    currentStreak = 1;
-                }
+                currentStreak = (diff === 1) ? currentStreak + 1 : 1;
             } else {
                 currentStreak = 1;
             }
@@ -38,13 +36,13 @@ const getUserProgressStats = async (user_id) => {
         }
 
         lastDate = currDate;
-
-        if (idx === 0) {
-            days_since_start = Math.floor((today - currDate) / (1000 * 60 * 60 * 24));
-        }
-
         total_money_saved += p.money_saved;
     });
+
+    if (firstDate) {
+        const today = new Date().setHours(0, 0, 0, 0);
+        days_since_start = Math.floor((today - firstDate) / (1000 * 60 * 60 * 24)) + 1;
+    }
 
     return {
         total_days_no_smoke,
