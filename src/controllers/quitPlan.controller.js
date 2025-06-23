@@ -1,4 +1,5 @@
 const QuitPlan = require("../models/quitPlan.model");
+const RequestQuitPlan = require("../models/requestQuitPlan.model");
 
 /**
  * GET: All quit plans (Admin only)
@@ -36,7 +37,7 @@ exports.sendQuitPlanRequest = async (req, res) => {
   try {
     const { name, reason, start_date, target_quit_date } = req.body;
 
-    const request = new QuitPlan({
+    const request = new RequestQuitPlan({
       user_id: req.user.id,
       name,
       reason,
