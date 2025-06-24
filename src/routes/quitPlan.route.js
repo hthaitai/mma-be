@@ -14,6 +14,7 @@ quitPlanRouter.get(
 // 🔐 Get a quit plan by ID — Only owner or admin
 quitPlanRouter.get("/:id", validateToken, quitPlanController.getQuitPlanById);
 
+quitPlanRouter.get("/user/:id", validateToken, quitPlanController.getQuitPlanByUserId);
 // 🔐 Create a new quit plan — User or Coach (Coach can create on behalf of user)
 quitPlanRouter.post(
   "/",

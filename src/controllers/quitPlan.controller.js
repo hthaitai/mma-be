@@ -177,3 +177,14 @@ exports.rejectQuitPlan = async (req, res) => {
     res.status(500).json({ message: "Lỗi khi từ chối kế hoạch", error });
   }
 };
+
+//get Quit Plan by userID
+exports.getQuitPlanByUserId = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const plans = await QuitPlan.find({ user_id: userId });
+    res.status(200).json(plans);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving quit plans", error });
+  }
+};
