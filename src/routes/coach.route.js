@@ -9,7 +9,7 @@ const checkCoach = require('../middlewares/CoachMiddleware');
 coachRouter.post('/', validateToken, checkCoach, coachController.createCoachProfile);
 
 // get all coach profiles
-coachRouter.get('/', validateToken, checkRole(['admin']), coachController.getAllCoachProfiles);
+coachRouter.get('/', validateToken, checkRole(['admin', 'user']), coachController.getAllCoachProfiles);
 
 // get one coach profile
 coachRouter.get('/:id', validateToken, checkRole(['coach']), coachController.getCoachProfileById);
