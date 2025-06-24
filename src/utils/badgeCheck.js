@@ -8,7 +8,7 @@ const checkAndAwardBadges = async (user_id) => {
     const awarded = await UserBadge.find({ user_id }).distinct('badge_id');
 
     for (const badge of allBadges) {
-        if (awarded.includes(badge._id.toString())) continue;
+        if (awarded.map(id => id.toString()).includes(badge._id.toString())) continue;
 
         const condition = badge.condition;
         let achieved = false;
@@ -22,6 +22,10 @@ const checkAndAwardBadges = async (user_id) => {
         }
 
         if (achieved) {
+
+            const alreadyAwarded = await UserBadge.findOne({ user_id, badge_id: badge._id });
+            if (alreadyAwarded) continue;
+
             await UserBadge.create({
                 user_id,
                 badge_id: badge._id,
