@@ -32,6 +32,10 @@ const quitPlanSchema = new mongoose.Schema(
       enum: ["approved"],
       default: "approved", // Mặc định luôn được duyệt khi tạo
     },
+    is_public: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

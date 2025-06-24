@@ -1,5 +1,7 @@
 const QuitPlan = require("../models/quitPlan.model");
 const RequestQuitPlan = require("../models/requestQuitPlan.model");
+const Stage = require("../models/stage.model");
+const Task = require("../models/task.model"); 
 
 /**
  * GET: All quit plans (Admin only)
@@ -186,5 +188,76 @@ exports.getQuitPlanByUserId = async (req, res) => {
     res.status(200).json(plans);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving quit plans", error });
+  }
+};
+
+// get quit plan public 
+exports.getPublicPlans = async (req, res) => {
+  try {
+    const publicPlans = await QuitPlan.find({ is_public: true }).select("-user_id");
+
+    res.json(publicPlans);
+  } catch (err) {
+    console.error("Lỗi khi lấy kế hoạch công khai:", err);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+//User clone quit plan public to their plan
+exports.usePublicPlan = async (req, res) => {
+  try {
+    const plan_id = req.params.id;
+    const user_id = req.user.id;
+
+    const publicPlan = await QuitPlan.findOne({ _id: plan_id, is_public: true });
+    if (!publicPlan) return res.status(404).json({ message: "Kế hoạch công khai không tồn tại" });
+
+    // 1. Tạo kế hoạch mới cho user
+    const userPlan = await QuitPlan.create({
+      user_id,
+      reason: publicPlan.reason,
+      name: publicPlan.name,
+      start_date: new Date(), // Hoặc cho phép người dùng chọn
+      target_quit_date: publicPlan.target_quit_date,
+      image: publicPlan.image,
+      is_public: false,
+      status: "approved",
+    });
+
+    // 2. Clone tất cả các stage
+    const stages = await Stage.find({ plan_id: publicPlan._id });
+
+    for (const stage of stages) {
+      const newStage = await Stage.create({
+        plan_id: userPlan._id,
+        title: stage.title,
+        description: stage.description,
+        stage_number: stage.stage_number,
+        start_date: stage.start_date,
+        end_date: stage.end_date,
+        is_completed: false,
+      });
+
+      // 3. Clone tất cả các task thuộc stage đó
+      const tasks = await Task.find({ stage_id: stage._id });
+
+      for (const task of tasks) {
+        await Task.create({
+          stage_id: newStage._id,
+          title: task.title,
+          description: task.description,
+          sort_order: task.sort_order,
+        });
+      }
+    }
+
+    res.status(201).json({
+      message: "Đã tạo kế hoạch từ mẫu công khai",
+      plan: userPlan,
+    });
+
+  } catch (err) {
+    console.error("Lỗi khi dùng kế hoạch mẫu:", err);
+    res.status(500).json({ message: "Lỗi server", error: err.message });
   }
 };

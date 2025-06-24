@@ -3,6 +3,13 @@ const quitPlanRouter = express.Router();
 const quitPlanController = require("../controllers/quitPlan.controller");
 const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
 
+//Get all quit plan public
+quitPlanRouter.get(
+  "/public",
+  validateToken,
+  quitPlanController.getPublicPlans
+);
+
 // 🔐 Get all quit plans — Admin only
 quitPlanRouter.get(
   "/",
@@ -60,5 +67,12 @@ quitPlanRouter.post(
   checkRole(["user", "coach", "admin"]),
   quitPlanController.sendQuitPlanRequest
 );
+
+quitPlanRouter.post(
+  "/user/use/:id",
+  validateToken,
+  quitPlanController.usePublicPlan
+);
+
 
 module.exports = quitPlanRouter;
