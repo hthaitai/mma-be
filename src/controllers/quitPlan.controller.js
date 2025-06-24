@@ -1,7 +1,7 @@
 const QuitPlan = require("../models/quitPlan.model");
 const RequestQuitPlan = require("../models/requestQuitPlan.model");
 const Stage = require("../models/stage.model");
-const Task = require("../models/task.model"); 
+const Task = require("../models/task.model");
 
 /**
  * GET: All quit plans (Admin only)
@@ -52,6 +52,53 @@ exports.sendQuitPlanRequest = async (req, res) => {
     res.status(201).json({ message: "Yêu cầu đã được gửi", request: saved });
   } catch (error) {
     res.status(400).json({ message: "Lỗi khi gửi yêu cầu", error });
+  }
+};
+
+// controllers/quitPlan.controller.js
+exports.getMyQuitPlanRequests = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const myRequests = await RequestQuitPlan.find({ user_id: userId });
+
+    res.status(200).json(myRequests);
+  } catch (error) {
+    console.error("Lỗi khi lấy yêu cầu kế hoạch của người dùng:", error);
+    res.status(500).json({ message: "Lỗi server", error });
+  }
+};
+
+// Hủy yêu cầu kế hoạch bỏ thuốc của chính mình
+exports.cancelQuitPlanRequest = async (req, res) => {
+  try {
+    const requestId = req.params.id;
+    const userId = req.user.id;
+
+    const request = await RequestQuitPlan.findById(requestId);
+    if (!request) {
+      return res.status(404).json({ message: "Không tìm thấy yêu cầu" });
+    }
+
+    // Chỉ chủ sở hữu mới được huỷ
+    if (request.user_id.toString() !== userId) {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền huỷ yêu cầu này" });
+    }
+
+    // Chỉ cho huỷ nếu chưa được duyệt hoặc từ chối
+    if (request.status !== "pending") {
+      return res
+        .status(400)
+        .json({ message: "Chỉ có thể huỷ yêu cầu đang chờ duyệt" });
+    }
+
+    await RequestQuitPlan.findByIdAndDelete(requestId);
+    res.status(200).json({ message: "Đã huỷ yêu cầu thành công" });
+  } catch (error) {
+    console.error("Lỗi khi huỷ yêu cầu:", error);
+    res.status(500).json({ message: "Lỗi server", error });
   }
 };
 
@@ -191,10 +238,12 @@ exports.getQuitPlanByUserId = async (req, res) => {
   }
 };
 
-// get quit plan public 
+// get quit plan public
 exports.getPublicPlans = async (req, res) => {
   try {
-    const publicPlans = await QuitPlan.find({ is_public: true }).select("-user_id");
+    const publicPlans = await QuitPlan.find({ is_public: true }).select(
+      "-user_id"
+    );
 
     res.json(publicPlans);
   } catch (err) {
@@ -209,8 +258,14 @@ exports.usePublicPlan = async (req, res) => {
     const plan_id = req.params.id;
     const user_id = req.user.id;
 
-    const publicPlan = await QuitPlan.findOne({ _id: plan_id, is_public: true });
-    if (!publicPlan) return res.status(404).json({ message: "Kế hoạch công khai không tồn tại" });
+    const publicPlan = await QuitPlan.findOne({
+      _id: plan_id,
+      is_public: true,
+    });
+    if (!publicPlan)
+      return res
+        .status(404)
+        .json({ message: "Kế hoạch công khai không tồn tại" });
 
     // 1. Tạo kế hoạch mới cho user
     const userPlan = await QuitPlan.create({
@@ -255,7 +310,6 @@ exports.usePublicPlan = async (req, res) => {
       message: "Đã tạo kế hoạch từ mẫu công khai",
       plan: userPlan,
     });
-
   } catch (err) {
     console.error("Lỗi khi dùng kế hoạch mẫu:", err);
     res.status(500).json({ message: "Lỗi server", error: err.message });
