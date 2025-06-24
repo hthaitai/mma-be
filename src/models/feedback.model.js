@@ -11,7 +11,12 @@ const feedbackSchema = new mongoose.Schema({
         enum: ['user_to_coach', 'coach_to_user', 'user_to_system', 'user_to_plan'],
         required: true
     },
-    content: { type: String, required: true }
+    content: { type: String, required: true },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'hidden'],
+        default: 'pending'
+    }
 }, { timestamps: true });
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);
