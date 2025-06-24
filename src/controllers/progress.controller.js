@@ -125,13 +125,22 @@ exports.getProgressById = async (req, res) => {
 exports.updateProgress = async (req, res) => {
   try {
     const user_id = req.user.id;
-    const { stage_id, date, cigarettes_smoked, money_saved, health_status } = req.body;
+    const { stage_id, date, cigarettes_smoked, health_status } = req.body;
     const progress = await Progress.findById(req.params.id);
     if (!progress) return res.status(404).json({ message: "Not found" });
 
     if (progress.user_id.toString() !== req.user.id) {
         return res.status(403).json({ message: "Not your progress" });
     }
+    const smokingStatus = await SmokingStatus.findOne({ user_id }).sort({ createdAt: -1 });
+    if (!smokingStatus) {
+      return res.status(400).json({ error: "Chưa có trạng thái hút thuốc ban đầu" });
+    }
+
+    const costPerCigarette = smokingStatus.cost_per_pack / 20;
+    const expectedCost = smokingStatus.cigarettes_per_day * costPerCigarette;
+    const actualCost = cigarettes_smoked * costPerCigarette;
+    const money_saved = Math.max(expectedCost - actualCost, 0);
 
     const cleanDate = new Date(date);
     cleanDate.setHours(0, 0, 0, 0);
