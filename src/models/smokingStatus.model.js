@@ -6,10 +6,9 @@ const statusSchema = new mongoose.Schema({
         required: true,
     },
     frequency: {
-        type: Number,
+        type: String,
         required: true,
-        min: 0,
-        max: 1000,
+        enum: ['daily', 'weekly', 'occasionally', 'social'], // danh sách giá trị cho phép
     },
     cigarettes_per_day: {
         type: Number,
@@ -21,7 +20,7 @@ const statusSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 0,
-        max: 1000,
+        max: 100000,
     },
     start_date: {
         type: Date,
