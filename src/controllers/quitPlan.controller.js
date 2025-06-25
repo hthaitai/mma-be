@@ -68,6 +68,25 @@ exports.getMyQuitPlanRequests = async (req, res) => {
     res.status(500).json({ message: "Lỗi server", error });
   }
 };
+// GET: All quit plan requests (Admin & Coach only)
+exports.getAllQuitPlanRequests = async (req, res) => {
+  try {
+    if (!["admin", "coach"].includes(req.user.role)) {
+      return res.status(403).json({
+        message: "Chỉ admin hoặc coach có quyền xem danh sách yêu cầu",
+      });
+    }
+
+    const requests = await RequestQuitPlan.find()
+      .populate("user_id", "name email avatar_url")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(requests);
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách yêu cầu:", error);
+    res.status(500).json({ message: "Lỗi server", error });
+  }
+};
 
 // Hủy yêu cầu kế hoạch bỏ thuốc của chính mình
 exports.cancelQuitPlanRequest = async (req, res) => {
@@ -108,8 +127,15 @@ exports.cancelQuitPlanRequest = async (req, res) => {
 // controllers/quitPlan.controller.js
 exports.createQuitPlan = async (req, res) => {
   try {
-    const { user_id, reason, name, start_date, target_quit_date, image } =
-      req.body;
+    const {
+      user_id,
+      reason,
+      name,
+      start_date,
+      target_quit_date,
+      image,
+      request_id, // ✅ nhận từ FE
+    } = req.body;
 
     if (!["admin", "coach"].includes(req.user.role)) {
       return res.status(403).json({
@@ -121,7 +147,6 @@ exports.createQuitPlan = async (req, res) => {
       return res.status(400).json({ message: "Thiếu user_id" });
     }
 
-    // Kiểm tra nếu đã có plan cùng thời gian
     const duplicate = await QuitPlan.findOne({
       user_id,
       start_date: { $lte: new Date(target_quit_date) },
@@ -129,12 +154,14 @@ exports.createQuitPlan = async (req, res) => {
     });
 
     if (duplicate) {
-      return res.status(409).json({ message: "Người dùng đã có kế hoạch trong thời gian này" });
+      return res
+        .status(409)
+        .json({ message: "Người dùng đã có kế hoạch trong thời gian này" });
     }
 
     const newPlan = new QuitPlan({
       user_id,
-      coach_id: req.user.role === 'coach' ? req.user.id : undefined,
+      coach_id: req.user.role === "coach" ? req.user.id : undefined,
       reason,
       name,
       start_date,
@@ -144,6 +171,14 @@ exports.createQuitPlan = async (req, res) => {
     });
 
     const savedPlan = await newPlan.save();
+
+    // ✅ Nếu có request_id thì cập nhật trạng thái "created"
+    if (request_id) {
+      await RequestQuitPlan.findByIdAndUpdate(request_id, {
+        status: "created",
+      });
+    }
+
     return res.status(201).json(savedPlan);
   } catch (error) {
     res.status(400).json({ message: "Error creating quit plan", error });
@@ -329,18 +364,23 @@ exports.usePublicPlan = async (req, res) => {
   }
 };
 
-
 module.exports.getUsersByCoach = async (req, res) => {
   try {
     const coachId = req.user.id;
 
-    if (req.user.role !== 'coach') {
-      return res.status(403).json({ message: 'Chỉ huấn luyện viên mới có quyền xem danh sách người dùng của mình' });
+    if (req.user.role !== "coach") {
+      return res.status(403).json({
+        message:
+          "Chỉ huấn luyện viên mới có quyền xem danh sách người dùng của mình",
+      });
     }
 
-    const plans = await QuitPlan.find({ coach_id: coachId }).populate('user_id', 'name email avatar_url');
+    const plans = await QuitPlan.find({ coach_id: coachId }).populate(
+      "user_id",
+      "name email avatar_url"
+    );
 
-    const users = plans.map(plan => ({
+    const users = plans.map((plan) => ({
       user_id: plan.user_id._id,
       name: plan.user_id.name,
       email: plan.user_id.email,
@@ -348,12 +388,12 @@ module.exports.getUsersByCoach = async (req, res) => {
       plan_name: plan.name,
       plan_id: plan._id,
       start_date: plan.start_date,
-      target_quit_date: plan.target_quit_date
+      target_quit_date: plan.target_quit_date,
     }));
 
     res.status(200).json(users);
   } catch (err) {
-    console.error('Lỗi khi lấy danh sách user:', err.message);
-    res.status(500).json({ error: 'Lỗi server' });
+    console.error("Lỗi khi lấy danh sách user:", err.message);
+    res.status(500).json({ error: "Lỗi server" });
   }
 };

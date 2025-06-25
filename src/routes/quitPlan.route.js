@@ -4,16 +4,19 @@ const quitPlanController = require("../controllers/quitPlan.controller");
 const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
 
 //Get all quit plan public
-quitPlanRouter.get(
-  "/public",
-  validateToken,
-  quitPlanController.getPublicPlans
-);
+quitPlanRouter.get("/public", validateToken, quitPlanController.getPublicPlans);
 quitPlanRouter.get(
   "/my-users",
   validateToken,
   checkRole(["coach"]),
-  quitPlanController.getUsersByCoach);
+  quitPlanController.getUsersByCoach
+);
+//get all quit plan requests
+quitPlanRouter.get(
+  "/requests",
+  validateToken,
+  quitPlanController.getAllQuitPlanRequests
+);
 // 🔐 Get all quit plans — Admin only
 quitPlanRouter.get(
   "/",
