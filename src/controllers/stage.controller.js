@@ -22,8 +22,7 @@ const canAccessPlan = async (user, planId) => {
 // ✅ Create Stage — Coach, Admin
 exports.createStage = async (req, res) => {
   try {
-    const { plan_id, title, description, stage_number, start_date, end_date } =
-      req.body;
+    const { plan_id, title, description, start_date, end_date } = req.body;
 
     const access = await canAccessPlan(req.user, plan_id);
 
@@ -33,11 +32,14 @@ exports.createStage = async (req, res) => {
         .json({ message: "Only coach or admin can create stages" });
     }
 
+    // 🔢 Tự động tính stage_number dựa vào số lượng hiện tại
+    const count = await Stage.countDocuments({ plan_id });
+
     const newStage = await Stage.create({
       plan_id,
       title,
       description,
-      stage_number,
+      stage_number: count + 1, // tự động gán
       start_date,
       end_date,
       is_completed: false,
@@ -131,7 +133,7 @@ exports.deleteStage = async (req, res) => {
 // ✅ Get all stages (Admin only)
 exports.getAllStages = async (req, res) => {
   try {
-    if (req.user.role !== "admin") {
+    if ((req.user.role !== "admin") & (req.user.role !== "coach")) {
       return res
         .status(403)
         .json({ message: "Only admin can access all stages" });

@@ -46,7 +46,7 @@ stageRouter.delete(
 stageRouter.get(
   "/",
   validateToken,
-  checkRole(["admin"]),
+  checkRole(["coach", "admin"]),
   stageController.getAllStages
 );
 

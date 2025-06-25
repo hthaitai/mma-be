@@ -1,5 +1,6 @@
 const Task = require("../models/task.model");
-
+const TaskResult = require("../models/TaskResult.model");
+const Stage = require("../models/stage.model");
 // Lấy tất cả task (có thể filter theo stage_id nếu cần)
 exports.getAllTasks = async (req, res) => {
   try {
@@ -84,7 +85,6 @@ exports.getTasksByStage = async (req, res) => {
   }
 };
 
-
 module.exports.completeTask = async (req, res) => {
   try {
     const task_id = req.params.id;
@@ -92,7 +92,7 @@ module.exports.completeTask = async (req, res) => {
 
     // 1. Lấy task để biết stage_id
     const task = await Task.findById(task_id);
-    if (!task) return res.status(404).json({ message: 'Task không tồn tại' });
+    if (!task) return res.status(404).json({ message: "Task không tồn tại" });
 
     // 2. Cập nhật hoặc tạo mới taskResult
     const taskResult = await TaskResult.findOneAndUpdate(
@@ -108,7 +108,7 @@ module.exports.completeTask = async (req, res) => {
     const completedResults = await TaskResult.find({
       user_id,
       stage_id: task.stage_id,
-      is_completed: true
+      is_completed: true,
     });
 
     const completedCount = completedResults.length;
@@ -119,13 +119,12 @@ module.exports.completeTask = async (req, res) => {
     }
 
     res.json({
-      message: 'Hoàn thành task thành công',
+      message: "Hoàn thành task thành công",
       taskResult,
-      stage_completed: totalTasks > 0 && completedCount === totalTasks
+      stage_completed: totalTasks > 0 && completedCount === totalTasks,
     });
-
   } catch (err) {
-    console.error('Lỗi cập nhật task:', err);
-    res.status(500).json({ message: 'Lỗi server', error: err.message });
+    console.error("Lỗi cập nhật task:", err);
+    res.status(500).json({ message: "Lỗi server", error: err.message });
   }
 };
