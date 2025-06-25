@@ -8,7 +8,7 @@ const Task = require("../models/task.model");
  */
 exports.getAllQuitPlans = async (req, res) => {
   try {
-    const plans = await QuitPlan.find();
+    const plans = await QuitPlan.find().populate("user_id", "name email"); // <-- thêm dòng này
     res.status(200).json(plans);
   } catch (error) {
     res.status(500).json({ message: "Error fetching quit plans", error });
@@ -37,10 +37,11 @@ exports.getQuitPlanById = async (req, res) => {
 
 exports.sendQuitPlanRequest = async (req, res) => {
   try {
-    const { name, reason, start_date, target_quit_date } = req.body;
+    const { name, reason, start_date, target_quit_date, coach_id } = req.body;
 
     const request = new RequestQuitPlan({
       user_id: req.user.id,
+      coach_id, // ID của coach được chọn
       name,
       reason,
       start_date,

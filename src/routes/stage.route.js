@@ -50,12 +50,4 @@ stageRouter.get(
   stageController.getAllStages
 );
 
-// 🔐 Get all stages — Admin only (hoặc thêm role tùy bạn)
-stageRouter.get(
-  "/",
-  validateToken,
-  checkRole(["admin"]),
-  stageController.getAllStages
-);
-
 module.exports = stageRouter;
