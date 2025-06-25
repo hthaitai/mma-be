@@ -18,19 +18,23 @@ quitPlanRouter.get(
 quitPlanRouter.get(
   "/",
   validateToken,
-  checkRole(["admin", "user", "coach"]),
+  checkRole(["admin", "coach"]),
   quitPlanController.getAllQuitPlans
 );
 
 // 🔐 Get a quit plan by ID — Only owner or admin
 quitPlanRouter.get("/:id", validateToken, quitPlanController.getQuitPlanById);
 
-quitPlanRouter.get("/user/:id", validateToken, quitPlanController.getQuitPlanByUserId);
+quitPlanRouter.get(
+  "/user/:id",
+  validateToken,
+  quitPlanController.getQuitPlanByUserId
+);
 // 🔐 Create a new quit plan — User or Coach (Coach can create on behalf of user)
 quitPlanRouter.post(
   "/",
   validateToken,
-  checkRole(["user", "coach", "admin"]),
+  checkRole(["coach", "admin"]),
 
   quitPlanController.createQuitPlan
 );
@@ -39,7 +43,7 @@ quitPlanRouter.post(
 quitPlanRouter.put(
   "/:id",
   validateToken,
-  checkRole(["user", "coach", "admin"]),
+  checkRole(["coach", "admin"]),
   quitPlanController.updateQuitPlan
 );
 
@@ -72,11 +76,22 @@ quitPlanRouter.post(
   quitPlanController.sendQuitPlanRequest
 );
 
+quitPlanRouter.get(
+  "/request/mine",
+  validateToken,
+  quitPlanController.getMyQuitPlanRequests
+);
+
+quitPlanRouter.delete(
+  "/request/:id",
+  validateToken,
+  quitPlanController.cancelQuitPlanRequest
+);
+
 quitPlanRouter.post(
   "/user/use/:id",
   validateToken,
   quitPlanController.usePublicPlan
 );
-
 
 module.exports = quitPlanRouter;
