@@ -9,7 +9,11 @@ quitPlanRouter.get(
   validateToken,
   quitPlanController.getPublicPlans
 );
-
+quitPlanRouter.get(
+  "/my-users",
+  validateToken,
+  checkRole(["coach"]),
+  quitPlanController.getUsersByCoach);
 // 🔐 Get all quit plans — Admin only
 quitPlanRouter.get(
   "/",

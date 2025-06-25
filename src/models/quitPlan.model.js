@@ -7,6 +7,11 @@ const quitPlanSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    coach_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+    },
     reason: {
       type: String,
       required: false,
