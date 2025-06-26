@@ -31,9 +31,7 @@ module.exports.getStatusBysUserId = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         const smokingStatus = await SmokingStatus.findOne({ user_id: userId });
-        if (!smokingStatus) {
-            return res.status(404).json({ message: 'Smoking status not found' });
-        }
+       
         res.status(200).json({ message: 'Smoking status found', smokingStatus });
     } catch (error) {
         console.log(error.message);

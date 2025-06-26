@@ -585,6 +585,42 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "CoachProfile"
+                ],
+                "summary": "Delete Coach",
+                "description": "",
+                "operationId": "deleteapicoachid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/user/{id}": {
@@ -1725,11 +1761,11 @@
                     }
                 ],
                 "tags": [
-                    "Badge User"
+                    "User Badge"
                 ],
                 "summary": "Assign Badge",
                 "description": "",
-                "operationId": "postapiuserbadgescreate",
+                "operationId": "postapiuserbadgecreate",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -1751,7 +1787,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                    "user_id": "683b19aa2274084cd4231a34",
+                                    "user_id": "6838801d80c105e05f5b5e96",
                                     "badge_id": "683c07f81a52cf047b37ddfc"
                                 }
                             }
@@ -1768,11 +1804,11 @@
                     }
                 ],
                 "tags": [
-                    "Badge User"
+                    "User Badge"
                 ],
-                "summary": "Get User badge",
+                "summary": "Get Badge User",
                 "description": "",
-                "operationId": "getapiuserbadgesuserid",
+                "operationId": "getapiuserbadgeuserid",
                 "parameters": [
                     {
                         "name": "id",
@@ -1791,6 +1827,78 @@
                                 "schema": {
                                     "type": "object",
                                     "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user-badge/badge-count": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "User Badge"
+                ],
+                "summary": "Get Badge Count",
+                "description": "",
+                "operationId": "getapiuserbadgebadgecount",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user-badge/share": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "User Badge"
+                ],
+                "summary": "Share Badge",
+                "description": "",
+                "operationId": "postapiuserbadgeshare",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "badge_id": "683c07f81a52cf047b37ddfc",
+                                    "content": "I just earned this amazing badge!"
                                 }
                             }
                         }
@@ -2059,6 +2167,35 @@
                 }
             }
         },
+        "/api/quitPlan/my-users": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Get My Users by Coach",
+                "description": "",
+                "operationId": "getapiquitPlanmyusers",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/quitPlan/user/use/{id}": {
             "post": {
                 "security": [
@@ -2094,11 +2231,223 @@
                             }
                         }
                     }
+                }
+            }
+        },
+        "/api/quitPlan/{id}/approve": {
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Approved Quit Plan",
+                "description": "",
+                "operationId": "putapiquitPlanidapprove",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan/{id}/reject": {
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Reject Quit Plan",
+                "description": "",
+                "operationId": "putapiquitPlanidreject",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan/request": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Request",
+                "description": "",
+                "operationId": "postapiquitPlanrequest",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
                 },
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {}
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "coach_id": "",
+                                    "name": "Kế hoạch bỏ thuốc",
+                                    "reason": "Muốn sống khỏe mạnh",
+                                    "start_date": "2025-06-03T00:00:00.000Z",
+                                    "target_quit_date": "2025-07-01T00:00:00.000Z"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan/request/mine": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Get My Request",
+                "description": "",
+                "operationId": "getapimyquitPlanrequest",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan/request/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Cancel Quitplan Request",
+                "description": "",
+                "operationId": "getapimyquitPlanrequest",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quitPlan/requests": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Get all Request Quit Plan",
+                "description": "",
+                "operationId": "gettapiquitPlanrequest",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -3772,7 +4121,7 @@
             "description": ""
         },
         {
-            "name": "Badge User",
+            "name": "User Badge",
             "description": ""
         },
         {
