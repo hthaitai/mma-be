@@ -54,11 +54,20 @@ const userSchema = new mongoose.Schema({
     otpExpires: {
         type: Date,
         default: null,
+    },
+    membership: {
+        subscriptionType: {
+            type: String,
+            enum: ['free', 'plus', 'premium'],
+            default: 'free',
+        },
+        expiresAt: {
+            type: Date,
+            default: null,
+        },
     }
-}, 
-{
-    timestamps: true,
-});
+},
+{ timestamps: true,});
 // Hash the password before saving the user
 userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {

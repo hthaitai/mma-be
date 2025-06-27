@@ -10,11 +10,11 @@ subscriptionRouter.post(
   checkRole(["admin"]),
   subscriptionController.createSubscription
 );
-subscriptionRouter.post(
-  "/:planId",
-  validateToken,
-  subscriptionController.createSubscription
-);
+// subscriptionRouter.post(
+//   "/",
+//   validateToken,
+//   subscriptionController.createSubscription
+// );
 
 // [GET] All subscriptions
 subscriptionRouter.get(

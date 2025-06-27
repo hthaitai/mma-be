@@ -1,25 +1,51 @@
 const Subscription = require("../models/subscription.model");
+const Package = require("../models/package.model");
 
 // [1] Create subscription
 exports.createSubscription = async (req, res) => {
   try {
-    const { name, price, start_date, end_date, is_active } = req.body;
-    const { planId } = req.params;
+    const { package_id } = req.body; // Lấy package_id từ body (người dùng chọn gói)
+    const userId = req.user.id; // Lấy user_id từ middleware auth
 
-    const subscription = new Subscription({
-      user_id: req.user.id, // lấy từ middleware auth
-      plan_id: planId, // lấy từ route param
-      name,
-      price,
-      start_date,
-      end_date,
-      is_active,
+    if (!package_id) {
+      return res.status(400).json({ message: "ID gói là bắt buộc." });
+    }
+
+    // 1. Tìm thông tin gói từ Package model
+    const packageInfo = await Package.findById(package_id);
+    if (!packageInfo) {
+      return res.status(404).json({ message: "Không tìm thấy gói này." });
+    }
+
+    const existingActiveSubscription = await Subscription.findOne({
+      user_id: userId,
+      status: 'active',
+      end_date: { $gte: new Date() } // Kiểm tra gói còn hạn
     });
 
-    const saved = await subscription.save();
-    res.status(201).json(saved);
+    if (existingActiveSubscription) {
+      // Tùy chọn: Xử lý trường hợp người dùng đã có gói active
+      return res.status(400).json({ message: "Người dùng đã có gói đăng ký đang hoạt động." });
+    }
+
+    // 2. Tạo bản ghi Subscription mới với trạng thái 'pending'
+    const newSubscription = new Subscription({
+      user_id: userId,
+      package_id: packageInfo._id,
+      name: packageInfo.name, // Lấy tên gói từ Package
+      price: packageInfo.price, // Lấy giá gói từ Package
+      status: "pending", // Mặc định là pending
+    });
+
+    const savedSubscription = await newSubscription.save();
+
+    res.status(201).json({
+      message: "Yêu cầu đăng ký gói đã được tạo thành công, đang chờ thanh toán.",
+      subscription: savedSubscription,
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error("Lỗi khi tạo Subscription:", err);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ.", error: err.message });
   }
 };
 

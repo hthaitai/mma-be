@@ -3231,59 +3231,7 @@
             }
         },
         "/api/subscriptions/{id}": {
-            "post": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "tags": [
-                    "Subscription"
-                ],
-                "summary": "Create",
-                "description": "",
-                "operationId": "postapisubscriptionsid",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "example": {}
-                                }
-                            }
-                        }
-                    }
-                },
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "example": {
-                                    "name": "Gói hỗ trợ nâng cao cấp ",
-                                    "price": 199000,
-                                    "start_date": "2025-06-05T00:00:00.000Z",
-                                    "end_date": "2025-07-05T00:00:00.000Z",
-                                    "is_active": true
-                                }
-                            }
-                        }
-                    }
-                }
-            },
+            
             "get": {
                 "security": [
                     {
@@ -3411,6 +3359,46 @@
             }
         },
         "/api/subscriptions": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Create",
+                "description": "",
+                "operationId": "postapisubscriptionsid",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                   "package_id": "685e68e6754cdc3c42ac3f09"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "get": {
                 "security": [
                     {
@@ -4066,6 +4054,427 @@
                     }
                 }
             }
+        },
+        "/api/payments/create-payment-link": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Create payment",
+                "description": "",
+                "operationId": "postapipaymentscreatepaymentlink",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "subscription_id": "68516f3b8f40fbe4453d44d4"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/webhook/receive-hook": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Receive-webhook",
+                "description": "",
+                "operationId": "postapipaymentswebhookreceivehook",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "code": "00",
+                                    "desc": "success",
+                                    "data": {
+                                        "orderCode": 1750686555121,
+                                        "amount": 5000,
+                                        "description": "VQRIO123",
+                                        "accountNumber": "12345678",
+                                        "reference": "TF230204212323",
+                                        "transactionDateTime": "2023-02-04 18:25:00",
+                                        "paymentLinkId": "124c33293c43417ab7879e14c8d9eb18",
+                                        "code": "00",
+                                        "desc": "Thành công",
+                                        "currency": "VND"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/order/{orderCode}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Get by Order code",
+                "description": "",
+                "operationId": "getapipaymentsorderorderCode",
+                "parameters": [
+                    {
+                        "name": "orderCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/all": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Get ALL",
+                "description": "",
+                "operationId": "getapipaymentsall",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/{paymentId}": {
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Update",
+                "description": "",
+                "operationId": "putapipaymentspaymentId",
+                "parameters": [
+                    {
+                        "name": "paymentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "status": "FAILED"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/packages": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Package"
+                ],
+                "summary": "Create Package",
+                "description": "",
+                "operationId": "postapipackages",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "premium",
+                                    "price": 199000,
+                                    "duration_days": 30,
+                                    "features": [
+                                        "Tất cả tính năng của Plus",
+                                        "Truy cập vào các bài tập thiền định",
+                                        "Giao lưu trực tiếp với chuyên gia (online)",
+                                        "Hỗ trợ 24/7",
+                                        "Quyền truy cập sớm các tính năng mới"
+                                    ],
+                                    "description": "Gói Premium cung cấp trải nghiệm toàn diện và hỗ trợ tối đa cho hành trình cai thuốc của bạn."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Package"
+                ],
+                "summary": "Get All Package",
+                "description": "",
+                "operationId": "getapipackages",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/packages/:id": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Package"
+                ],
+                "summary": "Get Package By Id",
+                "description": "",
+                "operationId": "getapipackagesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Package"
+                ],
+                "summary": "Update Package",
+                "description": "",
+                "operationId": "putapipackagesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "free",
+                                    "price": 0,
+                                    "duration_days": 0,
+                                    "features": [
+                                        "Cơ bản",
+                                        "Theo dõi tiến độ hàng ngày",
+                                        "Thống kê cơ bản",
+                                        "Xem bài viết trên cộng đồng"
+                                    ],
+                                    "description": "Gói miễn phí với các tính năng cơ bản giúp bạn bắt đầu hành trình bỏ thuốc."
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Package"
+                ],
+                "summary": "Delete Package",
+                "description": "",
+                "operationId": "deleteapipackagesid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4145,7 +4554,15 @@
             "description": ""
         },
         {
+            "name": "Payment",
+            "description": ""
+        },
+        {
             "name": "Feedback",
+            "description": ""
+        },
+        {
+            "name": "Package",
             "description": ""
         }
     ]

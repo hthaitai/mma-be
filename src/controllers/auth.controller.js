@@ -16,7 +16,8 @@ const createToken = (user) => {
             email: user.email,
             role: user.role,
             name: user.name,
-            avatar_url: user.avatar_url
+            avatar_url: user.avatar_url,
+            membership: user.membership
         },
         process.env.JWT_SECRET,
         {
@@ -35,7 +36,7 @@ module.exports.register = async (req, res) => {
         const { name, email, password } = req.body;
         const existUser = await User.findOne({ email })
         if (existUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({ message: 'Email đăng ký đã tồn tại' });
         }
         //Token xác thực
         const vertificationToken = crypto.randomBytes(32).toString('hex');
@@ -90,7 +91,7 @@ module.exports.register = async (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log('Error sending email:', error);
-                return res.status(500).json({ message: 'Error sending email' });
+                return res.status(500).json({ message: 'Lỗi khi gửi email' });
             }
             console.log('Email sent:', info.response);
         })
@@ -215,7 +216,7 @@ module.exports.login = async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({ message: 'Sai email hoặc mật khẩu' });
         }
 
         // Kiểm tra xác thực email
@@ -227,7 +228,7 @@ module.exports.login = async (req, res) => {
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid password' });
+            return res.status(400).json({ message: 'Sai mật khẩu' });
         }
         const token = createToken(user);
         res.cookie('jwt', token, {
@@ -258,7 +259,7 @@ module.exports.fogotPassword = async (req, res) => {
         const { email } = req.body;
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({ message: 'Sai email' });
         }
 
         const ressetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '10m' });

@@ -7,9 +7,9 @@ const subscriptionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    plan_id: {
+    package_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "QuitPlan",
+      ref: "Package",
       required: true,
     },
     name: {
@@ -22,15 +22,16 @@ const subscriptionSchema = new mongoose.Schema(
     },
     start_date: {
       type: Date,
-      required: true,
+      // required: true,
     },
     end_date: {
       type: Date,
-      required: true,
+      // required: true,
     },
-    is_active: {
-      type: Boolean,
-      default: true,
+    status: { // Trạng thái của gói đăng ký
+      type: String,
+      enum: ["pending", "active", "cancelled", "expired", "grace_period"],
+      default: "pending", // Mặc định là pending khi mới tạo
     },
   },
   {

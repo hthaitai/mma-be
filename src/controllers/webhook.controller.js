@@ -1,5 +1,7 @@
 const Payment = require("../models/payment.model");
 const Subscription = require("../models/subscription.model");
+const User = require("../models/user.model");
+const Package = require("../models/package.model");
 
 const handlePaymentWebhook = async (req, res) => {
   try {
@@ -40,16 +42,40 @@ const handlePaymentWebhook = async (req, res) => {
     await payment.save();
 
     console.log(`✅ Payment ${orderCode} cập nhật thành công`);
-
+    // Lấy thông tin Package để xác định duration_days
+    const packageInfo = await Package.findById(subscription.package_id);
+    if (!packageInfo) {
+      console.error(`Không tìm thấy Package với ID: ${subscription.package_id} cho Subscription ${subscription._id}`);
+      return res.status(500).json({ message: "Lỗi nội bộ: Không tìm thấy Package liên quan." });
+    }
+    const now = new Date();
+    const endDate = new Date(now);
+    endDate.setDate(now.getDate() + packageInfo.duration_days);
     // Cập nhật trạng thái subscription tương ứng (nếu cần)
     const subscription = await Subscription.findById(payment.subscription_id);
     if (subscription) {
-      subscription.status = "active"; // hoặc trạng thái phù hợp với app của bạn
-      subscription.updatedAt = new Date();
+      subscription.status = "active";
+      subscription.start_date = now;
+      subscription.end_date = endDate;
       await subscription.save();
 
       console.log(`✅ Subscription ${subscription._id} cập nhật thành công`);
     }
+
+    const user = await User.findById(subscription.user_id);
+    if (!user) {
+      console.error(`Không tìm thấy User với ID: ${subscription.user_id} cho Subscription ${subscription._id}`);
+      // Lỗi nghiêm trọng, có thể cần cơ chế cảnh báo hoặc xử lý thủ công
+      return res.status(500).json({ message: "Lỗi nội bộ: Không tìm thấy User liên quan." });
+    }
+
+    // Cập nhật membership của User
+    user.membership = {
+      subscriptionType: subscription.name.toLowerCase(), // Lấy tên gói từ subscription
+      expiresAt: subscription.end_date,
+    };
+    await user.save();
+    console.log(`User ${user._id} membership cập nhật thành công.`);
 
     return res.status(200).json({ message: "Cập nhật thành công" });
   } catch (error) {
