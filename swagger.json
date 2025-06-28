@@ -3231,7 +3231,6 @@
             }
         },
         "/api/subscriptions/{id}": {
-            
             "get": {
                 "security": [
                     {
@@ -3392,7 +3391,7 @@
                             "schema": {
                                 "type": "object",
                                 "example": {
-                                   "package_id": "685e68e6754cdc3c42ac3f09"
+                                    "package_id": "685e68e6754cdc3c42ac3f09"
                                 }
                             }
                         }
@@ -4033,6 +4032,44 @@
                 "parameters": [
                     {
                         "name": "stageId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks/stage/{id}/completed": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get Task Complete by Stage ID",
+                "description": "",
+                "operationId": "getapitasksstageidcompleted",
+                "parameters": [
+                    {
+                        "name": "id",
                         "in": "path",
                         "required": true,
                         "schema": {
