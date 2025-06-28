@@ -57,5 +57,11 @@ taskRouter.post(
   taskController.completeTask
 );
 
+taskRouter.get(
+  "/stage/:id/completed",
+  validateToken,
+  taskController.getCompletedTasksByStage
+);
+
 
 module.exports = taskRouter;

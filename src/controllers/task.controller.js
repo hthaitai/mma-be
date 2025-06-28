@@ -128,3 +128,22 @@ module.exports.completeTask = async (req, res) => {
     res.status(500).json({ message: "Lỗi server", error: err.message });
   }
 };
+
+//Xem task đã hoàn thành của 1 stage cụ thể
+module.exports.getCompletedTasksByStage = async (req, res) => {
+  try{
+    const user_id = req.user.id;
+    const stage_id = req.params.id;
+
+    const completedTasks = await TaskResult.find({
+      user_id,
+      stage_id,
+      is_completed: true,
+    });
+
+    res.status(200).json(completedTasks);
+  } catch (err) {
+    console.error("Lỗi khi lấy task đã hoàn thành:", err);
+    res.status(500).json({ message: "Lỗi server", error: err.message });
+  }
+};
