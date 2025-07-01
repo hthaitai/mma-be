@@ -4,6 +4,7 @@ const QuitPlan = require("../models/quitPlan.model");
 const checkAndAwardBadges = require("../utils/badgeCheck");
 const SmokingStatus = require("../models/smokingStatus.model");
 const { getPlanProgress, getTaskProgressInStage } = require("../utils/progressStats");
+const getUserProgressStats = require("../utils/userStats");
 
 // Helper: Kiểm tra quyền truy cập vào stage (dựa trên plan → user_id)
 const canAccessStage = async (user, stageId) => {
