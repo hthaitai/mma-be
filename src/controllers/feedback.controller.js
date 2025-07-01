@@ -135,7 +135,7 @@ module.exports.getAllFeedback = async (req, res) => {
         const feedback = await Feedback.find(filter)
             .populate('user_id', 'name email')
             .populate('coach_id', 'name')
-            // .populate('plan_id', 'title') // nếu muốn lấy tên kế hoạch
+            .populate('plan_id', 'name') // nếu muốn lấy tên kế hoạch
             .sort({ date: -1 });
 
         res.status(200).json(feedback);

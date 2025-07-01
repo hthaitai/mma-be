@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const feedbackSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    plan_id: { type: mongoose.Schema.Types.ObjectId, ref: 'QuitPlan', required: true }, // Optional: link to QuitPlan
+    plan_id: { type: mongoose.Schema.Types.ObjectId, ref: 'QuitPlan'}, // Optional: link to QuitPlan
     coach_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', require: true }, // Optional: who gave feedback
     rating: { type: Number, min: 1, max: 5 },
     date: { type: Date, default: Date.now },
