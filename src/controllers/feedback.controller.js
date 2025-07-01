@@ -49,7 +49,10 @@ module.exports.getFeedbackByUser = async (req, res) => {
 module.exports.getCoachFeedback = async (req, res) => {
     try {
         const coach_id = req.params.id;
-        const feedback = await Feedback.find({ coach_id: coach_id }).populate('user_id', 'name email avatar_url');
+        const feedback = await Feedback.find({ coach_id: coach_id })
+            .populate('user_id', 'name email avatar_url')
+            .populate('plan_id', 'name')
+            .populate('coach_id', 'name email avatar_url');
         res.status(200).json(feedback);
     } catch (error) {
         console.error(error);

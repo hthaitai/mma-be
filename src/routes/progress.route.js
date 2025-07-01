@@ -63,4 +63,10 @@ progressRouter.get(
   progressController.getSingleStageProgress
 );
 
+progressRouter.get(
+  "/consecutive-no-smoke/:id",
+  validateToken,
+  progressController.getConsecutiveNoSmokeDays
+);
+
 module.exports = progressRouter;

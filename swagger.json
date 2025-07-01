@@ -3034,6 +3034,44 @@
                 }
             }
         },
+        "/api/progress/consecutive-no-smoke/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Get User Consecutive No Smoke ",
+                "description": "Lay xem chuoi ngay khong hut thuoc bang user id",
+                "operationId": "getapiuserconsecutivenosmoke",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/notifications": {
             "post": {
                 "security": [

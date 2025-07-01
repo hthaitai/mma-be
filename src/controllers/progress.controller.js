@@ -189,7 +189,7 @@ exports.getAllProgress = async (req, res) => {
 
     if (req.user.role === "admin") {
       // Admin: xem toàn bộ
-      progress = await Progress.find();
+      progress = await Progress.find().populate('user_id', "name email avatar_url" ).populate('stage_id');
     } else if (req.user.role === "coach") {
       // Coach: xem toàn bộ progress nhưng có thể lọc theo stage nếu cần
       // Giản lược: trả về toàn bộ (hoặc lọc kỹ hơn nếu bạn muốn, ví dụ theo coach's plans)
@@ -282,5 +282,27 @@ exports.getSingleStageProgress = async (req, res) => {
   } catch (err) {
     console.error("Lỗi khi lấy tiến độ stage:", err.message);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+// Lấy chỉ số chuỗi ngày không hút thuốc liên tục của user
+module.exports.getConsecutiveNoSmokeDays = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    // Chỉ cho phép chính user, coach hoặc admin truy cập
+    if (
+      req.user.id !== userId &&
+      req.user.role !== 'coach' &&
+      req.user.role !== 'admin'
+    ) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    const stats = await getUserProgressStats(userId);
+    res.status(200).json({
+      user_id: userId,
+      consecutive_no_smoke_days: stats.consecutive_no_smoke_days
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching stats', error: err.message });
   }
 };
