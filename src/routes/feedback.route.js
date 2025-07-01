@@ -17,7 +17,7 @@ feedbackRouter.delete('/:id', validateToken, feedbackController.deleteFeedback);
 feedbackRouter.put('/:id', validateToken, feedbackController.updateFeedback);
 feedbackRouter.put('/status/:id', validateToken, feedbackController.updateFeedbackStatus);
 
-feedbackRouter.get('/', validateToken, checkRole(['admin']), feedbackController.getAllFeedback);
+feedbackRouter.get('/', feedbackController.getAllFeedback);
 feedbackRouter.get('/coach/:id/average-rating', validateToken, feedbackController.getCoachAverageRating);
 feedbackRouter.get('/system-rating', validateToken, feedbackController.getSystemAverageRating);
 
