@@ -17,10 +17,6 @@ const TaskSchema = new Schema(
       type: Number,
       default: 0,
     },
-    is_completed: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true }
 );
