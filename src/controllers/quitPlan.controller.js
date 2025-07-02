@@ -398,3 +398,26 @@ module.exports.getUsersByCoach = async (req, res) => {
     res.status(500).json({ error: "Lỗi server" });
   }
 };
+
+// GET: Các yêu cầu gửi cho Coach hiện tại
+exports.getRequestsByCoachId = async (req, res) => {
+  try {
+    const coachId = req.params.id; // 👈 Coach hiện tại (từ token)
+
+    if (req.user.role !== "coach") {
+      return res.status(403).json({
+        message: "Chỉ huấn luyện viên mới được xem các yêu cầu gửi đến mình",
+      });
+    }
+
+    // 🛑 Chỉ lấy request có coach_id === req.user.id
+    const requests = await RequestQuitPlan.find({ coach_id: coachId })
+      .populate("user_id", "name email avatar_url")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(requests);
+  } catch (error) {
+    console.error("Lỗi khi lấy yêu cầu:", error);
+    res.status(500).json({ message: "Lỗi server", error });
+  }
+};

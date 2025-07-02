@@ -97,4 +97,10 @@ quitPlanRouter.post(
   quitPlanController.usePublicPlan
 );
 
+quitPlanRouter.get(
+  "/requests/my-coach",
+  validateToken,
+  quitPlanController.getRequestsByCoachId
+);
+
 module.exports = quitPlanRouter;
