@@ -99,7 +99,9 @@ exports.getProgressByStage = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const progress = await Progress.find({ stage_id: stageId });
+    const progress = await Progress.find({ stage_id: stageId })
+      .populate("user_id", "name email avatar_url")
+      .populate("stage_id", "title description stage_number start_date end_date");
     res.status(200).json(progress);
   } catch (err) {
     res.status(400).json({ message: "Error fetching progress", err });
@@ -118,7 +120,7 @@ exports.getProgressById = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    res.status(200).json(progress);
+    res.status(200).json(progress).populate("user_id", "name email avatar_url").populate("stage_id", "title description stage_number start_date end_date");
   } catch (err) {
     res.status(400).json({ message: "Error", err });
   }
@@ -131,7 +133,7 @@ exports.updateProgress = async (req, res) => {
     if (!progress) return res.status(404).json({ message: "Not found" });
 
     if (progress.user_id.toString() !== req.user.id) {
-        return res.status(403).json({ message: "Not your progress" });
+      return res.status(403).json({ message: "Not your progress" });
     }
     const smokingStatus = await SmokingStatus.findOne({ user_id }).sort({ createdAt: -1 });
     if (!smokingStatus) {
@@ -190,7 +192,7 @@ exports.getAllProgress = async (req, res) => {
 
     if (req.user.role === "admin") {
       // Admin: xem toàn bộ
-      progress = await Progress.find().populate('user_id', "name email avatar_url" ).populate('stage_id');
+      progress = await Progress.find().populate('user_id', "name email avatar_url").populate('stage_id');
     } else if (req.user.role === "coach") {
       // Coach: xem toàn bộ progress nhưng có thể lọc theo stage nếu cần
       // Giản lược: trả về toàn bộ (hoặc lọc kỹ hơn nếu bạn muốn, ví dụ theo coach's plans)
