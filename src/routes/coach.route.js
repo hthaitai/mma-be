@@ -14,6 +14,9 @@ coachRouter.get('/', validateToken, checkRole(['admin', 'user']), coachControlle
 // get one coach profile
 coachRouter.get('/:id', validateToken, checkRole(['coach']), coachController.getCoachProfileById);
 
+// get coach profile by userId (for admin, user, coach)
+coachRouter.get('/user/:id', validateToken, checkRole(['admin', 'user', 'coach']), coachController.getCoachProfileByUserId);
+
 // Update coach profile
 coachRouter.put('/:id', validateToken, checkRole(['coach']), coachController.updateCoachProfile);
 

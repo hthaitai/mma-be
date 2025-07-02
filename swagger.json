@@ -623,6 +623,44 @@
                 }
             }
         },
+        "/api/coach/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "CoachProfile"
+                ],
+                "summary": "Get Coach Profile By User Id",
+                "description": "",
+                "operationId": "getapicoachuserid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/{id}": {
             "put": {
                 "security": [

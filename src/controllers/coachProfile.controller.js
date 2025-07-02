@@ -40,11 +40,11 @@ module.exports.createCoachProfile = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Error creating coach profile', error: err.message });
     }
-  };
+};
 // Lấy danh sách huấn luyện viên (có thể lọc theo chuyên môn sau này)
 module.exports.getAllCoachProfiles = async (req, res) => {
     try {
-        
+
         const profiles = await CoachProfile.find().populate('coach_id', 'name avatar_url');
         res.status(200).json(profiles);
     } catch (err) {
@@ -98,5 +98,31 @@ module.exports.deleteCoachProfile = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+//Xem hồ sơ huấn luyện viên với userID có role là coach
+module.exports.getCoachProfileByUserId = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        // 1. Kiểm tra user tồn tại và có role là coach
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.role !== 'coach') {
+            return res.status(403).json({ message: 'User is not a coach' });
+        }
+        // 2. Lấy profile
+        const profile = await CoachProfile.findOne({ coach_id: userId }).populate('coach_id', 'name avatar_url email');
+        if (!profile) {
+            return res.status(404).json({ message: 'Coach profile not found' });
+        }
+        // Optionally: lấy feedback và rating
+        const feedbacks = await Feedback.find({ coach_id: userId });
+        const rating_avg = feedbacks.length ? (feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length).toFixed(1) : 0;
+        res.status(200).json({ ...profile.toObject(), feedbacks, rating_avg });
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching coach profile by userId', error: err.message });
     }
 };
