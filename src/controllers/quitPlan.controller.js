@@ -61,7 +61,7 @@ exports.getMyQuitPlanRequests = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const myRequests = await RequestQuitPlan.find({ user_id: userId });
+    const myRequests = await RequestQuitPlan.find({ user_id: userId }).populate('coach_id', 'email name avatar_url').populate('user_id', 'email name avatar_url');
 
     res.status(200).json(myRequests);
   } catch (error) {
@@ -280,7 +280,7 @@ exports.rejectQuitPlan = async (req, res) => {
 exports.getQuitPlanByUserId = async (req, res) => {
   try {
     const userId = req.params.id;
-    const plans = await QuitPlan.find({ user_id: userId });
+    const plans = await QuitPlan.find({ user_id: userId }).populate('coach_id', 'email name avatar_url').populate('user_id', 'email name avatar_url');
     res.status(200).json(plans);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving quit plans", error });
