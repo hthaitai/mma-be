@@ -39,7 +39,7 @@ stageRouter.put(
 stageRouter.delete(
   "/:id",
   validateToken,
-  checkRole(["admin"]),
+  checkRole(["admin", "coach"]),
   stageController.deleteStage
 );
 // 🔐 Get all stages (Admin only)

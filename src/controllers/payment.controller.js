@@ -23,7 +23,7 @@ exports.createPaymentLink = async (req, res) => {
       return res.status(400).json({ error: "Gói đăng ký không có giá hợp lệ" });
     }
 
-    const order_code = Date.now().toString();
+    const order_code = Date.now();
     const shortDesc = `Gói #${subscription.package_id.name}`.slice(
       0,
       25
@@ -43,7 +43,7 @@ exports.createPaymentLink = async (req, res) => {
     const newPayment = await Payment.create({
       subscription_id,
       amount,
-      order_code: order_code,
+      order_code: order_code.toString(),
       status: "PENDING",
       payment_date: new Date(),
     });
