@@ -100,6 +100,10 @@ app.get("/", (req, res) => {
   res.send("API Smoking website");
 });
 
+webhookRouter.get("/receive-hook", (req, res) => {
+  res.status(200).send("Webhook OK");
+});
+
 app.use(async (err, req, res, next) => {
   (res.status = err.status || 500),
     res.send({
