@@ -8,7 +8,7 @@ const { validateToken, checkRole } = require('../middlewares/AuthMiddleware');
 packageRouter.post('/', validateToken, checkRole(['admin']), packageController.createPackage);
 
 // READ ALL: GET /api/packages
-packageRouter.get('/', validateToken, packageController.getAllPackages);
+packageRouter.get('/', packageController.getAllPackages);
 
 // READ ONE: GET /api/packages/:id
 packageRouter.get('/:id', validateToken, packageController.getPackageById);
