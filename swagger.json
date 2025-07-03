@@ -4457,7 +4457,7 @@
                 }
             }
         },
-        "/api/packages/:id": {
+        "/api/packages/{id}": {
             "get": {
                 "security": [
                     {
