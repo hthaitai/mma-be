@@ -9,6 +9,12 @@ const handlePaymentWebhook = async (req, res) => {
     const body = req.body;
     console.log("📦 Full Body (parsed):", JSON.stringify(body, null, 2));
 
+    // PayOS thường gửi orderCode: 123 cho các webhook test
+    if (data && data.orderCode === 123) { // Hoặc "123" nếu PayOS gửi là string
+      console.log("✨ Nhận được webhook test từ PayOS (orderCode 123). Trả về 200 OK.");
+      return res.status(200).json({ message: "Webhook test received successfully" });
+    }
+    
     const data = body.data;
     if (!data || !data.orderCode || body.code !== "00" || data.code !== "00") {
       console.warn("❌ Dữ liệu không hợp lệ");
