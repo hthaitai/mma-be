@@ -13,7 +13,7 @@ exports.createPaymentLink = async (req, res) => {
   try {
     const { subscription_id } = req.body;
 
-    const subscription = await Subscription.findById(subscription_id);
+    const subscription = await Subscription.findById(subscription_id).populate("package_id", "name price");
     if (!subscription) {
       return res.status(404).json({ error: "Không tìm thấy gói đăng ký" });
     }
@@ -23,8 +23,8 @@ exports.createPaymentLink = async (req, res) => {
       return res.status(400).json({ error: "Gói đăng ký không có giá hợp lệ" });
     }
 
-    const order_code = Date.now();
-    const shortDesc = `Gói #${subscription._id.toString().slice(-6)}`.slice(
+    const order_code = Date.now().toString();
+    const shortDesc = `Gói #${subscription.package_id.name}`.slice(
       0,
       25
     );
@@ -43,7 +43,7 @@ exports.createPaymentLink = async (req, res) => {
     const newPayment = await Payment.create({
       subscription_id,
       amount,
-      order_code: order_code.toString(),
+      order_code: order_code,
       status: "PENDING",
       payment_date: new Date(),
     });

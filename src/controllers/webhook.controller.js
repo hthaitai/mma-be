@@ -42,17 +42,22 @@ const handlePaymentWebhook = async (req, res) => {
     await payment.save();
 
     console.log(`✅ Payment ${orderCode} cập nhật thành công`);
+    const subscription = await Subscription.findById(payment.subscription_id);
+    if (!subscription) {
+      return res.status(404).json({ message: "Không tìm thấy subscription liên quan" });
+    }
     // Lấy thông tin Package để xác định duration_days
     const packageInfo = await Package.findById(subscription.package_id);
     if (!packageInfo) {
       console.error(`Không tìm thấy Package với ID: ${subscription.package_id} cho Subscription ${subscription._id}`);
       return res.status(500).json({ message: "Lỗi nội bộ: Không tìm thấy Package liên quan." });
     }
+    
     const now = new Date();
     const endDate = new Date(now);
     endDate.setDate(now.getDate() + packageInfo.duration_days);
     // Cập nhật trạng thái subscription tương ứng (nếu cần)
-    const subscription = await Subscription.findById(payment.subscription_id);
+
     if (subscription) {
       subscription.status = "active";
       subscription.start_date = now;
