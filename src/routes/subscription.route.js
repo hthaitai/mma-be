@@ -7,7 +7,6 @@ const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
 subscriptionRouter.post(
   "/",
   validateToken,
-  checkRole(["admin"]),
   subscriptionController.createSubscription
 );
 // subscriptionRouter.post(
