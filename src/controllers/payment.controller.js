@@ -35,7 +35,7 @@ exports.createPaymentLink = async (req, res) => {
       description: shortDesc,
       returnUrl: process.env.PAYOS_RETURN_URL,
       cancelUrl: process.env.PAYOS_CANCEL_URL,
-      webhookUrl: process.env.PAYOS_WEBHOOK_URL,
+      // webhookUrl: process.env.PAYOS_WEBHOOK_URL,
     };
 
     const paymentResponse = await payos.createPaymentLink(paymentPayload);
@@ -43,7 +43,7 @@ exports.createPaymentLink = async (req, res) => {
     const newPayment = await Payment.create({
       subscription_id,
       amount,
-      order_code: order_code.toString(),
+      order_code: order_code,
       status: "PENDING",
       payment_date: new Date(),
     });
