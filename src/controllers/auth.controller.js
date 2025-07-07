@@ -318,7 +318,104 @@ module.exports.fogotPassword = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
+// Request password reset with OTP
+module.exports.requestPasswordReset = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const otp = generateOtp();
+        user.otp = otp;
+        user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+        await user.save();
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Mã đặt lại mật khẩu của bạn',
+            html: `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    </head>
+                    <body style="margin: 0; padding: 0; background-color: #f7f7f7; font-family: Arial, sans-serif;">
+                        <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 40px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h1 style="color: #1a73e8; font-size: 28px; margin: 0; padding: 0;">Đặt lại mật khẩu</h1>
+                                <p style="color: #5f6368; font-size: 16px; margin-top: 10px;">Vui lòng nhập mã bên dưới để xác thực đổi lại mật khẩu</p>
+                            </div>
+                            
+                            <div style="background-color: #f8f9fa; border-radius: 10px; padding: 30px; text-align: center; margin: 20px 0;">
+                                <div style="font-size: 32px; letter-spacing: 8px; font-weight: bold; color: #1a73e8; font-family: monospace;">
+                                    ${otp}
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 30px;">
+                                <p style="color: #5f6368; font-size: 14px; margin: 0;">Code này sẽ hết hạn trong 10 phút</p>
+                                <p style="color: #5f6368; font-size: 14px; margin-top: 20px;">Nếu bạn không yêu cầu mã này, bạn có thể bỏ qua email này một cách an toàn.</p>
+                            </div>
+
+                            <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+                                <p style="color: #5f6368; font-size: 12px; margin: 0;">
+                                    Đây là một email tự động, vui lòng không trả lời.
+                                </p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email:', error);
+                return res.status(500).json({ message: 'Error sending email' });
+            }
+            console.log('Email sent:', info.response);
+        });
+
+        res.status(200).json({ message: 'Password reset OTP sent to your email.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+// Verify reset OTP
+module.exports.verifyResetOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.otp !== otp || Date.now() > user.otpExpires) {
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
+
+        // OTP is correct, generate a temporary reset token
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.ressetPasswordToken = resetToken;
+        user.ressetPasswordExpires = Date.now() + 5 * 60 * 1000; // 5 minutes to reset password
+
+        // Clear OTP fields
+        user.otp = null;
+        user.otpExpires = null;
+
+        await user.save();
+
+        res.status(200).json({ message: 'OTP verified successfully', resetToken });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 // Resset password 
 module.exports.ressetPassword = async (req, res) => {
     try {
@@ -351,6 +448,32 @@ module.exports.ressetPassword = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
+    }
+};
+
+// Reset password after OTP verification
+module.exports.resetPasswordMobile = async (req, res) => {
+    try {
+        const { email, newPassword, resetToken } = req.body;
+
+        const user = await User.findOne({
+            email,
+            ressetPasswordToken: resetToken,
+            ressetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired reset token' });
+        }
+
+        user.password = newPassword;
+        user.ressetPasswordToken = undefined;
+        user.ressetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).json({ message: 'Password has been reset successfully.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 module.exports.googleAuth = async (req, res) => {
