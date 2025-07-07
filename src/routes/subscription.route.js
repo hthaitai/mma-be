@@ -3,6 +3,8 @@ const subscriptionRouter = express.Router();
 const subscriptionController = require("../controllers/subscription.controller");
 const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
 
+subscriptionRouter.get('/my-active-subscription', validateToken, subscriptionController.MyActiveSubscription);
+
 // [POST] Create
 subscriptionRouter.post(
   "/",

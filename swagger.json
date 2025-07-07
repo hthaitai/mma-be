@@ -249,6 +249,120 @@
                 }
             }
         },
+        "/api/auth/request-password-reset": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Request password reset",
+                "description": "",
+                "operationId": "postapiauthrequestpasswordreset",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/verify-reset-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify reset password otp",
+                "description": "",
+                "operationId": "postapiauthverifyresetotp",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com",
+                                    "otp": "810986"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/reset-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Resset Password Mobile",
+                "description": "",
+                "operationId": "postapiauthresetpassword",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "brofstorm2003@gmail.com",
+                                    "newPassword": "Phong12345",
+                                    "resetToken": "00235839780aa00b80077c54faed9cfb5358eeaa12e2b5e159e3dd4fa8187cb6"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/smoking-status/{id}": {
             "post": {
                 "security": [
@@ -3486,6 +3600,35 @@
                 "summary": "GetAll",
                 "description": "",
                 "operationId": "getapisubscriptions",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/subscriptions/my-active-subscription": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "New Request",
+                "description": "",
+                "operationId": "getapisubscriptionsmyactivesubscription",
                 "parameters": [],
                 "responses": {
                     "200": {

@@ -99,3 +99,12 @@ exports.deleteSubscription = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.MyActiveSubscription = async (req, res) => {
+  try{
+    const subs = await Subscription.find({user_id: req.user.id, status: "active"}).populate('package_id');
+    res.status(200).json(subs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
