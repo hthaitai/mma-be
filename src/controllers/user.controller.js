@@ -41,7 +41,8 @@ module.exports.getUserById = async (req, res) => {
                 name: user.name,
                 role: user.role,
                 avatar_url: user.avatar_url,
-                isVerified: user.isVerified
+                isVerified: user.isVerified,
+                membership: user.membership
             }
         });
 
