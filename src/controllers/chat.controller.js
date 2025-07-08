@@ -84,8 +84,19 @@ const getChatHistory = async (req, res) => {
 };
 
 
+const getChatSessions = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const sessions = await ChatAI.find({ user_id: userId }).sort({ created_at: -1 });
+        res.status(200).json(sessions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
   startChat,
   sendMessage,
   getChatHistory,
+  getChatSessions,
 };

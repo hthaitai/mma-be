@@ -14,4 +14,7 @@ chatRouter.post('/:chatId/message', validateToken, chatController.sendMessage);
 // Route to get the history of a chat
 chatRouter.get('/:chatId', validateToken, chatController.getChatHistory);
 
+// Route to get all chat sessions for a user
+chatRouter.get('/sessions/:userId', validateToken, chatController.getChatSessions);
+
 module.exports = chatRouter;
