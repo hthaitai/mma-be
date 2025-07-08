@@ -33,31 +33,43 @@ const sendMessage = async (req, res) => {
     // Get user's smoking status
     const smokingStatus = await SmokingStatus.findOne({ user_id: userId }).sort({ date: -1 });
 
-    // Check if the topic is related to smoking cessation
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    const prompt = `Câu hỏi sau đây có liên quan đến việc cai thuốc lá, hút thuốc, hoặc bỏ thuốc không? Chỉ trả lời "có" hoặc "không".\n\nCâu hỏi: "${content}"`;
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const isRelated = response.text().trim().toLowerCase() === 'có';
 
+    // Get all intents from KnowledgeBase
+    const allIntents = await KnowledgeBase.find().select('intent -_id');
+    const intentList = allIntents.map(item => item.intent);
+
+    // Use Gemini to classify intent
+    const intentPrompt = `Dựa vào câu hỏi của người dùng, hãy xác định ý định (intent) của họ. Chỉ trả về một trong các ý định sau: ${intentList.join(', ')}, hoặc "khac" nếu không có ý định nào phù hợp.\n\nCâu hỏi: "${content}"`;
+    
+    const intentResult = await model.generateContent(intentPrompt);
+    const intentResponse = await intentResult.response;
+    const recognizedIntent = intentResponse.text().trim();
     let aiResponseContent;
+    let promptForGeneration;
 
-    if (isRelated) {
-      // Search Knowledge Base first
-      const kbEntry = await KnowledgeBase.findOne({ intent: { $regex: new RegExp(content, "i") } });
+    if (recognizedIntent && recognizedIntent !== 'khac') {
+      const kbEntry = await KnowledgeBase.findOne({ intent: recognizedIntent });
+      if (kbEntry && kbEntry.responses && kbEntry.responses.length > 0) {
+        // Get a random response from the array
+        const randomIndex = Math.floor(Math.random() * kbEntry.responses.length);
+        const contextFromKB = kbEntry.responses[randomIndex];
 
-      if (kbEntry) {
-        aiResponseContent = kbEntry.response_template;
-      } else {
-        // If not in Knowledge Base, use Gemini
-        const personalizedPrompt = `Dựa vào trạng thái hút thuốc của người dùng: ${JSON.stringify(smokingStatus)}, hãy trả lời câu hỏi sau đây về việc bỏ thuốc bằng tiếng Việt: "${content}"`;
-        const aiResult = await model.generateContent(personalizedPrompt);
-        const aiResponse = await aiResult.response;
-        aiResponseContent = aiResponse.text();
+        promptForGeneration = `Bạn là một trợ lý AI đồng cảm chuyên về cai thuốc lá. Dựa vào thông tin chính xác sau đây: "${contextFromKB}", hãy trả lời câu hỏi của người dùng một cách tự nhiên và thân thiện.
+        
+        Câu hỏi của người dùng: "${content}"`;
       }
-    } else {
-      aiResponseContent = "Tôi chỉ có thể trả lời các câu hỏi liên quan đến việc cai nghiện thuốc lá.";
     }
+
+    if (!promptForGeneration) {
+      promptForGeneration = `Bạn là một trợ lý AI chuyên về cai nghiện thuốc lá. Chỉ trả lời các câu hỏi liên quan đến việc cai thuốc, bỏ thuốc, hoặc các chủ đề sức khỏe liên quan. Nếu người dùng hỏi về chủ đề khác, hãy từ chối một cách lịch sự.
+  
+      Dựa vào trạng thái hút thuốc của người dùng: ${JSON.stringify(smokingStatus)}, hãy trả lời câu hỏi sau đây bằng tiếng Việt: "${content}"`;
+    } 
+
+    const aiResult = await model.generateContent(promptForGeneration);
+    const aiResponse = await aiResult.response;
+    aiResponseContent = aiResponse.text();
 
     // Save AI message
     const aiMessage = new ChatMessage({
@@ -74,24 +86,24 @@ const sendMessage = async (req, res) => {
 };
 
 const getChatHistory = async (req, res) => {
-    const { chatId } = req.params;
-    try {
-        const messages = await ChatMessage.find({ chat_id: chatId }).sort({ created_at: 1 });
-        res.status(200).json(messages);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  const { chatId } = req.params;
+  try {
+    const messages = await ChatMessage.find({ chat_id: chatId }).sort({ created_at: 1 });
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 
 const getChatSessions = async (req, res) => {
-    const { userId } = req.params;
-    try {
-        const sessions = await ChatAI.find({ user_id: userId }).sort({ created_at: -1 });
-        res.status(200).json(sessions);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  const { userId } = req.params;
+  try {
+    const sessions = await ChatAI.find({ user_id: userId }).sort({ created_at: -1 });
+    res.status(200).json(sessions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 module.exports = {
