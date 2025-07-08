@@ -34,7 +34,7 @@ const sendMessage = async (req, res) => {
     const smokingStatus = await SmokingStatus.findOne({ user_id: userId }).sort({ date: -1 });
 
     // Check if the topic is related to smoking cessation
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const prompt = `Câu hỏi sau đây có liên quan đến việc cai thuốc lá, hút thuốc, hoặc bỏ thuốc không? Chỉ trả lời "có" hoặc "không".\n\nCâu hỏi: "${content}"`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
