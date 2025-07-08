@@ -32,6 +32,7 @@ const paymentRouter = require("./routes/payment.route.js");
 const webhookRouter = require("./routes/webhook.route.js");
 const taskRouter = require("./routes/task.route.js");
 const packageRouter = require("./routes/package.routes");
+const chatRouter = require("./routes/chat.route.js");
 
 const whiteList = [
   "http://localhost:5173",
@@ -90,6 +91,7 @@ app.use("/api/feedback", feedbackRouter);
 app.use("/api/payments/webhook", webhookRouter);
 app.use("/api/tasks", taskRouter);
 app.use("/api/packages", packageRouter);
+app.use("/api/chat", chatRouter);
 
 // Swagger documentation
 const swaggerDocument = require("../swagger.json");

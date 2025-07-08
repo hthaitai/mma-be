@@ -4731,6 +4731,138 @@
                     }
                 }
             }
+        },
+        "/api/chat": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "ChatBotAI"
+                ],
+                "summary": "Chat",
+                "description": "",
+                "operationId": "postapichat",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "userId": "68550389a7e5baee496f028e"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat/{chatId}/message": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "ChatBotAI"
+                ],
+                "summary": "Chat Message",
+                "description": "",
+                "operationId": "postapichatchatIdmessage",
+                "parameters": [
+                    {
+                        "name": "chatId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "userId": "68550389a7e5baee496f028e",
+                                    "content": "Bạn có biết tôi là ai không ?"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat/{chatId}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "ChatBotAI"
+                ],
+                "summary": "Get Chat message",
+                "description": "",
+                "operationId": "getapichatchatId",
+                "parameters": [
+                    {
+                        "name": "chatId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4819,6 +4951,10 @@
         },
         {
             "name": "Package",
+            "description": ""
+        },
+        {
+            "name": "ChatBotAI",
             "description": ""
         }
     ]
