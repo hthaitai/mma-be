@@ -14,6 +14,6 @@ routerMeetSession.get('/coach', validateToken, checkCoach, controller.getCoachSe
 routerMeetSession.get('/user', validateToken, controller.getUserSessions);
 
 // Coach cập nhật trạng thái buổi hẹn
-routerMeetSession.put('/:sessionId/status', validateToken, checkCoach, controller.updateSessionStatus);
+routerMeetSession.put('/:id/status', validateToken, checkCoach, controller.updateSessionStatus);
 
 module.exports = routerMeetSession;
