@@ -133,8 +133,8 @@ module.exports.getAllFeedback = async (req, res) => {
         const filter = type && type !== 'all' ? { feedback_type: type } : {};
 
         const feedback = await Feedback.find(filter)
-            .populate('user_id', 'name email')
-            .populate('coach_id', 'name')
+            .populate('user_id', 'name email avatar_url')
+            .populate('coach_id', 'name email avatar_url')
             .populate('plan_id', 'name') // nếu muốn lấy tên kế hoạch
             .sort({ date: -1 });
 

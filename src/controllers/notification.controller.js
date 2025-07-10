@@ -104,7 +104,7 @@ exports.getNotificationsByUser = async (req, res) => {
     // Tìm notification theo progress
     const notifications = await Notification.find({
       progress_id: { $in: progressIds },
-    });
+    }).populate("progress_id");
 
     res.status(200).json(notifications);
   } catch (err) {
