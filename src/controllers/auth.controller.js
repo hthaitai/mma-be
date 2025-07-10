@@ -245,7 +245,8 @@ module.exports.login = async (req, res) => {
                 name: user.name,
                 role: user.role,
                 avatar_url: user.avatar_url,
-                token: token
+                token: token,
+                membership: user.membership
             }
         });
 

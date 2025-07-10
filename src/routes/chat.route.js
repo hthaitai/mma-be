@@ -2,19 +2,19 @@ const express = require('express');
 const chatRouter = express.Router();
 const chatController = require('../controllers/chat.controller');
 const { validateToken } = require('../middlewares/AuthMiddleware');
-
+const { checkSubscriptionAccess } = require('../middlewares/SubscriptionMiddleware');
 // All routes in this file are protected and require authentication
 
 // Route to start a new chat
-chatRouter.post('/', validateToken, chatController.startChat);
+chatRouter.post('/', validateToken, checkSubscriptionAccess(['premium']), chatController.startChat);
 
 // Route to send a message in a chat
-chatRouter.post('/:chatId/message', validateToken, chatController.sendMessage);
+chatRouter.post('/:chatId/message', validateToken, checkSubscriptionAccess(['premium']), chatController.sendMessage);
 
 // Route to get the history of a chat
-chatRouter.get('/:chatId', validateToken, chatController.getChatHistory);
+chatRouter.get('/:chatId', validateToken, checkSubscriptionAccess(['premium']), chatController.getChatHistory);
 
 // Route to get all chat sessions for a user
-chatRouter.get('/sessions/:userId', validateToken, chatController.getChatSessions);
+chatRouter.get('/sessions/:userId', validateToken, checkSubscriptionAccess(['premium']), chatController.getChatSessions);
 
 module.exports = chatRouter;
