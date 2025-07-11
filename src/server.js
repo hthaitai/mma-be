@@ -38,6 +38,7 @@ const whiteList = [
   "http://localhost:5173",
   "http://localhost:8080",
   "https://smokingswp.onrender.com",
+  "https://exhela.vercel.app",
 ];
 const corsOptions = {
   origin: function (origin, callback) {
