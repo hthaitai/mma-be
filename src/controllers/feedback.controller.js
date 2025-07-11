@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const Feedback = require('../models/feedback.model');
 
 module.exports.createFeedback = async (req, res) => {
@@ -105,10 +106,21 @@ module.exports.updateFeedback = async (req, res) => {
 
 module.exports.getCoachAverageRating = async (req, res) => {
     try {
-        const { coachId } = req.params;
+        const coachId = req.params.id;
+
+        if (!mongoose.Types.ObjectId.isValid(coachId)) {
+            return res.status(400).json({ message: 'Coach ID không hợp lệ' });
+        }
+
+        const coachObjectId = new mongoose.Types.ObjectId(coachId);
 
         const result = await Feedback.aggregate([
-            { $match: { coachId, feedback_type: 'user_to_coach' } },
+            {
+                $match: {
+                    coach_id: coachObjectId,
+                    feedback_type: 'user_to_coach'
+                }
+            },
             {
                 $group: {
                     _id: '$coach_id',
@@ -118,15 +130,22 @@ module.exports.getCoachAverageRating = async (req, res) => {
             }
         ]);
 
-        if (result.length === 0) return res.status(200).json(result);
+        if (result.length === 0) {
+            return res.status(200).json({ averageRating: 0, totalFeedbacks: 0 });
+        }
 
         const { averageRating, totalFeedbacks } = result[0];
-        res.status(200).json({ averageRating, totalFeedbacks });
+        res.status(200).json({
+            averageRating: Math.round(averageRating * 10) / 10,
+            totalFeedbacks
+        });
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
     }
 };
+
 module.exports.getAllFeedback = async (req, res) => {
     try {
         const { type } = req.query;
