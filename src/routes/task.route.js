@@ -47,7 +47,7 @@ taskRouter.put(
 taskRouter.delete(
   "/:id",
   validateToken,
-  checkRole(["admin"]),
+  checkRole(["coach", "admin"]),
   taskController.deleteTask
 );
 

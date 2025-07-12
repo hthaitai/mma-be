@@ -2604,6 +2604,44 @@
                 }
             }
         },
+        "/api/quitPlan/requests/my-coach/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "QuitPlan"
+                ],
+                "summary": "Get QuitPlan Requests by Coach",
+                "description": "",
+                "operationId": "getapiquitPlan",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/stages": {
             "post": {
                 "security": [

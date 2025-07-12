@@ -109,7 +109,8 @@ exports.getProgressByStage = async (req, res) => {
 };
 exports.getProgressById = async (req, res) => {
   try {
-    const progress = await Progress.findById(req.params.id);
+    const progress = await Progress.findById(req.params.id).populate("user_id", "name email avatar_url")
+      .populate("stage_id", "title description stage_number start_date end_date");
     if (!progress) return res.status(404).json({ message: "Not found" });
 
     const isOwner = progress.user_id.toString() === req.user.id;
@@ -120,7 +121,7 @@ exports.getProgressById = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    res.status(200).json(progress).populate("user_id", "name email avatar_url").populate("stage_id", "title description stage_number start_date end_date");
+    res.status(200).json(progress);
   } catch (err) {
     res.status(400).json({ message: "Error", err });
   }

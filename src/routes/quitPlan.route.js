@@ -2,6 +2,7 @@ const express = require("express");
 const quitPlanRouter = express.Router();
 const quitPlanController = require("../controllers/quitPlan.controller");
 const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
+const { checkSubscriptionAccess } = require("../middlewares/SubscriptionMiddleware");
 
 //Get all quit plan public
 quitPlanRouter.get("/public", validateToken, quitPlanController.getPublicPlans);
@@ -75,6 +76,7 @@ quitPlanRouter.put(
 quitPlanRouter.post(
   "/request",
   validateToken,
+  checkSubscriptionAccess(['plus','premium']),
   checkRole(["user", "coach", "admin"]),
   quitPlanController.sendQuitPlanRequest
 );
@@ -82,12 +84,14 @@ quitPlanRouter.post(
 quitPlanRouter.get(
   "/request/mine",
   validateToken,
+  checkSubscriptionAccess(['plus', 'premium']),
   quitPlanController.getMyQuitPlanRequests
 );
 
 quitPlanRouter.delete(
   "/request/:id",
   validateToken,
+  checkSubscriptionAccess(['plus', 'premium']),
   quitPlanController.cancelQuitPlanRequest
 );
 
@@ -98,7 +102,7 @@ quitPlanRouter.post(
 );
 
 quitPlanRouter.get(
-  "/requests/my-coach",
+  "/requests/my-coach/:id",
   validateToken,
   quitPlanController.getRequestsByCoachId
 );
