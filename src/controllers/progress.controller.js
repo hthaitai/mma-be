@@ -3,7 +3,10 @@ const Stage = require("../models/stage.model");
 const QuitPlan = require("../models/quitPlan.model");
 const checkAndAwardBadges = require("../utils/badgeCheck");
 const SmokingStatus = require("../models/smokingStatus.model");
-const { getPlanProgress, getTaskProgressInStage } = require("../utils/progressStats");
+const {
+  getPlanProgress,
+  getTaskProgressInStage,
+} = require("../utils/progressStats");
 const getUserProgressStats = require("../utils/userStats");
 
 // Helper: Kiểm tra quyền truy cập vào stage (dựa trên plan → user_id)
@@ -31,13 +34,8 @@ const canAccessStage = async (user, stageId) => {
 // ✅ Create progress (User only for their stage)
 exports.createProgress = async (req, res) => {
   try {
-    const {
-      stage_id,
-      date,
-      cigarettes_smoked,
-      health_status,
-      user_id,
-    } = req.body;
+    const { stage_id, date, cigarettes_smoked, health_status, user_id } =
+      req.body;
 
     const access = await canAccessStage(req.user, stage_id);
     if (!access.allowed) {
@@ -60,12 +58,18 @@ exports.createProgress = async (req, res) => {
     });
 
     if (existing) {
-      return res.status(400).json({ message: "Đã có tiến trình được ghi nhận trong ngày này" });
+      return res
+        .status(400)
+        .json({ message: "Đã có tiến trình được ghi nhận trong ngày này" });
     }
 
-    const smokingStatus = await SmokingStatus.findOne({ user_id: finalUserId }).sort({ createdAt: -1 });
+    const smokingStatus = await SmokingStatus.findOne({
+      user_id: finalUserId,
+    }).sort({ createdAt: -1 });
     if (!smokingStatus) {
-      return res.status(400).json({ error: "Chưa có trạng thái hút thuốc ban đầu" });
+      return res
+        .status(400)
+        .json({ error: "Chưa có trạng thái hút thuốc ban đầu" });
     }
 
     const costPerCigarette = smokingStatus.cost_per_pack / 20;
@@ -85,7 +89,9 @@ exports.createProgress = async (req, res) => {
     res.status(201).json(progress);
   } catch (err) {
     console.error("Error in createProgress:", err);
-    res.status(400).json({ message: "Error creating progress", error: err.message });
+    res
+      .status(400)
+      .json({ message: "Error creating progress", error: err.message });
   }
 };
 
@@ -101,7 +107,10 @@ exports.getProgressByStage = async (req, res) => {
 
     const progress = await Progress.find({ stage_id: stageId })
       .populate("user_id", "name email avatar_url")
-      .populate("stage_id", "title description stage_number start_date end_date");
+      .populate(
+        "stage_id",
+        "title description stage_number start_date end_date"
+      );
     res.status(200).json(progress);
   } catch (err) {
     res.status(400).json({ message: "Error fetching progress", err });
@@ -109,8 +118,7 @@ exports.getProgressByStage = async (req, res) => {
 };
 exports.getProgressById = async (req, res) => {
   try {
-    const progress = await Progress.findById(req.params.id).populate("user_id", "name email avatar_url")
-      .populate("stage_id", "title description stage_number start_date end_date");
+    const progress = await Progress.findById(req.params.id);
     if (!progress) return res.status(404).json({ message: "Not found" });
 
     const isOwner = progress.user_id.toString() === req.user.id;
@@ -121,7 +129,14 @@ exports.getProgressById = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    res.status(200).json(progress);
+    res
+      .status(200)
+      .json(progress)
+      .populate("user_id", "name email avatar_url")
+      .populate(
+        "stage_id",
+        "title description stage_number start_date end_date"
+      );
   } catch (err) {
     res.status(400).json({ message: "Error", err });
   }
@@ -136,9 +151,13 @@ exports.updateProgress = async (req, res) => {
     if (progress.user_id.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not your progress" });
     }
-    const smokingStatus = await SmokingStatus.findOne({ user_id }).sort({ createdAt: -1 });
+    const smokingStatus = await SmokingStatus.findOne({ user_id }).sort({
+      createdAt: -1,
+    });
     if (!smokingStatus) {
-      return res.status(400).json({ error: "Chưa có trạng thái hút thuốc ban đầu" });
+      return res
+        .status(400)
+        .json({ error: "Chưa có trạng thái hút thuốc ban đầu" });
     }
 
     const costPerCigarette = smokingStatus.cost_per_pack / 20;
@@ -154,8 +173,8 @@ exports.updateProgress = async (req, res) => {
         $set: {
           cigarettes_smoked,
           money_saved,
-          health_status
-        }
+          health_status,
+        },
       },
       { new: true, upsert: true }
     );
@@ -189,26 +208,29 @@ exports.deleteProgress = async (req, res) => {
 
 exports.getAllProgress = async (req, res) => {
   try {
-    let progress;
+    let query = {};
 
-    if (req.user.role === "admin") {
-      // Admin: xem toàn bộ
-      progress = await Progress.find().populate('user_id', "name email avatar_url").populate('stage_id');
-    } else if (req.user.role === "coach") {
-      // Coach: xem toàn bộ progress nhưng có thể lọc theo stage nếu cần
-      // Giản lược: trả về toàn bộ (hoặc lọc kỹ hơn nếu bạn muốn, ví dụ theo coach's plans)
-      progress = await Progress.find();
-    } else {
-      // User: chỉ xem progress của chính họ
-      progress = await Progress.find({ user_id: req.user.id });
+    if (req.user.role === "user") {
+      query = { user_id: req.user.id };
     }
+
+    const progress = await Progress.find(query)
+      .populate("user_id", "name email avatar_url")
+      .populate({
+        path: "stage_id",
+        populate: {
+          path: "plan_id",
+          select: "name",
+        },
+        select: "name plan_id",
+      });
 
     res.status(200).json(progress);
   } catch (err) {
+    console.error("❌ Error in getAllProgress:", err);
     res.status(500).json({ message: "Error fetching progress records", err });
   }
 };
-
 
 // API: Tiến độ tổng thể của user (qua nhiều plan)
 exports.getUserOverallProgress = async (req, res) => {
@@ -227,15 +249,16 @@ exports.getUserOverallProgress = async (req, res) => {
       planProgressList.push({
         plan_id: plan._id,
         plan_name: plan.name,
-        progress_percent: percent
+        progress_percent: percent,
       });
     }
 
-    const overall = plans.length > 0 ? Math.round(totalPercent / plans.length) : 0;
+    const overall =
+      plans.length > 0 ? Math.round(totalPercent / plans.length) : 0;
 
     res.json({
       overall_progress_percent: overall,
-      plans: planProgressList
+      plans: planProgressList,
     });
   } catch (err) {
     console.error("Lỗi khi lấy tiến độ:", err.message);
@@ -251,20 +274,22 @@ exports.getSinglePlanProgress = async (req, res) => {
 
     if (!plan) return res.status(404).json({ error: "Plan not found" });
 
-    if (req.user.role !== 'admin' && plan.user_id.toString() !== req.user.id) {
-      return res.status(403).json({ error: "Không có quyền truy cập kế hoạch này" });
+    if (req.user.role !== "admin" && plan.user_id.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Không có quyền truy cập kế hoạch này" });
     }
 
-    const { totalStages, completedStages, progress_percent } = await getPlanProgress(plan_id);
+    const { totalStages, completedStages, progress_percent } =
+      await getPlanProgress(plan_id);
 
     res.json({
       plan_id,
       plan_name: plan.name,
       total_stages: totalStages,
       completed_stages: completedStages,
-      progress_percent: progress_percent
+      progress_percent: progress_percent,
     });
-
   } catch (err) {
     console.error("Lỗi khi lấy tiến độ kế hoạch:", err.message);
     res.status(500).json({ error: "Server error" });
@@ -281,7 +306,7 @@ exports.getSingleStageProgress = async (req, res) => {
 
     res.json({
       stage_id,
-      progress_percent: percent
+      progress_percent: percent,
     });
   } catch (err) {
     console.error("Lỗi khi lấy tiến độ stage:", err.message);
@@ -296,17 +321,19 @@ module.exports.getConsecutiveNoSmokeDays = async (req, res) => {
     // Chỉ cho phép chính user, coach hoặc admin truy cập
     if (
       req.user.id !== userId &&
-      req.user.role !== 'coach' &&
-      req.user.role !== 'admin'
+      req.user.role !== "coach" &&
+      req.user.role !== "admin"
     ) {
-      return res.status(403).json({ message: 'Access denied' });
+      return res.status(403).json({ message: "Access denied" });
     }
     const stats = await getUserProgressStats(userId);
     res.status(200).json({
       user_id: userId,
-      consecutive_no_smoke_days: stats.consecutive_no_smoke_days
+      consecutive_no_smoke_days: stats.consecutive_no_smoke_days,
     });
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching stats', error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching stats", error: err.message });
   }
 };
