@@ -69,4 +69,9 @@ progressRouter.get(
   progressController.getConsecutiveNoSmokeDays
 );
 
+progressRouter.get(
+  "/plan/:id/money-saved",
+  validateToken,
+  progressController.getTotalMoneySavedInPlan
+);
 module.exports = progressRouter;

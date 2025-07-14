@@ -337,3 +337,51 @@ module.exports.getConsecutiveNoSmokeDays = async (req, res) => {
       .json({ message: "Error fetching stats", error: err.message });
   }
 };
+
+exports.getTotalMoneySavedInPlan = async (req, res) => {
+  try {
+    const plan_id = req.params.id;
+    const plan = await QuitPlan.findById(plan_id);
+
+    if (!plan) {
+      return res.status(404).json({ error: "Plan not found" });
+    }
+
+    // Kiểm tra quyền truy cập
+    if (req.user.role !== "admin" && plan.user_id.toString() !== req.user.id) {
+      return res.status(403).json({
+        error: "Không có quyền truy cập kế hoạch này"
+      });
+    }
+
+    // Lấy tất cả các stages trong plan
+    const stages = await Stage.find({ plan_id });
+    const stageIds = stages.map(stage => stage._id);
+
+    // Tính tổng tiền tiết kiệm từ tất cả progress trong các stages
+    const totalMoneySaved = await Progress.aggregate([
+      {
+        $match: {
+          stage_id: { $in: stageIds },
+          user_id: plan.user_id
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$money_saved" }
+        }
+      }
+    ]);
+
+    res.json({
+      plan_id,
+      plan_name: plan.name,
+      total_money_saved: totalMoneySaved[0]?.total || 0
+    });
+
+  } catch (err) {
+    console.error("Lỗi khi tính tổng tiền tiết kiệm:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+};

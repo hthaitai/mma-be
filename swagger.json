@@ -3262,6 +3262,39 @@
                 }
             }
         },
+        "/api/progress/plan/{id}/money-saved": {
+            "get": {
+                "tags": [
+                    "Progress"
+                ],
+                "summary": "Get total money saved",
+                "description": "",
+                "operationId": "getapiprogressplanidmoneysaved",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/notifications": {
             "post": {
                 "security": [
