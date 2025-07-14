@@ -7,6 +7,10 @@ const chatAISchema = new Schema({
     ref: 'User',
     required: true,
   },
+  title: {
+    type: String,
+    default: 'New Chat',
+  },
   created_at: {
     type: Date,
     default: Date.now,

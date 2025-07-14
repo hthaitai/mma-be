@@ -30,6 +30,16 @@ const sendMessage = async (req, res) => {
     });
     await userMessage.save();
 
+    // Check if this is the first message in the chat
+    const messageCount = await ChatMessage.countDocuments({ chat_id: chatId });
+    if (messageCount === 1) {
+      const chat = await ChatAI.findById(chatId);
+      if (chat) {
+        chat.title = content.split(' ').slice(0, 5).join(' ');
+        await chat.save();
+      }
+    }
+
     // Get user's smoking status
     const smokingStatus = await SmokingStatus.findOne({ user_id: userId }).sort({ date: -1 });
 
@@ -55,14 +65,14 @@ const sendMessage = async (req, res) => {
         const randomIndex = Math.floor(Math.random() * kbEntry.responses.length);
         const contextFromKB = kbEntry.responses[randomIndex];
 
-        promptForGeneration = `Bạn là một trợ lý AI đồng cảm chuyên về cai thuốc lá. Dựa vào thông tin chính xác sau đây: "${contextFromKB}", hãy trả lời câu hỏi của người dùng một cách tự nhiên và thân thiện.
+        promptForGeneration = `Bạn là một trợ lý AI đồng cảm chuyên về cai thuốc lá. Dựa vào thông tin chính xác sau đây: "${contextFromKB}", hãy trả lời câu hỏi của người dùng một cách ngắn gọn, tự nhiên và thân thiện.
         
         Câu hỏi của người dùng: "${content}"`;
       }
     }
 
     if (!promptForGeneration) {
-      promptForGeneration = `Bạn là một trợ lý AI chuyên về cai nghiện thuốc lá. Chỉ trả lời các câu hỏi liên quan đến việc cai thuốc, bỏ thuốc, hoặc các chủ đề sức khỏe liên quan. Nếu người dùng hỏi về chủ đề khác, hãy từ chối một cách lịch sự.
+      promptForGeneration = `Bạn là một trợ lý AI chuyên về cai nghiện thuốc lá. Chỉ trả lời các câu hỏi liên quan đến việc cai thuốc, bỏ thuốc, hoặc các chủ đề sức khỏe liên quan một cách ngắn gọn. Nếu người dùng hỏi về chủ đề khác, hãy từ chối một cách lịch sự.
   
       Dựa vào trạng thái hút thuốc của người dùng: ${JSON.stringify(smokingStatus)}, hãy trả lời câu hỏi sau đây bằng tiếng Việt: "${content}"`;
     } 

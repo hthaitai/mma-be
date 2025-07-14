@@ -119,9 +119,9 @@ exports.deleteStage = async (req, res) => {
       return res.status(404).json({ message: "Stage not found" });
     }
 
-    if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Only admin can delete stages" });
-    }
+    // if (req.user.role !== "admin") {
+    //   return res.status(403).json({ message: "Only admin can delete stages" });
+    // }
 
     await Stage.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Stage deleted successfully" });
