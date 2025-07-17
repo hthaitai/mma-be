@@ -9,6 +9,11 @@ const morgan = require("morgan");
 const swaggerUi = require("swagger-ui-express");
 const cookieParser = require("cookie-parser");
 
+let open;
+(async () => {
+  open = (await import("open")).default;
+})();
+
 const db = require("./db/index.js");
 const cors = require("cors");
 
@@ -117,6 +122,8 @@ app.use(async (err, req, res, next) => {
     });
 });
 
-app.listen(port, () =>
-  console.log(`Server is running on http://localhost:${port}`)
-);
+app.listen(port, async () => {
+  console.log(`Server is running on http://localhost:${port}`);
+  const open = (await import("open")).default;
+  open(`http://localhost:${port}/api-docs`);
+});

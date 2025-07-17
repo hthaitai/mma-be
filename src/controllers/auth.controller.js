@@ -32,76 +32,38 @@ function generateOtp() {
 
 // Register a new user
 module.exports.register = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        const existUser = await User.findOne({ email })
-        if (existUser) {
-            return res.status(400).json({ message: 'Email đăng ký đã tồn tại' });
-        }
-        //Token xác thực
-        const vertificationToken = crypto.randomBytes(32).toString('hex');
-        const avatar_url = `https://ui-avatars.com/api/?name=${name}&background=random`
+  try {
+    const { name, email, password } = req.body;
 
-        const newuser = new User({
-            name,
-            email,
-            password,
-            avatar_url,
-            vertificationToken
-        });
-
-        await newuser.save();
-        // Tạo link xác thực
-        const verificationLink = `http://localhost:${process.env.VITE_PORT}/login/${vertificationToken}`;// sẽ sửa lại verificationLink khi có front-end fogetpassword
-        // Gửi email xác thực
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Xác thực tài khoản',
-            html: `
-                <!DOCTYPE html>
-                <html>
-                    <body style="margin: 0; padding: 20px; background-color: #f4f4f4; font-family: Arial, sans-serif;">
-                        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                            <h2 style="color: #2C3E50; text-align: center; margin-bottom: 20px; font-size: 24px;">Xin chào ${name}!</h2>
-                            <div style="color: #666; line-height: 1.6; font-size: 16px;">
-                                <p style="margin-bottom: 15px;">Cảm ơn bạn đã đăng ký tài khoản. Vui lòng click vào nút bên dưới để xác thực tài khoản của bạn:</p>
-                                <div style="text-align: center; margin: 25px 0;">
-                                    <a href="${verificationLink}" 
-                                    style="background-color: #3498DB; 
-                                            color: white; 
-                                            padding: 12px 30px; 
-                                            text-decoration: none; 
-                                            border-radius: 5px; 
-                                            font-weight: bold;
-                                            display: inline-block;">
-                                        Xác thực tài khoản
-                                    </a>
-                                </div>
-                                <p style="color: #999; font-size: 14px; text-align: center; margin-top: 20px;">Link này sẽ hết hạn sau 24 giờ.</p>
-                                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                                <p style="color: #999; font-size: 12px; text-align: center;">Nếu bạn không yêu cầu xác thực này, vui lòng bỏ qua email này.</p>
-                            </div>
-                        </div>
-                    </body>
-                </html>
-            `
-        }
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('Error sending email:', error);
-                return res.status(500).json({ message: 'Lỗi khi gửi email' });
-            }
-            console.log('Email sent:', info.response);
-        })
-
-        return res.status(201).json({ message: 'User created successfully, please check your email to verify your email account' });
-
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
+    // Kiểm tra thiếu trường
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Thiếu thông tin đăng ký' });
     }
-}
+
+    // Kiểm tra email đã tồn tại
+    const existUser = await User.findOne({ email });
+    if (existUser) {
+      return res.status(400).json({ message: 'Email đã được sử dụng' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Tạo user mới
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      avatar_url: `https://ui-avatars.com/api/?name=${name}&background=random`
+    });
+
+    await newUser.save();
+
+    return res.status(201).json({ message: 'Đăng ký thành công' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 //Verify email
 module.exports.verifyEmail = async (req, res) => {
     try {
