@@ -7,7 +7,7 @@ const { validateToken, checkRole } = require("../middlewares/AuthMiddleware");
 stageRouter.post(
   "/",
   validateToken,
-  checkRole(["coach", "admin"]),
+  checkRole(["coach", "admin","user"]),
   stageController.createStage
 );
 
@@ -31,7 +31,7 @@ stageRouter.get(
 stageRouter.put(
   "/:id",
   validateToken,
-  checkRole(["coach", "admin"]),
+  checkRole(["coach","user", "admin"]),
   stageController.updateStage
 );
 
@@ -46,7 +46,7 @@ stageRouter.delete(
 stageRouter.get(
   "/",
   validateToken,
-  checkRole(["coach", "admin"]),
+  checkRole(["coach","user", "admin"]),
   stageController.getAllStages
 );
 

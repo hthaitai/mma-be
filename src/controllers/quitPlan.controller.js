@@ -1,7 +1,6 @@
 const QuitPlan = require("../models/quitPlan.model");
 const RequestQuitPlan = require("../models/requestQuitPlan.model");
 const Stage = require("../models/stage.model");
-const Task = require("../models/task.model");
 
 /**
  * GET: All quit plans (Admin only)
@@ -342,17 +341,7 @@ exports.usePublicPlan = async (req, res) => {
         is_completed: false,
       });
 
-      // 3. Clone tất cả các task thuộc stage đó
-      const tasks = await Task.find({ stage_id: stage._id });
-
-      for (const task of tasks) {
-        await Task.create({
-          stage_id: newStage._id,
-          title: task.title,
-          description: task.description,
-          sort_order: task.sort_order,
-        });
-      }
+      // Đã bỏ logic clone task vì đã loại bỏ module task
     }
 
     res.status(201).json({

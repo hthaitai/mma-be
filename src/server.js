@@ -35,7 +35,6 @@ const subscriptionRouter = require("./routes/subscription.route.js");
 const feedbackRouter = require("./routes/feedback.route");
 const paymentRouter = require("./routes/payment.route.js");
 const webhookRouter = require("./routes/webhook.route.js");
-const taskRouter = require("./routes/task.route.js");
 const packageRouter = require("./routes/package.routes");
 const chatRouter = require("./routes/chat.route.js");
 
@@ -94,7 +93,6 @@ app.use("/api/subscriptions", subscriptionRouter);
 app.use("/api/payments", paymentRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/api/payments/webhook", webhookRouter);
-app.use("/api/tasks", taskRouter);
 app.use("/api/packages", packageRouter);
 app.use("/api/chat", chatRouter);
 

@@ -133,7 +133,7 @@ exports.deleteStage = async (req, res) => {
 // ✅ Get all stages (Admin only)
 exports.getAllStages = async (req, res) => {
   try {
-    if ((req.user.role !== "admin") & (req.user.role !== "coach")) {
+    if ((req.user.role !== "admin") &(req.user.role !== "user")& (req.user.role !== "coach")) {
       return res
         .status(403)
         .json({ message: "Only admin can access all stages" });

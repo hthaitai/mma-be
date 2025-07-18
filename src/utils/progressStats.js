@@ -1,7 +1,5 @@
 const Stage = require("../models/stage.model");
 const Progress = require("../models/progress.model");
-const TaskResult = require("../models/TaskResult.model");
-const Task = require("../models/task.model");
 // Tính % tiến độ của một kế hoạch
 const getPlanProgress = async (plan_id) => {
     const stages = await Stage.find({ plan_id });
@@ -25,15 +23,5 @@ const getStageProgress = async (stage_id, user_id) => {
     return totalDays > 0 ? Math.round((progressCount / totalDays) * 100) : 0;
 };
 
-const getTaskProgressInStage = async (stage_id, user_id) => {
-    const allTasks = await Task.find({ stage_id });
-    const totalTasks = allTasks.length;
 
-    // Gợi ý: tạo thêm bảng TaskResult nếu cần lưu trạng thái user hoàn thành task
-    const completedTaskIds = await TaskResult.find({ user_id, stage_id }).distinct("task_id");
-    const completedCount = completedTaskIds.length;
-
-    return totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
-};
-
-module.exports = { getPlanProgress, getStageProgress, getTaskProgressInStage };
+module.exports = { getPlanProgress, getStageProgress };
