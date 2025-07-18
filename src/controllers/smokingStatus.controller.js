@@ -9,7 +9,6 @@ module.exports.createSmokingStatus = async (req, res) => {
         } else {
             const { frequency, cigarettes_per_day, cost_per_pack, start_date } = req.body;
             const newSmokingStatus = new SmokingStatus({
-                frequency,
                 cigarettes_per_day,
                 cost_per_pack, start_date,
                 user_id: userId
@@ -30,8 +29,8 @@ module.exports.getStatusBysUserId = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        const smokingStatus = await SmokingStatus.findOne({ user_id: userId });
-       
+        const smokingStatus = await SmokingStatus.find({ user_id: userId });
+
         res.status(200).json({ message: 'Smoking status found', smokingStatus });
     } catch (error) {
         console.log(error.message);

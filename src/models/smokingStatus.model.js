@@ -5,11 +5,11 @@ const statusSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    frequency: {
-        type: String,
-        required: true,
-        enum: ['daily', 'weekly', 'occasionally', 'social'], // danh sách giá trị cho phép
-    },
+    // frequency: {
+    //     type: String,
+    //     required: true,
+    //     enum: ['daily', 'weekly', 'occasionally', 'social'], // danh sách giá trị cho phép
+    // },
     cigarettes_per_day: {
         type: Number,
         required: true,
