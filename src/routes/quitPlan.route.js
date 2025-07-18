@@ -38,7 +38,7 @@ quitPlanRouter.get(
 quitPlanRouter.post(
   "/",
   validateToken,
-  checkRole(["coach", "admin"]),
+  checkRole(["coach", "admin","user"]),
 
   quitPlanController.createQuitPlan
 );

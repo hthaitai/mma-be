@@ -137,12 +137,7 @@ exports.createQuitPlan = async (req, res) => {
       request_id, // ✅ nhận từ FE
     } = req.body;
 
-    if (!["admin", "coach"].includes(req.user.role)) {
-      return res.status(403).json({
-        message: "Chỉ admin hoặc coach được tạo kế hoạch trực tiếp",
-      });
-    }
-
+    // ✅ Cho phép tất cả các role (user, coach, admin) tạo kế hoạch
     if (!user_id) {
       return res.status(400).json({ message: "Thiếu user_id" });
     }
@@ -195,7 +190,8 @@ exports.updateQuitPlan = async (req, res) => {
       return res.status(404).json({ message: "Quit plan not found" });
     }
 
-    if (req.user.role !== "admin" && plan.user_id.toString() !== req.user.id) {
+    // ✅ Cho phép user cập nhật kế hoạch của chính mình
+    if (plan.user_id.toString() !== req.user.id) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -224,6 +220,11 @@ exports.deleteQuitPlan = async (req, res) => {
     const plan = await QuitPlan.findById(req.params.id);
     if (!plan) {
       return res.status(404).json({ message: "Quit plan not found" });
+    }
+
+    // ✅ Cho phép user xóa kế hoạch của chính mình
+    if (plan.user_id.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Access denied" });
     }
 
     await QuitPlan.findByIdAndDelete(req.params.id);
